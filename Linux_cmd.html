@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Linux Commands</title>
+	 <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+
+<!-- Navigation bar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark"  >
+  <a class="navbar-brand" href="#">REPTILE'S WORLD</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+      </li>
+      
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+         Content To Learn ?
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">   
+          <a class="dropdown-item" href="#">Footprinting And Infromation Gathering</a>
+          <a class="dropdown-item" href="#">Scanning Network</a>
+          <a class="dropdown-item" href="#">System Hacking</a>
+          <a class="dropdown-item" href="#">Android Hacking</a>
+          <a class="dropdown-item" href="#">DDos Attack</a>
+          <a class="dropdown-item" href="#">Man In The Middle Attack</a>  
+          <a class="dropdown-item" href="#">Wifi Hacking</a>     
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Hacking Through Android</a>
+        </div>
+      </li>
+    </ul>
+
+
+    <form class="form-inline my-2 my-lg-0" action="https://www.google.com/search">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+
+<!-- commands -->
+
+<div class="container">
+  <h2 class="text-success text-center ">Linux Important Commands</h2>
+  <p>Commands on Linux-like operating systems are either built-ins or external commands. The former are part of the shell. The latter consist of both executables, which are programs that have been written in a programming language (e.g., C, C++, Java or Python) and then compiled into a binary, and shell scripts.</p>
+  <p><strong>Note:</strong> A command is an instruction given by a user telling a computer to do something, such a run a single program or a group of linked programs.:</p>
+ 
+  
+  </div>
+
+
+<div id="accordion" >
+
+  <div class="card  ">
+    <div class="card-header  ">
+      <a class="card-link" data-toggle="collapse" href="#collapseOne">
+      SYSTEM INFORMATION
+      </a>
+    </div>
+    <div id="collapseOne" class="collapse" data-parent="#accordion">
+      <div class="card-body " >
+        <br># Display Linux system information
+        <br><p class="text-success">uname -a</p>
+
+        <br># Display kernel release information
+               <br><p class="text-success">uname -r</p>
+
+        <br># Show which version of redhat installed
+               <br><p class="text-success">cat /etc/redhat-release</p>
+
+        <br># Show how long the system has been running + load
+               <br><p class="text-success">uptime</p>
+
+        <br># Show system host name
+               <br><p class="text-success">hostname</p>
+
+        <br># Display the IP addresses of the host
+               <br><p class="text-success">hostname -I</p>
+
+        <br># Show system reboot history
+               <br><p class="text-success">last reboot</p>
+
+        <br># Show the current date and time
+               <br><p class="text-success">date</p>
+
+        <br># Show this month's calendar
+               <br><p class="text-success">cal</p>
+
+        <br># Display who is online
+               <br><p class="text-success">w</p>
+
+        <br># Who you are logged in as
+               <br><p class="text-success">whoami</p>
+      
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseTwo">
+       HARDWARE INFORMATION
+      </a>
+    </div>
+    <div id="collapseTwo" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+# Display messages in kernel ring buffer
+<br><p class="text-success">dmesg</p>
+
+# Display CPU information
+<br><p class="text-success">cat /proc/cpuinfo</p>
+
+# Display memory information
+<br><p class="text-success">cat /proc/meminfo</p>
+
+# Display free and used memory ( -h for human readable, -m for MB, -g for GB.)
+<br><p class="text-success">free -h</p>
+
+# Display PCI devices
+<br><p class="text-success">lspci -tv</p>
+
+# Display USB devices
+<br><p class="text-success">lsusb -tv</p>
+
+# Display DMI/SMBIOS (hardware info) from the BIOS
+<br><p class="text-success">dmidecode</p>
+
+# Show info about disk sda
+<br><p class="text-success">hdparm -i /dev/sda</p>
+
+# Perform a read speed test on disk sda
+<br><p class="text-success">hdparm -tT /dev/sda</p>
+
+# Test for unreadable blocks on disk sda
+<br><p class="text-success">badblocks -s /dev/sda </p>      
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree">
+       PERFORMANCE MONITORING AND STATISTICS
+      </a>
+    </div>
+    <div id="collapseThree" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+# Display and manage the top processes
+<br><p class="text-success">top</p>
+
+# Interactive process viewer (top alternative)
+<br><p class="text-success">htop</p>
+
+# Display processor related statistics
+<br><p class="text-success">mpstat 1</p>
+
+# Display virtual memory statistics
+<br><p class="text-success">vmstat 1</p>
+
+# Display I/O statistics
+<br><p class="text-success">iostat 1</p>
+
+# Display the last 100 syslog messages  (Use /var/log/syslog for Debian based systems.)
+<br><p class="text-success">tail 100 /var/log/messages</p>
+
+# Capture and display all packets on interface eth0
+<br><p class="text-success">tcpdump -i eth0</p>
+
+# Monitor all traffic on port 80 ( HTTP )
+<br><p class="text-success">tcpdump -i eth0 'port 80'</p>
+
+# List all open files on the system
+<br><p class="text-success">lsof</p>
+
+# List files opened by user
+<br><p class="text-success">lsof -u user</p>
+
+# Display free and used memory ( -h for human readable, -m for MB, -g for GB.)
+<br><p class="text-success">free -h</p>
+
+# Execute "df -h", showing periodic updates
+<br><p class="text-success">watch df -h  </p>   
+      </div>
+    </div>
+  </div>
+  <!--  -->
+
+    <div class="card">
+    <div class="card-header">
+      <a class="card-link" data-toggle="collapse" href="#collapseFour">
+        USER INFORMATION AND MANAGEMENT
+      </a>
+    </div>
+    <div id="collapseFour" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+# Display the user and group ids of your current user.
+<br><p class="text-success">id</p>
+
+# Display the last users who have logged onto the system.
+<br><p class="text-success">last</p>
+
+# Show who is logged into the system.
+<br><p class="text-success">who</p>
+
+# Show who is logged in and what they are doing.
+<br><p class="text-success">w</p>
+
+# Create a group named "test".
+<br><p class="text-success">groupadd test</p>
+
+# Create an account named john, with a comment of "John Smith" and create the user's home directory.
+<br><p class="text-success">useradd -c "John Smith" -m john</p>
+
+# Delete the john account.
+<br><p class="text-success">userdel john</p>
+
+# Add the john account to the sales group
+<br><p class="text-success">usermod -aG sales john</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseFive">
+       FILE AND DIRECTORY COMMANDS
+      </a>
+    </div>
+    <div id="collapseFive" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+       # List all files in a long listing (detailed) format
+<br><p class="text-success">ls -al</p>
+
+# Display the present working directory
+<br><p class="text-success">pwd</p>
+
+# Create a directory
+<br><p class="text-success">mkdir directory</p>
+
+# Remove (delete) file
+<br><p class="text-success">rm file</p>
+
+# Remove the directory and its contents recursively
+<br><p class="text-success">rm -r directory</p>
+
+# Force removal of file without prompting for confirmation
+<br><p class="text-success">rm -f file</p>
+
+# Forcefully remove directory recursively
+<br><p class="text-success">rm -rf directory</p>
+
+# Copy file1 to file2
+<br><p class="text-success">cp file1 file2</p>
+
+# Copy source_directory recursively to destination. If destination exists, copy source_directory into destination, otherwise create destination with the contents of source_directory.
+<br><p class="text-success">cp -r source_directory destination</p>
+
+# Rename or move file1 to file2. If file2 is an existing directory, move file1 into directory file2
+<br><p class="text-success">mv file1 file2</p>
+
+# Create symbolic link to linkname
+<br><p class="text-success">ln -s /path/to/file linkname</p>
+
+# Create an empty file or update the access and modification times of file.
+<br><p class="text-success">touch file</p>
+
+# View the contents of file
+<br><p class="text-success">cat file</p>
+
+# Browse through a text file
+<br><p class="text-success">less file</p>
+
+# Display the first 10 lines of file
+<br><p class="text-success">head file</p>
+
+# Display the last 10 lines of file
+<br><p class="text-success">tail file</p>
+
+# Display the last 10 lines of file and "follow" the file as it grows.
+<br><p class="text-success">tail -f file</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseSix">
+      PROCESS MANAGEMENT
+      </a>
+    </div>
+    <div id="collapseSix" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+# Display your currently running processes
+<br><p class="text-success">ps</p>
+
+# Display all the currently running processes on the system.
+<br><p class="text-success">ps -ef</p>
+
+# Display process information for processname
+<br><p class="text-success">ps -ef | grep processname</p>
+
+# Display and manage the top processes
+<br><p class="text-success">top</p>
+
+# Interactive process viewer (top alternative)
+<br><p class="text-success">htop</p>
+
+# Kill process with process ID of pid
+<br><p class="text-success">kill pid</p>
+
+# Kill all processes named processname
+<br><p class="text-success">killall processname</p>
+
+# Start program in the background
+<br><p class="text-success">program &</p>
+
+# Display stopped or background jobs
+<br><p class="text-success">bg</p>
+
+# Brings the most recent background job to foreground
+<br><p class="text-success">fg</p>
+
+# Brings job n to the foreground
+<br><p class="text-success">fg n   </p>    
+      </div>
+    </div>
+  </div>
+  <!--  -->
+  <div class="card">
+    <div class="card-header">
+      <a class="card-link" data-toggle="collapse" href="#collapseSeven">
+        FILE PERMISSIONS
+      </a>
+    </div>
+    <div id="collapseSeven" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+       
+
+       rwx rwx rwx   -------- chmod 777 filename<br>
+       rwx rwx r-x   -------- chmod 775 filename<br>
+       rwx r-x r-x   --------- chmod 755 filename<br>
+       rw- rw- r--   --------- chmod 664 filename<br>
+       rw- r-- r--   --------- chmod 644 filename<br>
+
+# NOTE: Use 777 sparingly!<br>
+
+        r = Read<br>
+        w = write<br>
+        x = execute<br>
+        - = no access<br>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseEight">
+      ARCHIVES (TAR FILES)
+      </a>
+    </div>
+    <div id="collapseEight" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+# Create tar named archive.tar containing directory.
+<br><p class="text-success">tar cf archive.tar directory</p>
+
+# Extract the contents from archive.tar.
+<br><p class="text-success">tar xf archive.tar</p>
+
+# Create a gzip compressed tar file name archive.tar.gz.
+<br><p class="text-success">tar czf archive.tar.gz directory</p>
+
+# Extract a gzip compressed tar file.
+<br><p class="text-success">tar xzf archive.tar.gz</p>
+
+# Create a tar file with bzip2 compression
+<br><p class="text-success">tar cjf archive.tar.bz2 directory</p>
+
+# Extract a bzip2 compressed tar file.
+<br><p class="text-success">tar xjf archive.tar.bz2</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseNine">
+       NETWORKING
+      </a>
+    </div>
+    <div id="collapseNine" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+# Display all network interfaces and ip address
+<br><p class="text-success">ifconfig -a</p>
+
+# Display eth0 address and details
+<br><p class="text-success">ifconfig eth0</p>
+
+# Query or control network driver and hardware settings
+<br><p class="text-success">ethtool eth0</p>
+
+# Send ICMP echo request to host
+<br><p class="text-success">ping host</p>
+
+# Display whois information for domain
+<br><p class="text-success">whois domain</p>
+
+# Display DNS information for domain
+<br><p class="text-success">dig domain</p>
+
+# Reverse lookup of IP_ADDRESS
+<br><p class="text-success">dig -x IP_ADDRESS</p>
+
+# Display DNS ip address for domain
+<br><p class="text-success">host domain</p>
+
+# Display the network address of the host name.
+<br><p class="text-success">hostname -i</p>
+
+# Display all local ip addresses
+<br><p class="text-success">hostname -I</p>
+
+# Download http://domain.com/file
+<br><p class="text-success">wget http://domain.com/file</p>
+
+# Display listening tcp and udp ports and corresponding programs
+<br><p class="text-success">netstat -nutlp</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <a class="card-link" data-toggle="collapse" href="#collapseTen">
+      INSTALLING PACKAGES
+      </a>
+    </div>
+    <div id="collapseTen" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+# Search for a package by keyword.
+<br><p class="text-success">yum search keyword</p>
+
+# Install package.
+<br><p class="text-success">yum install package</p>
+
+# Display description and summary information about package.
+<br><p class="text-success">yum info package</p>
+
+# Install package from local file named package.rpm
+<br><p class="text-success">rpm -i package.rpm</p>
+
+# Remove/uninstall package.
+<br><p class="text-success">yum remove package</p>
+
+# Install software from source code.
+<br><p class="text-success">tar zxvf sourcecode.tar.gz
+cd sourcecode<br>
+./configure<br>
+make<br>
+make install<br></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseEleven">
+       SEARCH
+      </a>
+    </div>
+    <div id="collapseEleven" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+# Search for pattern in file
+<br><p class="text-success">grep pattern file</p>
+
+# Search recursively for pattern in directory
+<br><p class="text-success">grep -r pattern directory</p>
+
+# Find files and directories by name
+<br><p class="text-success">locate name</p>
+
+# Find files in /home/john that start with "prefix".
+<br><p class="text-success">find /home/john -name 'prefix*'</p>
+
+# Find files larger than 100MB in /home
+<br><p class="text-success">find /home -size +100M</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseTwelve">
+     SSH LOGINS
+      </a>
+    </div>
+    <div id="collapseTwelve" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+# Connect to host as your local username.
+<br><p class="text-success">ssh host</p>
+
+# Connect to host as user
+<br><p class="text-success">ssh user@host</p>
+
+# Connect to host using port
+<br><p class="text-success">ssh -p port user@host</p>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <a class="card-link" data-toggle="collapse" href="#collapseThirteen">
+        FILE TRANSFERS
+      </a>
+    </div>
+    <div id="collapseThirteen" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+# Secure copy file.txt to the /tmp folder on server
+<br><p class="text-success">scp file.txt server:/tmp</p>
+
+# Copy *.html files from server to the local /tmp folder.
+<br><p class="text-success">scp server:/var/www/*.html /tmp</p>
+
+# Copy all files and directories recursively from server to the current system's /tmp folder.
+<br><p class="text-success">scp -r server:/var/www /tmp</p>
+
+# Synchronize /home to /backups/home
+<br><p class="text-success">rsync -a /home /backups/</p>
+
+# Synchronize files/directories between the local and remote system with compression enabled
+<br><p class="text-success">rsync -avz /home server:/backups/</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseFourteen">
+       DISK USAGE
+      </a>
+    </div>
+    <div id="collapseFourteen" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+# Show free and used space on mounted filesystems
+<br><p class="text-success">df -h</p>
+
+# Show free and used inodes on mounted filesystems
+<br><p class="text-success">df -i</p>
+
+# Display disks partitions sizes and types
+<br><p class="text-success">fdisk -l</p>
+
+# Display disk usage for all files and directories in human readable format
+<br><p class="text-success">du -ah</p>
+
+# Display total disk usage off the current directory
+<br><p class="text-success">du -sh</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseFifteen">
+         DIRECTORY NAVIGATION
+      </a>
+    </div>
+    <div id="collapseFifteen" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+   # To go up one level of the directory tree.  (Change into the parent directory.)
+<br><p class="text-success">cd ..</p>
+
+# Go to the $HOME directory
+<br><p class="text-success">cd</p>
+
+# Change to the /etc directory
+<br><p class="text-success">cd /etc</p>
+      </div>
+    </div>
+  </div>
+</div> 
+
+
+
+
+
+
+
+
+
+
+<!-- Footer -->
+<footer>
+  <h1 class="text-center text-capitalize text-muted w-100 pt-5 pb-5 mt-5">Thank You</h1>
+</footer>
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> 
+</body>
+</html>
