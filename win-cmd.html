@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Windows Commands</title>
+	 <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   
+   
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css" integrity="sha384-b6lVK+yci+bfDmaY1u0zE8YYJt0TZxLEAFyYSLHId4xoVvsrQu3INevFKo+Xir8e" crossorigin="anonymous">
+</head>
+<body>
+
+<!-- Navigation bar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark"  >
+  <a class="navbar-brand" href="#">HACKER'S WORLD</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+      </li>
+      
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+         Content To Learn ?
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">   
+          <a class="dropdown-item" href="Linux_cmd.html">Linux Basic Commmands</a>
+          <a class="dropdown-item" href="#">Footprinting And Infromation Gathering</a>
+          <a class="dropdown-item" href="#">Scanning Network</a>
+          <a class="dropdown-item" href="#">System Hacking</a>
+          <a class="dropdown-item" href="#">Android Hacking</a>
+          <a class="dropdown-item" href="#">DDos Attack</a>
+          <a class="dropdown-item" href="#">Man In The Middle Attack</a>  
+          <a class="dropdown-item" href="#">Wifi Hacking</a>     
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Hacking Through Android</a>
+        </div>
+      </li>
+    </ul>
+
+
+    <form class="form-inline my-2 my-lg-0" action="https://www.google.com/search">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+
+<!-- commands -->
+
+<div class="container">
+  <h2 class="text-success text-center ">Windows Important Commands</h2>
+  <p>You may run several commands and scripts on your computer using the Windows command line, sometimes referred to as the Command Prompt or the Windows Terminal. The command line can offer a more effective and versatile approach to administer your system, automate operations, and solve issues—despite the fact that many users prefer to utilise the graphical user interface (GUI) on their Windows computers.</p>
+  <p><strong>Note:</strong> The commands will be divided into a number of areas, including network setup, security, file and folder management, system information, and more. We will outline each command's syntax, parameters, and typical use situations in addition to giving usage examples. You will have a thorough understanding of the Windows command line at the end of this tutorial, as well as how to use it to improve the productivity and efficiency of your work.</p>
+  <div class=" text-center ">
+    <hr>
+    <i class="bi bi-link-45deg"></i>
+    <a class="text-danger" href="https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/windows-commands">
+    FOR MORE WINDOWS COMMAND PLEASE CLICK HERE</a><br>
+    <i class="bi bi-link-45deg"></i>
+    <a class="text-info" href="https://learn.microsoft.com/en-us/microsoft-365/?view=o365-worldwide">
+        FOR WINDOWS DOCUMENTATION PLEASE CLICK HERE</a>
+        <hr>
+  </div>
+
+
+<div id="accordion" >
+
+  <div class="card  ">
+    <div class="card-header  ">
+      <a class="card-link" data-toggle="collapse" href="#collapseOne">
+        Navigation Commands
+      </a>
+    </div>
+    <div id="collapseOne" class="collapse" data-parent="#accordion">
+      <div class="card-body " >
+        <br># Change the current working directory to the specified path
+        <br><p class="text-success">cd [path]</p>
+
+        <br># List the contents of the current directory.
+               <br><p class="text-success">dir</p>
+
+        <br># create a new directory
+               <br><p class="text-success">mkdir [dir_name]</p>
+
+        <br># to delete the specified directory (must be empty).
+               <br><p class="text-success">rmdir [dir_name]</p>
+
+        <br># to display the contents of the specified file.
+               <br><p class="text-success">type [file_name]</p>
+     
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header ">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseTwo">
+        File Management Commands
+      </a>
+    </div>
+    <div id="collapseTwo" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+# copy a file to a new location. 
+<br><p class="text-success">copy [source_file] [destination]</p>
+
+# delete the specified file. 
+<br><p class="text-success">del [file_name]</p>
+
+# move a file to a new location.
+<br><p class="text-success">move [source_file] [destination]</p>
+
+# to rename a file.
+<br><p class="text-success">ren [old_file_name] [new_file_name]</p>
+
+   
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree">
+        System Commands
+      </a>
+    </div>
+    <div id="collapseThree" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+# to display system information such as the operating system name, version, and build number, as well as information about the processor, memory, and network adapters.
+<br><p class="text-success">systeminfo</p>
+
+# to display a list of currently running processes. By default, it will display the process name, process ID, and memory usage for each process.
+<br><p class="text-success">tasklist</p>
+
+# to terminate the specified process. The /im option specifies that the process should be terminated by its image name (i.e. the name of the executable file). For example, taskkill /im notepad.exe would terminate any instances of the Notepad application that are currently running
+<br><p class="text-success">taskkill /im [process_name].exe</p>
+
+      </div>
+    </div>
+  </div>
+  <!--  -->
+
+    <div class="card">
+    <div class="card-header">
+      <a class="card-link" data-toggle="collapse" href="#collapseFour">
+        Networking Commands
+      </a>
+    </div>
+    <div id="collapseFour" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+# to display network configuration information such as the IP address, subnet mask, and default gateway for each network adapter. You can also use various options (e.g. ipconfig /all to display detailed information for each adapter or ipconfig /release to release the IP address for a specific adapter).
+<br><p class="text-success">ipconfig</p>
+
+# to test network connectivity by sending ICMP echo request packets to the specified host.
+<br><p class="text-success">ping [host_name]</p>
+
+# to trace the route that packets take from the local computer to the specified host.
+<br><p class="text-success">tracert [host_name]</p>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseFive">
+        User Account Management Commands
+      </a>
+    </div>
+    <div id="collapseFive" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+       # to manage user accounts on the local computer.
+<br><p class="text-success">net user [username]</p>
+
+# to manage local groups on the local computer.
+<br><p class="text-success">net localgroup [groupname]</p>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseSix">
+        Miscellaneous Commands
+      </a>
+    </div>
+    <div id="collapseSix" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+# to display or change file associations for a specific file extension.
+<br><p class="text-success">assoc [.ext]</p>
+
+# to display environment variables such as the current user’s home directory, the system root directory, and the temporary folder location.
+<br><p class="text-success">set</p>
+
+# to launch the Windows Task Manager, which displays information about currently running processes, performance metrics, and startup programs.
+<br><p class="text-success">taskmgr</p>
+
+  
+      </div>
+    </div>
+  </div>
+  <!--  -->
+  <div class="card">
+    <div class="card-header">
+      <a class="card-link" data-toggle="collapse" href="#collapseSeven">
+        File and Directory Management Commands
+      </a>
+    </div>
+    <div id="collapseSeven" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+       
+        # to create a new directory with the specified name.
+        <br><p class="text-success">md [directory]</p>
+        # to delete a directory with the specified name.
+        <br><p class="text-success">rd [directory]</p>
+        # to copy files and directories from the source location to the destination location. 
+        <br><p class="text-success">xcopy [source] [destination]</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseEight">
+        System Information Commands
+      </a>
+    </div>
+    <div id="collapseEight" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+# Create tar named archive.tar containing directory.
+<br><p class="text-success">systeminfo</p>
+
+# display detailed information about the local computer’s system configuration, including the operating system version, processor type, and installed hotfixes.
+<br><p class="text-success">tar xf archive.tar</p>
+
+# display the hostname of the local computer.
+<br><p class="text-success">hostname</p>
+
+# display active network connections, including the protocol, local and remote IP addresses, and connection status.
+<br><p class="text-success">netstat</p>
+
+# display a list of running processes on the local computer, including the process name, process ID, and memory usage.
+<br><p class="text-success">tasklist</p>
+
+# isplay a list of installed device drivers on the local computer, including the driver name, version, and file location.
+<br><p class="text-success">driverquery</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseNine">
+        Task Scheduler Commands
+      </a>
+    </div>
+    <div id="collapseNine" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+# display network statistics such as active TCP connections, open ports, and listening ports.
+<br><p class="text-success">netstat</p>
+
+# manage Windows services. You can use various options to start, stop, pause, resume, or query the status of a service.
+<br><p class="text-success">sc</p>
+
+# Qmanage event logs on the local computer. You can use various options to view, export, or clear event logs.
+<br><p class="text-success">wevtutil</p>
+
+# display the Resultant Set of Policy (RSoP) for a user or computer on the local or remote computer.
+<br><p class="text-success">gpresult</p>
+
+# manage the Windows registry. You can use various options to add, delete, modify, or query registry keys and values.
+<br><p class="text-success">reg</p>
+
+
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <a class="card-link" data-toggle="collapse" href="#collapseTen">
+        Batch Scripting & Processing Commands
+      </a>
+    </div>
+    <div id="collapseTen" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+# display messages and variables on the console. 
+<br><p class="text-success">@echo</p>
+
+# to create, modify, or delete environment variables.
+<br><p class="text-success">set</p>
+
+# to turn off the echoing of the batch script commands on the console. 
+<br><p class="text-success">echo off</p>
+
+# to wait for the user to press a key before continuing the script execution.
+<br><p class="text-success">pause</p>
+
+# to jump to a label in the script. 
+<br><p class="text-success">goto</p>
+
+# to call another batch script or command-line program from the current script. 
+<br><p class="text-success">call</p>
+
+# to execute a command or a series of commands based on a specific condition or a set of conditions. 
+<br><p class="text-success">if</p>
+
+# to execute a command or a series of commands for each item in a set of files or directories.
+<br><p class="text-success">for</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseEleven">
+        Compression and Archiving Commands
+      </a>
+    </div>
+    <div id="collapseEleven" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+# o compress files and directories to save disk space. 
+<br><p class="text-success">compact</p>
+
+# to extract files from a compressed Windows cabinet (.cab) file.
+<br><p class="text-success">expand</p>
+
+# to create a compressed Windows cabinet (.cab) file from one or more files. 
+<br><p class="text-success">makecab</p>
+
+# to create, extract, and manipulate tar archives.
+<br><p class="text-success">tar</p>
+
+# to create, extract, and manipulate ZIP archives.
+<br><p class="text-success">zip</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseTwelve">
+        Security Commands
+      </a>
+    </div>
+    <div id="collapseTwelve" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+# to encrypt or decrypt the files and folders on the local computer.
+<br><p class="text-success">cipher</p>
+
+# to scan the system files on the local computer and repair any corrupted or missing files. 
+<br><p class="text-success">sfc</p>
+
+# to manage the user accounts on the local computer. 
+<br><p class="text-success">net user</p>
+# to manage the groups on the local computer. 
+<br><p class="text-success">net group</p>
+# to configure the network settings on the local computer.
+<br><p class="text-success">netsh</p>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <a class="card-link" data-toggle="collapse" href="#collapseThirteen">
+        Disk Management Commands
+      </a>
+    </div>
+    <div id="collapseThirteen" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+# to check the file system and the physical disk for errors and bad sectors.
+<br><p class="text-success">chkdsk</p>
+
+# to manage the disk partitions and volumes on the local computer.
+<br><p class="text-success">diskpart</p>
+
+# to format the file system on a disk volume. 
+<br><p class="text-success">format</p>
+
+# to manage the file system features on the local computer.
+<br><p class="text-success">fsutil</p>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <a class="collapsed card-link" data-toggle="collapse" href="#collapseFourteen">
+        User Interface Commands
+      </a>
+    </div>
+    <div id="collapseFourteen" class="collapse" data-parent="#accordion">
+      <div class="card-body">
+# configure the console display and input modes on the local computer.
+<br><p class="text-success">mode</p>
+
+# change the foreground and background colors of the console screen on the local computer.
+<br><p class="text-success">color</p>
+
+# set the title of the console window on the local computer. 
+<br><p class="text-success">title</p>
+
+# clear the console screen on the local computer. 
+<br><p class="text-success">cls</p>
+
+# Display total disk usage off the current directory
+<br><p class="text-success">du -sh</p>
+      </div>
+    </div>
+  </div>
+  </div>
+  </div>
+  </div>
+
+
+
+
+<!-- Footer -->
+<footer>
+  <h1 class="text-center text-capitalize text-muted w-100 pt-5 pb-5 mt-5">Thank You</h1>
+</footer>
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<!-- Popper JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> 
+</body>
+</html>
