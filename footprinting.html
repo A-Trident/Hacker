@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Footprinting & Reconnaissance - Hacker's World</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Learn footprinting and reconnaissance techniques for ethical hacking">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #f59e0b;
+      --primary-glow: rgba(245, 158, 11, 0.3);
+      --dark: #0d1117;
+      --darker: #010409;
+      --card-bg: #161b22;
+      --text-primary: #c9d1d9;
+      --text-secondary: #8b949e;
+      --accent: #58a6ff;
+      --danger: #ff4444;
+      --border: #30363d;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--dark);
+      color: var(--text-primary);
+      overflow-x: hidden;
+    }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--darker); }
+    ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+
+    /* Navbar */
+    .navbar {
+      background: rgba(13, 17, 23, 0.95) !important;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 15px 30px;
+      transition: all 0.3s ease;
+    }
+    .navbar.scrolled { padding: 10px 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+    .navbar-brand { font-weight: 700; font-size: 1.4rem; color: #00ff88 !important; letter-spacing: 2px; }
+    .navbar-brand i { margin-right: 8px; }
+    .nav-link { color: var(--text-primary) !important; font-weight: 400; margin: 0 8px; transition: color 0.3s ease; }
+    .nav-link:hover { color: var(--primary) !important; }
+    .dropdown-menu {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px;
+      padding: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-height: 70vh; overflow-y: auto;
+    }
+    .navbar-nav .dropdown-menu { right: 0; left: auto; }
+    .dropdown-item { color: var(--text-primary); padding: 10px 15px; border-radius: 6px; transition: all 0.3s ease; font-size: 0.9rem; }
+    .dropdown-item:hover { background: rgba(245,158,11,0.1); color: var(--primary); transform: translateX(5px); }
+    .dropdown-item i { margin-right: 10px; color: var(--primary); }
+    .dropdown-divider { border-top-color: var(--border); }
+
+    /* Page Header */
+    .page-header {
+      padding: 120px 0 60px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .page-header::before {
+      content: '';
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: radial-gradient(ellipse at top, rgba(245,158,11,0.06), transparent 60%);
+      z-index: 0;
+    }
+    .page-header .container { position: relative; z-index: 1; }
+    .page-header h1 { font-size: 2.8rem; font-weight: 700; margin-bottom: 15px; }
+    .page-header h1 span { color: var(--primary); }
+    .page-header .lead {
+      color: var(--text-secondary); max-width: 750px; margin: 0 auto 20px; line-height: 1.8; font-size: 1.05rem;
+    }
+    .breadcrumb-custom {
+      display: flex; justify-content: center; gap: 8px; margin-bottom: 30px; flex-wrap: wrap;
+    }
+    .breadcrumb-custom a { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
+    .breadcrumb-custom a:hover { color: var(--primary); }
+    .breadcrumb-custom span { color: var(--text-secondary); font-size: 0.9rem; }
+
+    /* Phase Badge */
+    .phase-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 15px; border-radius: 50px; font-size: 0.75rem;
+      font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+    }
+    .badge-passive { background: rgba(0,255,136,0.1); color: #00ff88; border: 1px solid rgba(0,255,136,0.2); }
+    .badge-active { background: rgba(255,68,68,0.1); color: #ff4444; border: 1px solid rgba(255,68,68,0.2); }
+    .badge-tool { background: rgba(88,166,255,0.1); color: var(--accent); border: 1px solid rgba(88,166,255,0.2); }
+
+    /* Section Headers */
+    .section-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .section-header h2 {
+      font-size: 2rem; font-weight: 700; margin-bottom: 10px;
+    }
+    .section-header h2 span { color: var(--primary); }
+    .section-header p {
+      color: var(--text-secondary); max-width: 600px; margin: 0 auto;
+    }
+
+    /* Content Sections */
+    .content-section { padding: 60px 0; }
+
+    /* Info Cards */
+    .info-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 30px;
+      height: 100%;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .info-card:hover {
+      transform: translateY(-5px);
+      border-color: rgba(245,158,11,0.3);
+      box-shadow: 0 10px 30px rgba(245,158,11,0.08);
+    }
+    .info-card-icon {
+      width: 55px; height: 55px;
+      background: rgba(245,158,11,0.1);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 18px;
+    }
+    .info-card-icon i { font-size: 1.5rem; color: var(--primary); }
+    .info-card h5 { font-weight: 600; margin-bottom: 10px; font-size: 1.1rem; }
+    .info-card p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; margin: 0; }
+
+    /* Accordion */
+    .accordion-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      margin-bottom: 20px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .accordion-card:hover { border-color: rgba(245,158,11,0.3); }
+    .accordion-header {
+      padding: 20px 25px;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+      background: none; border: none; width: 100%;
+      text-align: left; color: var(--text-primary);
+      transition: background 0.3s ease;
+    }
+    .accordion-header:hover { background: rgba(245,158,11,0.03); }
+    .accordion-header-left { display: flex; align-items: center; gap: 15px; }
+    .accordion-icon {
+      width: 45px; height: 45px;
+      background: rgba(245,158,11,0.1);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .accordion-icon i { font-size: 1.3rem; color: var(--primary); }
+    .accordion-title { font-weight: 600; font-size: 1.05rem; }
+    .accordion-subtitle { font-size: 0.8rem; color: var(--text-secondary); }
+    .accordion-arrow {
+      color: var(--text-secondary); transition: transform 0.3s ease;
+    }
+    .accordion-arrow.rotated { transform: rotate(180deg); }
+    .accordion-body {
+      border-top: 1px solid var(--border);
+      padding: 25px;
+      display: none;
+      color: var(--text-secondary);
+      line-height: 1.9;
+      font-size: 0.95rem;
+    }
+    .accordion-body h6 { color: var(--primary); font-weight: 600; margin: 20px 0 10px; }
+    .accordion-body ul { padding-left: 20px; }
+    .accordion-body li { margin-bottom: 8px; }
+    .accordion-body strong { color: var(--text-primary); }
+
+    /* Tool Cards */
+    .tool-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      transition: all 0.3s ease;
+      height: 100%;
+    }
+    .tool-card:hover {
+      border-color: rgba(245,158,11,0.4);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(245,158,11,0.08);
+    }
+    .tool-card h6 { color: var(--primary); font-weight: 600; margin-bottom: 8px; }
+    .tool-card p { color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 10px; line-height: 1.6; }
+    .tool-cmd {
+      background: var(--dark);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 15px;
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    }
+    .tool-cmd code {
+      font-family: 'Fira Code', monospace;
+      color: var(--primary);
+      font-size: 0.85rem;
+      flex: 1;
+    }
+    .tool-cmd .copy-btn {
+      background: none; border: 1px solid var(--border); border-radius: 5px;
+      color: var(--text-secondary); padding: 3px 8px; cursor: pointer;
+      font-size: 0.75rem; transition: all 0.3s ease;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .tool-cmd .copy-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+    /* Process Steps */
+    .process-step {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 30px;
+      align-items: flex-start;
+    }
+    .step-number {
+      min-width: 50px; height: 50px;
+      background: rgba(245,158,11,0.1);
+      border: 2px solid var(--primary);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 1.2rem; color: var(--primary);
+      flex-shrink: 0;
+    }
+    .step-content h5 { font-weight: 600; margin-bottom: 5px; font-size: 1rem; }
+    .step-content p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+
+    /* Warning Box */
+    .warning-box {
+      background: linear-gradient(135deg, rgba(245,158,11,0.08), rgba(245,158,11,0.02));
+      border: 1px solid rgba(245,158,11,0.2);
+      border-radius: 12px;
+      padding: 25px;
+      margin: 30px 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .warning-box::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 4px; height: 100%; background: var(--primary);
+    }
+    .warning-box h6 { color: var(--primary); font-weight: 600; margin-bottom: 8px; }
+    .warning-box h6 i { margin-right: 8px; }
+    .warning-box p { color: var(--text-secondary); font-size: 0.9rem; margin: 0; line-height: 1.7; }
+
+    /* Table */
+    .styled-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 20px 0;
+    }
+    .styled-table thead th {
+      background: rgba(245,158,11,0.1);
+      color: var(--primary);
+      padding: 14px 18px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      border-bottom: 2px solid var(--border);
+    }
+    .styled-table tbody td {
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+    .styled-table tbody tr:hover { background: rgba(245,158,11,0.03); }
+    .styled-table tbody tr:last-child td { border-bottom: none; }
+
+    /* Footer */
+    .footer {
+      background: var(--darker);
+      border-top: 1px solid var(--border);
+      padding: 40px 0 20px;
+    }
+    .footer-content {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 15px;
+    }
+    .footer-brand { color: #00ff88; font-weight: 700; font-size: 1.2rem; letter-spacing: 2px; }
+    .footer-brand i { margin-right: 6px; }
+    .footer-links a {
+      color: var(--text-secondary); text-decoration: none; margin-left: 20px;
+      font-size: 0.9rem; transition: color 0.3s ease;
+    }
+    .footer-links a:hover { color: var(--primary); }
+    .footer-bottom {
+      text-align: center; margin-top: 20px; padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    .footer-bottom p { color: var(--text-secondary); font-size: 0.8rem; }
+
+    /* Back to Top */
+    .back-to-top {
+      position: fixed; bottom: 30px; right: 30px;
+      width: 45px; height: 45px;
+      background: var(--primary); color: var(--dark);
+      border: none; border-radius: 50%; font-size: 1.2rem;
+      cursor: pointer; display: none; align-items: center;
+      justify-content: center; z-index: 999;
+      box-shadow: 0 4px 15px var(--primary-glow);
+      transition: all 0.3s ease;
+    }
+    .back-to-top:hover { transform: translateY(-3px); }
+
+    /* Toast */
+    .toast-notification {
+      position: fixed; bottom: 80px; right: 30px;
+      background: var(--card-bg); border: 1px solid var(--primary);
+      color: var(--primary); padding: 12px 20px; border-radius: 10px;
+      font-size: 0.85rem; z-index: 1000; display: none;
+      box-shadow: 0 5px 20px var(--primary-glow);
+      animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(100px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .page-header h1 { font-size: 2rem; }
+      .footer-content { flex-direction: column; text-align: center; }
+      .footer-links a { margin: 0 10px; }
+      .process-step { flex-direction: column; align-items: center; text-align: center; }
+      .navbar-nav .dropdown-menu { right: auto; left: 0; max-height: 50vh; }
+    }
+  </style>
+</head>
+<body>
+
+<button class="back-to-top" id="backToTop"><i class="bi bi-arrow-up"></i></button>
+<div class="toast-notification" id="toast"><i class="bi bi-check-circle-fill"></i> <span id="toastMsg">Copied!</span></div>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg fixed-top" id="mainNavbar">
+  <a class="navbar-brand" href="index.html"><i class="bi bi-shield-lock-fill"></i> HACKER'S WORLD</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house-fill"></i> Home</a></li>
+      <li class="nav-item active"><a class="nav-link" href="#"><i class="bi bi-search"></i> Footprinting</a></li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"><i class="bi bi-grid-fill"></i> More</a>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="Linux_cmd.html"><i class="bi bi-terminal-fill"></i> Linux Commands</a>
+          <a class="dropdown-item" href="win-cmd.html"><i class="bi bi-windows"></i> Windows Commands</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="scanning.html"><i class="bi bi-broadcast-pin"></i> Scanning Networks</a>
+          <a class="dropdown-item" href="system-hacking.html"><i class="bi bi-pc-display"></i> System Hacking</a>
+          <a class="dropdown-item" href="android-hacking.html"><i class="bi bi-phone-fill"></i> Android Hacking</a>
+          <a class="dropdown-item" href="ddos.html"><i class="bi bi-lightning-fill"></i> DDoS</a>
+          <a class="dropdown-item" href="mitm.html"><i class="bi bi-people-fill"></i> MITM</a>
+          <a class="dropdown-item" href="wifi-hacking.html"><i class="bi bi-wifi"></i> WiFi Hacking</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Page Header -->
+<section class="page-header">
+  <div class="container">
+    <div class="breadcrumb-custom">
+      <a href="index.html"><i class="bi bi-house-fill"></i> Home</a>
+      <span>/</span>
+      <span>Footprinting &amp; Reconnaissance</span>
+    </div>
+    <h1 data-aos="fade-up"><i class="bi bi-search" style="color:var(--primary)"></i> Footprinting &amp; <span>Reconnaissance</span></h1>
+    <p class="lead" data-aos="fade-up" data-aos-delay="100">
+      Footprinting is the first phase of ethical hacking where a penetration tester gathers as much
+      information as possible about a target system, network, or organization before launching an attack.
+    </p>
+    <div data-aos="fade-up" data-aos-delay="200">
+      <span class="phase-badge badge-passive"><i class="bi bi-eye-fill"></i> Passive Recon</span>
+      <span class="phase-badge badge-active"><i class="bi bi-broadcast"></i> Active Recon</span>
+    </div>
+  </div>
+</section>
+
+<!-- What is Footprinting -->
+<section class="content-section">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>What is <span>Footprinting</span>?</h2>
+      <p>Understanding the first and most critical phase of penetration testing.</p>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="0">
+        <div class="info-card">
+          <div class="info-card-icon"><i class="bi bi-bullseye"></i></div>
+          <h5>Objective</h5>
+          <p>Collect maximum information about the target including IP ranges, domain details, network topology, OS fingerprinting, organizational structure, email addresses, and more.</p>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="info-card">
+          <div class="info-card-icon"><i class="bi bi-eye-fill"></i></div>
+          <h5>Passive Reconnaissance</h5>
+          <p>Gathering information without directly interacting with the target. Uses public sources like WHOIS, DNS records, social media, job postings, and cached pages.</p>
+          <span class="phase-badge badge-passive mt-2"><i class="bi bi-shield-check"></i> No Direct Contact</span>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="info-card">
+          <div class="info-card-icon"><i class="bi bi-broadcast"></i></div>
+          <h5>Active Reconnaissance</h5>
+          <p>Directly interacting with the target to gather information. Includes port scanning, ping sweeps, banner grabbing, and social engineering calls.</p>
+          <span class="phase-badge badge-active mt-2"><i class="bi bi-exclamation-triangle"></i> Direct Interaction</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Information Gathered -->
+<section class="content-section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>Information <span>Gathered</span></h2>
+      <p>Types of information collected during the footprinting phase.</p>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6 mb-4" data-aos="fade-up">
+        <div class="info-card">
+          <div class="info-card-icon"><i class="bi bi-building"></i></div>
+          <h5>Organization Information</h5>
+          <p>
+            • Employee details &amp; contact information<br>
+            • Company's branch and location details<br>
+            • Organization's background and structure<br>
+            • News articles and press releases<br>
+            • Legal documents and SEC filings<br>
+            • Company policies and procedures
+          </p>
+        </div>
+      </div>
+      <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="info-card">
+          <div class="info-card-icon"><i class="bi bi-hdd-network-fill"></i></div>
+          <h5>Network Information</h5>
+          <p>
+            • Domain names and sub-domains<br>
+            • IP addresses and network blocks<br>
+            • Network topology and architecture<br>
+            • Firewalls and IDS/IPS systems<br>
+            • DNS records (A, MX, NS, TXT, etc.)<br>
+            • Networking protocols in use
+          </p>
+        </div>
+      </div>
+      <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="info-card">
+          <div class="info-card-icon"><i class="bi bi-pc-display-horizontal"></i></div>
+          <h5>System Information</h5>
+          <p>
+            • Operating systems in use<br>
+            • Web server types and versions<br>
+            • User and group names<br>
+            • System banners and fingerprints<br>
+            • Routing tables and SNMP info<br>
+            • Authentication mechanisms
+          </p>
+        </div>
+      </div>
+      <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+        <div class="info-card">
+          <div class="info-card-icon"><i class="bi bi-globe2"></i></div>
+          <h5>Web Presence Information</h5>
+          <p>
+            • Social media profiles<br>
+            • Website technologies (CMS, frameworks)<br>
+            • Web application entry points<br>
+            • Cached and archived web pages<br>
+            • Metadata from public documents<br>
+            • Email addresses and formats
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footprinting Methodology -->
+<section class="content-section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>Footprinting <span>Methodology</span></h2>
+      <p>A step-by-step approach to information gathering.</p>
+    </div>
+
+    <div class="process-step" data-aos="fade-up">
+      <div class="step-number">1</div>
+      <div class="step-content">
+        <h5>Footprinting Through Search Engines</h5>
+        <p>Use Google Dorking, Bing, Shodan, and Censys to find hidden information, exposed directories, login pages, sensitive files, and misconfigured servers related to the target.</p>
+      </div>
+    </div>
+    <div class="process-step" data-aos="fade-up" data-aos-delay="50">
+      <div class="step-number">2</div>
+      <div class="step-content">
+        <h5>Footprinting Through Web Services</h5>
+        <p>Explore social networking sites (LinkedIn, Twitter, Facebook), job posting sites, financial services, and company websites to gather personal and organizational data.</p>
+      </div>
+    </div>
+    <div class="process-step" data-aos="fade-up" data-aos-delay="100">
+      <div class="step-number">3</div>
+      <div class="step-content">
+        <h5>Footprinting Through Social Networking</h5>
+        <p>Analyze employee profiles on social media platforms to learn about technologies, internal processes, roles, relationships, and potential entry points for social engineering.</p>
+      </div>
+    </div>
+    <div class="process-step" data-aos="fade-up" data-aos-delay="150">
+      <div class="step-number">4</div>
+      <div class="step-content">
+        <h5>WHOIS &amp; DNS Footprinting</h5>
+        <p>Query WHOIS databases and DNS servers to discover domain registrant information, name servers, mail servers, IP ranges, and subdomains associated with the target.</p>
+      </div>
+    </div>
+    <div class="process-step" data-aos="fade-up" data-aos-delay="200">
+      <div class="step-number">5</div>
+      <div class="step-content">
+        <h5>Network Footprinting</h5>
+        <p>Map the target's network using traceroute, ping sweeps, and network scanning to identify live hosts, network ranges, routing paths, and infrastructure components.</p>
+      </div>
+    </div>
+    <div class="process-step" data-aos="fade-up" data-aos-delay="250">
+      <div class="step-number">6</div>
+      <div class="step-content">
+        <h5>Email Footprinting</h5>
+        <p>Track email headers, analyze communication paths, identify mail servers, and gather email addresses to map the organization's email infrastructure.</p>
+      </div>
+    </div>
+    <div class="process-step" data-aos="fade-up" data-aos-delay="300">
+      <div class="step-number">7</div>
+      <div class="step-content">
+        <h5>Competitive Intelligence Gathering</h5>
+        <p>Collect business-related information from public records, SEC filings, news articles, and industry reports to understand the target's strategic position.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Google Dorking -->
+<section class="content-section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>Google <span>Dorking</span></h2>
+      <p>Advanced search operators to uncover hidden information.</p>
+    </div>
+
+    <div class="warning-box" data-aos="fade-up">
+      <h6><i class="bi bi-exclamation-triangle-fill"></i> Important Notice</h6>
+      <p>Google Dorking should only be used for authorized security assessments. Unauthorized use against systems you don't own or have permission to test is illegal.</p>
+    </div>
+
+    <table class="styled-table" data-aos="fade-up">
+      <thead>
+        <tr>
+          <th>Operator</th>
+          <th>Description</th>
+          <th>Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code style="color:var(--primary)">site:</code></td>
+          <td>Restrict results to a specific domain</td>
+          <td><code style="color:var(--accent)">site:example.com</code></td>
+        </tr>
+        <tr>
+          <td><code style="color:var(--primary)">intitle:</code></td>
+          <td>Search for pages with specific title</td>
+          <td><code style="color:var(--accent)">intitle:"index of"</code></td>
+        </tr>
+        <tr>
+          <td><code style="color:var(--primary)">inurl:</code></td>
+          <td>Search for specific strings in URL</td>
+          <td><code style="color:var(--accent)">inurl:admin</code></td>
+        </tr>
+        <tr>
+          <td><code style="color:var(--primary)">filetype:</code></td>
+          <td>Search for specific file types</td>
+          <td><code style="color:var(--accent)">filetype:pdf site:example.com</code></td>
+        </tr>
+        <tr>
+          <td><code style="color:var(--primary)">intext:</code></td>
+          <td>Search for text within page body</td>
+          <td><code style="color:var(--accent)">intext:"password"</code></td>
+        </tr>
+        <tr>
+          <td><code style="color:var(--primary)">cache:</code></td>
+          <td>View Google's cached version of a page</td>
+          <td><code style="color:var(--accent)">cache:example.com</code></td>
+        </tr>
+        <tr>
+          <td><code style="color:var(--primary)">link:</code></td>
+          <td>Find pages that link to a specific URL</td>
+          <td><code style="color:var(--accent)">link:example.com</code></td>
+        </tr>
+        <tr>
+          <td><code style="color:var(--primary)">info:</code></td>
+          <td>Get info Google has about a page</td>
+          <td><code style="color:var(--accent)">info:example.com</code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Tools Section -->
+<section class="content-section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>Footprinting <span>Tools</span></h2>
+      <p>Popular tools used during the reconnaissance phase.</p>
+    </div>
+
+    <div class="row">
+      <!-- WHOIS -->
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="0">
+        <div class="tool-card">
+          <h6><i class="bi bi-globe2"></i> WHOIS Lookup</h6>
+          <p>Query domain registration databases to find registrant info, name servers, creation dates, and contact details.</p>
+          <span class="phase-badge badge-passive mb-2"><i class="bi bi-eye"></i> Passive</span>
+          <div class="tool-cmd">
+            <code>whois example.com</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+      </div>
+      <!-- Nslookup -->
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="50">
+        <div class="tool-card">
+          <h6><i class="bi bi-diagram-3-fill"></i> Nslookup</h6>
+          <p>Query DNS name servers to find IP addresses, mail servers, and other DNS records for a domain.</p>
+          <span class="phase-badge badge-passive mb-2"><i class="bi bi-eye"></i> Passive</span>
+          <div class="tool-cmd">
+            <code>nslookup example.com</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+      </div>
+      <!-- Dig -->
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="tool-card">
+          <h6><i class="bi bi-terminal-fill"></i> Dig</h6>
+          <p>Flexible DNS lookup utility for querying DNS servers. Provides detailed information about DNS records.</p>
+          <span class="phase-badge badge-passive mb-2"><i class="bi bi-eye"></i> Passive</span>
+          <div class="tool-cmd">
+            <code>dig example.com ANY</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+      </div>
+      <!-- theHarvester -->
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="150">
+        <div class="tool-card">
+          <h6><i class="bi bi-envelope-fill"></i> theHarvester</h6>
+          <p>Gather email addresses, subdomains, hosts, employee names, and open ports from public sources.</p>
+          <span class="phase-badge badge-passive mb-2"><i class="bi bi-eye"></i> Passive</span>
+          <div class="tool-cmd">
+            <code>theHarvester -d example.com -b google</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+      </div>
+      <!-- Maltego -->
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="tool-card">
+          <h6><i class="bi bi-diagram-2-fill"></i> Maltego</h6>
+          <p>Visual link analysis tool for mapping relationships between entities like people, domains, companies, and infrastructure.</p>
+          <span class="phase-badge badge-tool mb-2"><i class="bi bi-tools"></i> GUI Tool</span>
+          <div class="tool-cmd">
+            <code>maltego</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+      </div>
+      <!-- Recon-ng -->
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="250">
+        <div class="tool-card">
+          <h6><i class="bi bi-search"></i> Recon-ng</h6>
+          <p>Full-featured web reconnaissance framework with independent modules for OSINT gathering and analysis.</p>
+          <span class="phase-badge badge-passive mb-2"><i class="bi bi-eye"></i> Passive</span>
+          <div class="tool-cmd">
+            <code>recon-ng</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+      </div>
+      <!-- Shodan -->
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+        <div class="tool-card">
+          <h6><i class="bi bi-hdd-rack-fill"></i> Shodan</h6>
+          <p>Search engine for Internet-connected devices. Find exposed servers, webcams, industrial systems, and IoT devices.</p>
+          <span class="phase-badge badge-passive mb-2"><i class="bi bi-eye"></i> Passive</span>
+          <div class="tool-cmd">
+            <code>shodan search "apache" --limit 10</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+      </div>
+      <!-- Sublist3r -->
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="350">
+        <div class="tool-card">
+          <h6><i class="bi bi-list-nested"></i> Sublist3r</h6>
+          <p>Fast subdomain enumeration tool using multiple search engines and bruteforce to discover subdomains.</p>
+          <span class="phase-badge badge-passive mb-2"><i class="bi bi-eye"></i> Passive</span>
+          <div class="tool-cmd">
+            <code>sublist3r -d example.com</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+      </div>
+      <!-- Traceroute -->
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="400">
+        <div class="tool-card">
+          <h6><i class="bi bi-arrow-right-circle-fill"></i> Traceroute</h6>
+          <p>Trace the route packets take to reach a destination. Identifies routers, gateways, and network hops.</p>
+          <span class="phase-badge badge-active mb-2"><i class="bi bi-broadcast"></i> Active</span>
+          <div class="tool-cmd">
+            <code>traceroute example.com</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Detailed Techniques Accordion -->
+<section class="content-section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>Detailed <span>Techniques</span></h2>
+      <p>In-depth exploration of each footprinting technique.</p>
+    </div>
+
+    <!-- WHOIS Footprinting -->
+    <div class="accordion-card" data-aos="fade-up">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-header-left">
+          <div class="accordion-icon"><i class="bi bi-globe2"></i></div>
+          <div>
+            <div class="accordion-title">WHOIS Footprinting</div>
+            <div class="accordion-subtitle">Domain registration &amp; ownership data</div>
+          </div>
+        </div>
+        <i class="bi bi-chevron-down accordion-arrow"></i>
+      </div>
+      <div class="accordion-body">
+        <p>WHOIS is a query and response protocol used for querying databases that store registered users or assignees of an Internet resource such as a domain name or IP address block.</p>
+        <h6>Information Obtained:</h6>
+        <ul>
+          <li><strong>Domain name details</strong> — Registration date, expiry, and status</li>
+          <li><strong>Registrant contact</strong> — Name, email, phone, and address</li>
+          <li><strong>Name servers</strong> — DNS servers handling the domain</li>
+          <li><strong>Registrar info</strong> — Domain registrar company details</li>
+          <li><strong>IP range</strong> — Network blocks assigned to the organization</li>
+        </ul>
+        <h6>WHOIS Resources:</h6>
+        <ul>
+          <li><a href="https://whois.domaintools.com/" target="_blank" style="color:var(--accent)">DomainTools WHOIS</a></li>
+          <li><a href="https://www.arin.net/resources/registry/whois/" target="_blank" style="color:var(--accent)">ARIN WHOIS (North America)</a></li>
+          <li><a href="https://www.ripe.net/manage-ips-and-asns/db" target="_blank" style="color:var(--accent)">RIPE NCC (Europe)</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- DNS Footprinting -->
+    <div class="accordion-card" data-aos="fade-up" data-aos-delay="50">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-header-left">
+          <div class="accordion-icon"><i class="bi bi-diagram-3-fill"></i></div>
+          <div>
+            <div class="accordion-title">DNS Footprinting</div>
+            <div class="accordion-subtitle">Domain Name System record analysis</div>
+          </div>
+        </div>
+        <i class="bi bi-chevron-down accordion-arrow"></i>
+      </div>
+      <div class="accordion-body">
+        <p>DNS footprinting involves querying DNS servers to extract information about the target's domain infrastructure.</p>
+        <h6>DNS Record Types:</h6>
+        <table class="styled-table">
+          <thead>
+            <tr><th>Record</th><th>Description</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>A</strong></td><td>Maps hostname to IPv4 address</td></tr>
+            <tr><td><strong>AAAA</strong></td><td>Maps hostname to IPv6 address</td></tr>
+            <tr><td><strong>MX</strong></td><td>Mail exchange server records</td></tr>
+            <tr><td><strong>NS</strong></td><td>Authoritative name servers for the domain</td></tr>
+            <tr><td><strong>CNAME</strong></td><td>Canonical name (alias) records</td></tr>
+            <tr><td><strong>SOA</strong></td><td>Start of Authority — primary DNS info</td></tr>
+            <tr><td><strong>TXT</strong></td><td>Text records (SPF, DKIM, verification)</td></tr>
+            <tr><td><strong>PTR</strong></td><td>Reverse DNS — maps IP to hostname</td></tr>
+          </tbody>
+        </table>
+        <h6>DNS Zone Transfer:</h6>
+        <p>A DNS zone transfer replicates DNS data across servers. If misconfigured, attackers can obtain the entire DNS zone file containing all records.</p>
+        <div class="tool-cmd" style="margin-top:10px;">
+          <code>dig axfr @ns1.example.com example.com</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Email Footprinting -->
+    <div class="accordion-card" data-aos="fade-up" data-aos-delay="100">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-header-left">
+          <div class="accordion-icon"><i class="bi bi-envelope-fill"></i></div>
+          <div>
+            <div class="accordion-title">Email Footprinting</div>
+            <div class="accordion-subtitle">Email header analysis &amp; tracking</div>
+          </div>
+        </div>
+        <i class="bi bi-chevron-down accordion-arrow"></i>
+      </div>
+      <div class="accordion-body">
+        <p>Email footprinting involves analyzing email headers to trace the origin of an email, identify mail servers, and gather network information.</p>
+        <h6>Information from Email Headers:</h6>
+        <ul>
+          <li><strong>Sender's IP address</strong> and geographic location</li>
+          <li><strong>Mail server</strong> details and routing path</li>
+          <li><strong>Authentication</strong> results (SPF, DKIM, DMARC)</li>
+          <li><strong>Email client</strong> and operating system used</li>
+          <li><strong>Timestamps</strong> and time zone information</li>
+        </ul>
+        <h6>Email Tracking Tools:</h6>
+        <ul>
+          <li><a href="https://mxtoolbox.com/EmailHeaders.aspx" target="_blank" style="color:var(--accent)">MXToolbox Header Analyzer</a></li>
+          <li><a href="https://toolbox.googleapps.com/apps/messageheader/" target="_blank" style="color:var(--accent)">Google Message Header Analyzer</a></li>
+          <li>infoga — Email OSINT tool on Kali Linux</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Website Footprinting -->
+    <div class="accordion-card" data-aos="fade-up" data-aos-delay="150">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-header-left">
+          <div class="accordion-icon"><i class="bi bi-window-desktop"></i></div>
+          <div>
+            <div class="accordion-title">Website Footprinting</div>
+            <div class="accordion-subtitle">Web technology analysis &amp; mapping</div>
+          </div>
+        </div>
+        <i class="bi bi-chevron-down accordion-arrow"></i>
+      </div>
+      <div class="accordion-body">
+        <p>Website footprinting involves examining the target's web presence to identify technologies, structures, and potential vulnerabilities.</p>
+        <h6>Techniques:</h6>
+        <ul>
+          <li><strong>Web mirroring</strong> — Download and analyze an entire website offline using tools like HTTrack</li>
+          <li><strong>Technology identification</strong> — Identify CMS, frameworks, plugins using Wappalyzer or BuiltWith</li>
+          <li><strong>robots.txt &amp; sitemap.xml</strong> — Find hidden directories and restricted areas</li>
+          <li><strong>Source code analysis</strong> — Examine HTML, JavaScript for comments, API keys, endpoints</li>
+          <li><strong>Metadata extraction</strong> — Extract metadata from public documents (FOCA, ExifTool)</li>
+          <li><strong>Wayback Machine</strong> — View archived versions of the website for historical data</li>
+        </ul>
+        <h6>Useful Resources:</h6>
+        <ul>
+          <li><a href="https://web.archive.org/" target="_blank" style="color:var(--accent)">Wayback Machine</a></li>
+          <li><a href="https://www.wappalyzer.com/" target="_blank" style="color:var(--accent)">Wappalyzer</a></li>
+          <li><a href="https://builtwith.com/" target="_blank" style="color:var(--accent)">BuiltWith</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Social Engineering Recon -->
+    <div class="accordion-card" data-aos="fade-up" data-aos-delay="200">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-header-left">
+          <div class="accordion-icon"><i class="bi bi-person-bounding-box"></i></div>
+          <div>
+            <div class="accordion-title">Social Engineering Reconnaissance</div>
+            <div class="accordion-subtitle">Human intelligence &amp; OSINT</div>
+          </div>
+        </div>
+        <i class="bi bi-chevron-down accordion-arrow"></i>
+      </div>
+      <div class="accordion-body">
+        <p>Social engineering reconnaissance involves gathering information about people within the target organization using publicly available information and social interactions.</p>
+        <h6>Sources of Information:</h6>
+        <ul>
+          <li><strong>LinkedIn</strong> — Employee roles, technologies used, organizational hierarchy</li>
+          <li><strong>Twitter/X</strong> — Company announcements, employee opinions, tech stack mentions</li>
+          <li><strong>GitHub</strong> — Public repositories, code commits, API keys, credentials</li>
+          <li><strong>Job postings</strong> — Technologies, tools, and systems used internally</li>
+          <li><strong>Company blog</strong> — Technical articles revealing architecture and tools</li>
+          <li><strong>Forums &amp; communities</strong> — Employee questions revealing internal systems</li>
+        </ul>
+        <h6>OSINT Tools:</h6>
+        <ul>
+          <li><a href="https://osintframework.com/" target="_blank" style="color:var(--accent)">OSINT Framework</a> — Collection of OSINT tools and resources</li>
+          <li><strong>Sherlock</strong> — Find social media accounts by username</li>
+          <li><strong>SpiderFoot</strong> — Automated OSINT reconnaissance</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- Countermeasures -->
+<section class="content-section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>Counter<span>measures</span></h2>
+      <p>How organizations can protect themselves from footprinting attacks.</p>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6 mb-4" data-aos="fade-up">
+        <div class="info-card">
+          <div class="info-card-icon"><i class="bi bi-shield-fill-check"></i></div>
+          <h5>Technical Countermeasures</h5>
+          <p>
+            • Restrict zone transfers to authorized servers only<br>
+            • Use WHOIS privacy protection services<br>
+            • Configure web servers to hide version information<br>
+            • Implement proper robots.txt without revealing sensitive directories<br>
+            • Remove metadata from public documents<br>
+            • Use strong access controls on DNS records<br>
+            • Enable DNSSEC for DNS integrity
+          </p>
+        </div>
+      </div>
+      <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="info-card">
+          <div class="info-card-icon"><i class="bi bi-people-fill"></i></div>
+          <h5>Organizational Countermeasures</h5>
+          <p>
+            • Train employees on social engineering awareness<br>
+            • Establish strict social media policies<br>
+            • Limit information in job postings<br>
+            • Regularly audit public-facing information<br>
+            • Use separate email addresses for domain registration<br>
+            • Monitor for data leaks and exposed credentials<br>
+            • Implement an information classification policy
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand"><i class="bi bi-shield-lock-fill"></i> HACKER'S WORLD</div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="Linux_cmd.html">Linux</a>
+        <a href="win-cmd.html">Windows</a>
+        <a href="scanning.html">Scanning</a>
+        <a href="system-hacking.html">System Hacking</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 Hacker's World. All Rights Reserved. Educational purposes only.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+<script>
+  AOS.init({ once: true, duration: 600 });
+
+  // Navbar scroll
+  window.addEventListener('scroll', function () {
+    var nb = document.getElementById('mainNavbar');
+    var bt = document.getElementById('backToTop');
+    nb.classList.toggle('scrolled', window.scrollY > 50);
+    bt.style.display = window.scrollY > 300 ? 'flex' : 'none';
+  });
+
+  // Back to top
+  document.getElementById('backToTop').addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // Toggle accordion
+  function toggleAccordion(header) {
+    var body = header.nextElementSibling;
+    var arrow = header.querySelector('.accordion-arrow');
+    var isOpen = body.style.display === 'block';
+    body.style.display = isOpen ? 'none' : 'block';
+    arrow.classList.toggle('rotated', !isOpen);
+  }
+
+  // Copy tool command
+  function copyTool(btn) {
+    var code = btn.parentElement.querySelector('code');
+    var text = code.textContent.trim();
+    navigator.clipboard.writeText(text).then(function () {
+      btn.innerHTML = '<i class="bi bi-check-lg"></i>';
+      showToast('Command copied to clipboard!');
+      setTimeout(function () {
+        btn.innerHTML = '<i class="bi bi-clipboard"></i>';
+      }, 2000);
+    });
+  }
+
+  // Toast
+  function showToast(msg) {
+    var t = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    t.style.display = 'block';
+    setTimeout(function () { t.style.display = 'none'; }, 2500);
+  }
+</script>
+
+</body>
+</html>

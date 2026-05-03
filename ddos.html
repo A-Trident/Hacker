@@ -1,0 +1,1072 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>DDoS Attacks - Hacker's World</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Learn about DDoS attacks, types, tools, and defense mechanisms">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #f97316;
+      --primary-glow: rgba(249, 115, 22, 0.3);
+      --primary-light: rgba(249, 115, 22, 0.1);
+      --dark: #0d1117;
+      --darker: #010409;
+      --card-bg: #161b22;
+      --text-primary: #c9d1d9;
+      --text-secondary: #8b949e;
+      --accent: #58a6ff;
+      --danger: #ff4444;
+      --success: #00ff88;
+      --warning: #f59e0b;
+      --purple: #a855f7;
+      --border: #30363d;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--dark);
+      color: var(--text-primary);
+      overflow-x: hidden;
+    }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--darker); }
+    ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+
+    /* Navbar */
+    .navbar {
+      background: rgba(13,17,23,0.95) !important; backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border); padding: 15px 30px; transition: all 0.3s ease;
+    }
+    .navbar.scrolled { padding: 10px 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+    .navbar-brand { font-weight: 700; font-size: 1.4rem; color: #00ff88 !important; letter-spacing: 2px; }
+    .navbar-brand i { margin-right: 8px; }
+    .nav-link { color: var(--text-primary) !important; font-weight: 400; margin: 0 8px; transition: color 0.3s ease; }
+    .nav-link:hover { color: var(--primary) !important; }
+    .dropdown-menu {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px;
+      padding: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-height: 70vh; overflow-y: auto;
+    }
+    .navbar-nav .dropdown-menu { right: 0; left: auto; }
+    .dropdown-item { color: var(--text-primary); padding: 10px 15px; border-radius: 6px; transition: all 0.3s ease; font-size: 0.9rem; }
+    .dropdown-item:hover { background: var(--primary-light); color: var(--primary); transform: translateX(5px); }
+    .dropdown-item i { margin-right: 10px; color: var(--primary); }
+    .dropdown-divider { border-top-color: var(--border); }
+
+    /* Page Header */
+    .page-header {
+      padding: 120px 0 60px; text-align: center; position: relative; overflow: hidden;
+    }
+    .page-header::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(ellipse at top, rgba(249,115,22,0.06), transparent 60%),
+                  radial-gradient(ellipse at bottom right, rgba(255,68,68,0.04), transparent 60%);
+      z-index: 0;
+    }
+    .page-header .container { position: relative; z-index: 1; }
+    .page-header h1 { font-size: 2.8rem; font-weight: 700; margin-bottom: 15px; }
+    .page-header h1 span { color: var(--primary); }
+    .page-header .lead {
+      color: var(--text-secondary); max-width: 750px; margin: 0 auto 20px; line-height: 1.8; font-size: 1.05rem;
+    }
+    .breadcrumb-custom {
+      display: flex; justify-content: center; gap: 8px; margin-bottom: 30px; flex-wrap: wrap;
+    }
+    .breadcrumb-custom a { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
+    .breadcrumb-custom a:hover { color: var(--primary); }
+    .breadcrumb-custom span { color: var(--text-secondary); font-size: 0.9rem; }
+
+    /* Badges */
+    .ddos-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 15px; border-radius: 50px; font-size: 0.75rem;
+      font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+    }
+    .badge-volumetric { background: rgba(249,115,22,0.1); color: var(--primary); border: 1px solid rgba(249,115,22,0.2); }
+    .badge-protocol { background: rgba(168,85,247,0.1); color: var(--purple); border: 1px solid rgba(168,85,247,0.2); }
+    .badge-application { background: rgba(88,166,255,0.1); color: var(--accent); border: 1px solid rgba(88,166,255,0.2); }
+    .badge-layer { background: rgba(0,255,136,0.1); color: var(--success); border: 1px solid rgba(0,255,136,0.2); }
+
+    /* Section */
+    .section-header { text-align: center; margin-bottom: 50px; }
+    .section-header h2 { font-size: 2rem; font-weight: 700; margin-bottom: 10px; }
+    .section-header h2 span { color: var(--primary); }
+    .section-header p { color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
+    .content-section { padding: 60px 0; }
+
+    /* Info Cards */
+    .info-card {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 15px;
+      padding: 30px; height: 100%; transition: all 0.3s ease;
+    }
+    .info-card:hover {
+      transform: translateY(-5px); border-color: rgba(249,115,22,0.3);
+      box-shadow: 0 10px 30px rgba(249,115,22,0.08);
+    }
+    .info-card-icon {
+      width: 55px; height: 55px; background: var(--primary-light);
+      border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 18px;
+    }
+    .info-card-icon i { font-size: 1.5rem; color: var(--primary); }
+    .info-card h5 { font-weight: 600; margin-bottom: 10px; font-size: 1.1rem; }
+    .info-card p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; margin: 0; }
+
+    /* Attack Type Cards */
+    .attack-card {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 15px;
+      padding: 25px; height: 100%; transition: all 0.3s ease; position: relative; overflow: hidden;
+    }
+    .attack-card:hover {
+      border-color: rgba(249,115,22,0.4); transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(249,115,22,0.1);
+    }
+    .attack-card::after {
+      content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--danger));
+      transform: scaleX(0); transition: transform 0.3s ease;
+    }
+    .attack-card:hover::after { transform: scaleX(1); }
+    .attack-card h6 { color: var(--primary); font-weight: 600; margin-bottom: 8px; font-size: 1rem; }
+    .attack-card p { color: var(--text-secondary); font-size: 0.85rem; line-height: 1.7; margin-bottom: 12px; }
+
+    /* OSI Layer Visual */
+    .osi-layer {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px;
+      padding: 15px 20px; margin-bottom: 8px; display: flex; align-items: center; gap: 15px;
+      transition: all 0.3s ease;
+    }
+    .osi-layer:hover {
+      border-color: rgba(249,115,22,0.3); transform: translateX(5px);
+    }
+    .osi-num {
+      min-width: 40px; height: 40px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem; flex-shrink: 0;
+    }
+    .osi-info h6 { font-weight: 600; font-size: 0.9rem; margin-bottom: 2px; }
+    .osi-info p { color: var(--text-secondary); font-size: 0.8rem; margin: 0; }
+    .osi-target { font-size: 0.7rem; color: var(--danger); font-weight: 600; }
+
+    /* Flow Diagram */
+    .flow-container {
+      display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 15px;
+      margin: 30px 0;
+    }
+    .flow-box {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+      padding: 20px; text-align: center; min-width: 160px; transition: all 0.3s ease;
+    }
+    .flow-box:hover {
+      border-color: rgba(249,115,22,0.4); transform: translateY(-3px);
+    }
+    .flow-box i { font-size: 1.5rem; color: var(--primary); margin-bottom: 8px; display: block; }
+    .flow-box h6 { font-size: 0.85rem; font-weight: 600; margin-bottom: 4px; }
+    .flow-box p { font-size: 0.75rem; color: var(--text-secondary); margin: 0; }
+    .flow-arrow {
+      color: var(--primary); font-size: 1.5rem;
+    }
+
+    /* Stats Cards */
+    .stat-card {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px;
+      padding: 25px; text-align: center; transition: all 0.3s ease;
+    }
+    .stat-card:hover {
+      border-color: rgba(249,115,22,0.3); transform: translateY(-3px);
+    }
+    .stat-number { font-size: 2rem; font-weight: 700; color: var(--primary); }
+    .stat-label { font-size: 0.85rem; color: var(--text-secondary); }
+
+    /* Tool Command Block */
+    .tool-cmd {
+      background: var(--dark); border: 1px solid var(--border); border-radius: 8px;
+      padding: 12px 15px; display: flex; align-items: center;
+      justify-content: space-between; gap: 10px; margin-top: 10px;
+    }
+    .tool-cmd code {
+      font-family: 'Fira Code', monospace; color: var(--primary); font-size: 0.85rem; flex: 1;
+      word-break: break-all;
+    }
+    .tool-cmd .copy-btn {
+      background: none; border: 1px solid var(--border); border-radius: 5px;
+      color: var(--text-secondary); padding: 3px 8px; cursor: pointer;
+      font-size: 0.75rem; transition: all 0.3s ease;
+      display: flex; align-items: center; gap: 4px; flex-shrink: 0;
+    }
+    .tool-cmd .copy-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+    /* Accordion */
+    .accordion-card {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 15px;
+      margin-bottom: 20px; overflow: hidden; transition: all 0.3s ease;
+    }
+    .accordion-card:hover { border-color: rgba(249,115,22,0.3); }
+    .accordion-header {
+      padding: 20px 25px; cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+      background: none; border: none; width: 100%;
+      text-align: left; color: var(--text-primary); transition: background 0.3s ease;
+    }
+    .accordion-header:hover { background: rgba(249,115,22,0.03); }
+    .accordion-header-left { display: flex; align-items: center; gap: 15px; }
+    .accordion-icon {
+      width: 45px; height: 45px; background: var(--primary-light);
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    }
+    .accordion-icon i { font-size: 1.3rem; color: var(--primary); }
+    .accordion-title { font-weight: 600; font-size: 1.05rem; }
+    .accordion-subtitle { font-size: 0.8rem; color: var(--text-secondary); }
+    .accordion-arrow { color: var(--text-secondary); transition: transform 0.3s ease; }
+    .accordion-arrow.rotated { transform: rotate(180deg); }
+    .accordion-body {
+      border-top: 1px solid var(--border); padding: 25px; display: none;
+      color: var(--text-secondary); line-height: 1.9; font-size: 0.95rem;
+    }
+    .accordion-body h6 { color: var(--primary); font-weight: 600; margin: 20px 0 10px; }
+    .accordion-body h6:first-child { margin-top: 0; }
+    .accordion-body ul { padding-left: 20px; }
+    .accordion-body li { margin-bottom: 8px; }
+    .accordion-body strong { color: var(--text-primary); }
+
+    /* Styled Table */
+    .styled-table {
+      width: 100%; border-collapse: separate; border-spacing: 0;
+      border-radius: 12px; overflow: hidden; margin: 20px 0;
+    }
+    .styled-table thead th {
+      background: var(--primary-light); color: var(--primary);
+      padding: 14px 18px; font-weight: 600; font-size: 0.9rem;
+      border-bottom: 2px solid var(--border);
+    }
+    .styled-table tbody td {
+      padding: 12px 18px; border-bottom: 1px solid var(--border);
+      font-size: 0.9rem; color: var(--text-secondary);
+    }
+    .styled-table tbody tr:hover { background: rgba(249,115,22,0.03); }
+    .styled-table tbody tr:last-child td { border-bottom: none; }
+
+    /* Warning Box */
+    .warning-box {
+      background: linear-gradient(135deg, rgba(255,68,68,0.08), rgba(255,68,68,0.02));
+      border: 1px solid rgba(255,68,68,0.2); border-radius: 12px;
+      padding: 25px; margin: 30px 0; position: relative; overflow: hidden;
+    }
+    .warning-box::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 4px; height: 100%; background: var(--danger);
+    }
+    .warning-box h6 { color: var(--danger); font-weight: 600; margin-bottom: 8px; }
+    .warning-box h6 i { margin-right: 8px; }
+    .warning-box p { color: var(--text-secondary); font-size: 0.9rem; margin: 0; line-height: 1.7; }
+
+    /* Footer */
+    .footer {
+      background: var(--darker); border-top: 1px solid var(--border); padding: 40px 0 20px;
+    }
+    .footer-content {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
+    }
+    .footer-brand { color: #00ff88; font-weight: 700; font-size: 1.2rem; letter-spacing: 2px; }
+    .footer-brand i { margin-right: 6px; }
+    .footer-links a {
+      color: var(--text-secondary); text-decoration: none; margin-left: 20px;
+      font-size: 0.9rem; transition: color 0.3s ease;
+    }
+    .footer-links a:hover { color: var(--primary); }
+    .footer-bottom {
+      text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border);
+    }
+    .footer-bottom p { color: var(--text-secondary); font-size: 0.8rem; }
+
+    .back-to-top {
+      position: fixed; bottom: 30px; right: 30px; width: 45px; height: 45px;
+      background: var(--primary); color: #fff; border: none; border-radius: 50%;
+      font-size: 1.2rem; cursor: pointer; display: none; align-items: center;
+      justify-content: center; z-index: 999;
+      box-shadow: 0 4px 15px var(--primary-glow); transition: all 0.3s ease;
+    }
+    .back-to-top:hover { transform: translateY(-3px); }
+
+    .toast-notification {
+      position: fixed; bottom: 80px; right: 30px;
+      background: var(--card-bg); border: 1px solid var(--primary);
+      color: var(--primary); padding: 12px 20px; border-radius: 10px;
+      font-size: 0.85rem; z-index: 1000; display: none;
+      box-shadow: 0 5px 20px var(--primary-glow); animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(100px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+      .page-header h1 { font-size: 2rem; }
+      .footer-content { flex-direction: column; text-align: center; }
+      .footer-links a { margin: 0 10px; }
+      .flow-container { flex-direction: column; }
+      .flow-arrow { transform: rotate(90deg); }
+      .navbar-nav .dropdown-menu { right: auto; left: 0; max-height: 50vh; }
+    }
+  </style>
+</head>
+<body>
+
+<button class="back-to-top" id="backToTop"><i class="bi bi-arrow-up"></i></button>
+<div class="toast-notification" id="toast"><i class="bi bi-check-circle-fill"></i> <span id="toastMsg">Copied!</span></div>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg fixed-top" id="mainNavbar">
+  <a class="navbar-brand" href="index.html"><i class="bi bi-shield-lock-fill"></i> HACKER'S WORLD</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house-fill"></i> Home</a></li>
+      <li class="nav-item active"><a class="nav-link" href="#"><i class="bi bi-lightning-fill"></i> DDoS</a></li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"><i class="bi bi-grid-fill"></i> More</a>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="Linux_cmd.html"><i class="bi bi-terminal-fill"></i> Linux Commands</a>
+          <a class="dropdown-item" href="win-cmd.html"><i class="bi bi-windows"></i> Windows Commands</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="footprinting.html"><i class="bi bi-search"></i> Footprinting</a>
+          <a class="dropdown-item" href="scanning.html"><i class="bi bi-broadcast-pin"></i> Scanning</a>
+          <a class="dropdown-item" href="system-hacking.html"><i class="bi bi-pc-display"></i> System Hacking</a>
+          <a class="dropdown-item" href="android-hacking.html"><i class="bi bi-phone-fill"></i> Android Hacking</a>
+          <a class="dropdown-item" href="mitm.html"><i class="bi bi-people-fill"></i> MITM</a>
+          <a class="dropdown-item" href="wifi-hacking.html"><i class="bi bi-wifi"></i> WiFi Hacking</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Page Header -->
+<section class="page-header">
+  <div class="container">
+    <div class="breadcrumb-custom">
+      <a href="index.html"><i class="bi bi-house-fill"></i> Home</a><span>/</span><span>DDoS Attacks</span>
+    </div>
+    <h1 data-aos="fade-up"><i class="bi bi-lightning-fill" style="color:var(--primary)"></i> DDoS <span>Attacks</span></h1>
+    <p class="lead" data-aos="fade-up" data-aos-delay="100">
+      A Distributed Denial of Service (DDoS) attack overwhelms a target server, service, or network with a flood of
+      Internet traffic from multiple sources, rendering it unavailable to legitimate users.
+    </p>
+    <div data-aos="fade-up" data-aos-delay="200">
+      <span class="ddos-badge badge-volumetric"><i class="bi bi-water"></i> Volumetric</span>
+      <span class="ddos-badge badge-protocol"><i class="bi bi-hdd-network-fill"></i> Protocol</span>
+      <span class="ddos-badge badge-application"><i class="bi bi-globe"></i> Application Layer</span>
+    </div>
+  </div>
+</section>
+
+<!-- Warning -->
+<section class="content-section" style="padding-bottom:0;">
+  <div class="container">
+    <div class="warning-box" data-aos="fade-up">
+      <h6><i class="bi bi-exclamation-triangle-fill"></i> Serious Legal Warning</h6>
+      <p>Launching DDoS attacks is a <strong>serious criminal offense</strong> in virtually every jurisdiction worldwide. Penalties include
+        heavy fines and imprisonment. This content is provided <strong>purely for educational and defensive purposes</strong>.
+        Understanding DDoS attacks is essential for building effective defenses. Never attack systems without explicit authorization.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DDoS Stats -->
+<section class="content-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3 col-6 mb-3" data-aos="fade-up">
+        <div class="stat-card">
+          <div class="stat-number">5.45M</div>
+          <div class="stat-label">DDoS Attacks in H1 2024</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6 mb-3" data-aos="fade-up" data-aos-delay="50">
+        <div class="stat-card">
+          <div class="stat-number">3.47 Tbps</div>
+          <div class="stat-label">Largest Recorded Attack</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6 mb-3" data-aos="fade-up" data-aos-delay="100">
+        <div class="stat-card">
+          <div class="stat-number">14 min</div>
+          <div class="stat-label">Average Attack Duration</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6 mb-3" data-aos="fade-up" data-aos-delay="150">
+        <div class="stat-card">
+          <div class="stat-number">$120K+</div>
+          <div class="stat-label">Average Cost per Incident</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DoS vs DDoS -->
+<section class="content-section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>DoS vs <span>DDoS</span></h2>
+      <p>Understanding the difference between Denial of Service and Distributed Denial of Service.</p>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6 mb-4" data-aos="fade-up">
+        <div class="info-card">
+          <div class="info-card-icon"><i class="bi bi-person-fill"></i></div>
+          <h5>DoS (Denial of Service)</h5>
+          <p>
+            <strong>• Single source</strong> — Attack originates from one machine<br>
+            <strong>• Lower bandwidth</strong> — Limited by single connection speed<br>
+            <strong>• Easier to block</strong> — Block the source IP address<br>
+            <strong>• Simpler execution</strong> — Can be launched from a single script<br>
+            <strong>• Less effective</strong> — Against modern infrastructure<br>
+            <strong>• Traceable</strong> — Easier to identify the attacker
+          </p>
+        </div>
+      </div>
+      <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="info-card">
+          <div class="info-card-icon" style="background:rgba(239,68,68,0.1);"><i class="bi bi-people-fill" style="color:var(--danger);"></i></div>
+          <h5>DDoS (Distributed Denial of Service)</h5>
+          <p>
+            <strong>• Multiple sources</strong> — Attack from thousands of compromised machines (botnet)<br>
+            <strong>• Massive bandwidth</strong> — Combined bandwidth of all bots<br>
+            <strong>• Hard to block</strong> — Cannot simply block one IP<br>
+            <strong>• Complex execution</strong> — Requires botnet infrastructure<br>
+            <strong>• Highly effective</strong> — Can take down major services<br>
+            <strong>• Difficult to trace</strong> — Traffic comes from legitimate-looking sources
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How DDoS Works — Flow -->
+<section class="content-section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>How DDoS <span>Works</span></h2>
+      <p>The anatomy of a Distributed Denial of Service attack.</p>
+    </div>
+
+    <div class="flow-container" data-aos="fade-up">
+      <div class="flow-box">
+        <i class="bi bi-person-fill-gear"></i>
+        <h6>Attacker</h6>
+        <p>Controls the botnet</p>
+      </div>
+      <div class="flow-arrow"><i class="bi bi-arrow-right"></i></div>
+      <div class="flow-box">
+        <i class="bi bi-diagram-3-fill"></i>
+        <h6>C&C Server</h6>
+        <p>Command & Control</p>
+      </div>
+      <div class="flow-arrow"><i class="bi bi-arrow-right"></i></div>
+      <div class="flow-box">
+        <i class="bi bi-hdd-rack-fill"></i>
+        <h6>Botnet</h6>
+        <p>Thousands of bots</p>
+      </div>
+      <div class="flow-arrow"><i class="bi bi-arrow-right"></i></div>
+      <div class="flow-box" style="border-color:rgba(255,68,68,0.4);">
+        <i class="bi bi-exclamation-triangle-fill" style="color:var(--danger);"></i>
+        <h6 style="color:var(--danger);">Target</h6>
+        <p>Overwhelmed server</p>
+      </div>
+    </div>
+
+    <div class="accordion-card" data-aos="fade-up">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-header-left">
+          <div class="accordion-icon"><i class="bi bi-robot"></i></div>
+          <div>
+            <div class="accordion-title">Botnets Explained</div>
+            <div class="accordion-subtitle">The backbone of DDoS attacks</div>
+          </div>
+        </div>
+        <i class="bi bi-chevron-down accordion-arrow"></i>
+      </div>
+      <div class="accordion-body">
+        <p>A <strong>botnet</strong> is a network of compromised computers (bots/zombies) controlled by an attacker through a Command and Control (C&C) server.</p>
+        <h6>How Botnets Are Built:</h6>
+        <ul>
+          <li><strong>Malware distribution</strong> — Through phishing emails, drive-by downloads, or infected software</li>
+          <li><strong>IoT exploitation</strong> — Scanning for IoT devices with default credentials (Mirai botnet)</li>
+          <li><strong>Vulnerability exploitation</strong> — Automated scanning and exploitation of unpatched systems</li>
+          <li><strong>Worm propagation</strong> — Self-replicating malware spreading across networks</li>
+        </ul>
+        <h6>Notable Botnets:</h6>
+        <ul>
+          <li><strong>Mirai</strong> — IoT botnet that attacked Dyn DNS (2016), took down Twitter, Netflix, Reddit</li>
+          <li><strong>Emotet</strong> — Banking trojan turned botnet-as-a-service infrastructure</li>
+          <li><strong>Mēris</strong> — Attacked Yandex with 21.8 million requests per second (2021)</li>
+          <li><strong>Mantis</strong> — Record 26 million HTTPS requests per second (2022)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Attack Categories -->
+<section class="content-section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>Attack <span>Categories</span></h2>
+      <p>The three main categories of DDoS attacks based on OSI model targeting.</p>
+    </div>
+
+    <!-- Category 1: Volumetric -->
+    <div class="accordion-card" data-aos="fade-up">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-header-left">
+          <div class="accordion-icon"><i class="bi bi-water"></i></div>
+          <div>
+            <div class="accordion-title">Volumetric Attacks (Layer 3/4)</div>
+            <div class="accordion-subtitle">Flood the target's bandwidth</div>
+          </div>
+        </div>
+        <i class="bi bi-chevron-down accordion-arrow"></i>
+      </div>
+      <div class="accordion-body">
+        <p>Volumetric attacks aim to consume all available bandwidth between the target and the Internet by sending massive amounts of traffic.</p>
+        <h6>Common Volumetric Attacks:</h6>
+        <ul>
+          <li><strong>UDP Flood</strong> — Sends massive UDP packets to random ports. Target must process and respond with ICMP "Destination Unreachable" packets, consuming resources.</li>
+          <li><strong>ICMP Flood (Ping Flood)</strong> — Overwhelms target with ICMP Echo Request packets requiring responses for each packet.</li>
+          <li><strong>DNS Amplification</strong> — Sends small DNS queries with spoofed source IP. DNS servers respond with much larger replies to the target (amplification factor ~28-54x).</li>
+          <li><strong>NTP Amplification</strong> — Exploits NTP monlist command for amplification factor of ~556x.</li>
+          <li><strong>Memcached Amplification</strong> — Exploits open Memcached servers for amplification factor up to ~51,000x (largest known amplification).</li>
+          <li><strong>SSDP Amplification</strong> — Exploits UPnP-enabled devices for ~30x amplification.</li>
+        </ul>
+        <h6>Measured in: Gbps or Tbps</h6>
+      </div>
+    </div>
+
+    <!-- Category 2: Protocol -->
+    <div class="accordion-card" data-aos="fade-up" data-aos-delay="50">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-header-left">
+          <div class="accordion-icon" style="background:rgba(168,85,247,0.1);"><i class="bi bi-hdd-network-fill" style="color:var(--purple);"></i></div>
+          <div>
+            <div class="accordion-title">Protocol Attacks (Layer 3/4)</div>
+            <div class="accordion-subtitle">Exploit protocol weaknesses</div>
+          </div>
+        </div>
+        <i class="bi bi-chevron-down accordion-arrow"></i>
+      </div>
+      <div class="accordion-body">
+        <p>Protocol attacks exploit weaknesses in network protocol implementations to consume server resources or intermediate equipment like firewalls and load balancers.</p>
+        <h6>Common Protocol Attacks:</h6>
+        <ul>
+          <li><strong>SYN Flood</strong> — Sends a flood of SYN packets without completing the TCP handshake, filling up the target's connection table (half-open connections).</li>
+          <li><strong>ACK Flood</strong> — Sends massive ACK packets that the server must process and look up in its connection table.</li>
+          <li><strong>SYN-ACK Flood</strong> — Sends spoofed SYN-ACK packets causing the target to send RST for each, consuming CPU.</li>
+          <li><strong>Ping of Death</strong> — Sends oversized or malformed ICMP packets that crash the target system.</li>
+          <li><strong>Smurf Attack</strong> — Sends ICMP requests with the target's spoofed IP to a broadcast address, causing all hosts to reply to the target.</li>
+          <li><strong>Fragmentation Attack</strong> — Sends fragmented packets that the target cannot reassemble, consuming memory.</li>
+        </ul>
+        <h6>Measured in: Packets per second (pps)</h6>
+      </div>
+    </div>
+
+    <!-- Category 3: Application Layer -->
+    <div class="accordion-card" data-aos="fade-up" data-aos-delay="100">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-header-left">
+          <div class="accordion-icon" style="background:rgba(88,166,255,0.1);"><i class="bi bi-globe" style="color:var(--accent);"></i></div>
+          <div>
+            <div class="accordion-title">Application Layer Attacks (Layer 7)</div>
+            <div class="accordion-subtitle">Target web applications &amp; services</div>
+          </div>
+        </div>
+        <i class="bi bi-chevron-down accordion-arrow"></i>
+      </div>
+      <div class="accordion-body">
+        <p>Application layer attacks target the actual web server or application, making them harder to detect because they mimic legitimate user traffic.</p>
+        <h6>Common Application Layer Attacks:</h6>
+        <ul>
+          <li><strong>HTTP Flood</strong> — Sends a massive number of HTTP GET or POST requests that appear legitimate. Very difficult to distinguish from real traffic.</li>
+          <li><strong>Slowloris</strong> — Opens many connections and sends partial HTTP headers very slowly, keeping connections open and exhausting the server's connection pool.</li>
+          <li><strong>RUDY (R-U-Dead-Yet)</strong> — Sends POST requests with extremely long content-length headers, sending data one byte at a time.</li>
+          <li><strong>DNS Query Flood</strong> — Sends a flood of DNS queries for non-existent domains, overwhelming the DNS server.</li>
+          <li><strong>WordPress Pingback</strong> — Exploits WordPress XML-RPC pingback feature to generate massive traffic.</li>
+          <li><strong>HTTPS Flood</strong> — Encrypted HTTP flood that is harder to inspect and filter due to TLS encryption overhead.</li>
+        </ul>
+        <h6>Measured in: Requests per second (rps)</h6>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OSI Layer Targeting -->
+<section class="content-section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>OSI Layer <span>Targeting</span></h2>
+      <p>Which layers of the OSI model are targeted by DDoS attacks.</p>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-8 mx-auto" data-aos="fade-up">
+        <div class="osi-layer">
+          <div class="osi-num" style="background:rgba(88,166,255,0.1); color:var(--accent);">L7</div>
+          <div class="osi-info">
+            <h6>Application Layer</h6>
+            <p>HTTP Flood, Slowloris, RUDY, DNS Query Flood</p>
+          </div>
+          <span class="osi-target">← TARGETED</span>
+        </div>
+        <div class="osi-layer">
+          <div class="osi-num" style="background:rgba(168,85,247,0.1); color:var(--purple);">L6</div>
+          <div class="osi-info">
+            <h6>Presentation Layer</h6>
+            <p>SSL/TLS abuse, malformed SSL requests</p>
+          </div>
+          <span class="osi-target">← TARGETED</span>
+        </div>
+        <div class="osi-layer">
+          <div class="osi-num" style="background:rgba(245,158,11,0.1); color:var(--warning);">L5</div>
+          <div class="osi-info">
+            <h6>Session Layer</h6>
+            <p>Telnet DDoS, session hijacking</p>
+          </div>
+        </div>
+        <div class="osi-layer">
+          <div class="osi-num" style="background:rgba(249,115,22,0.1); color:var(--primary);">L4</div>
+          <div class="osi-info">
+            <h6>Transport Layer</h6>
+            <p>SYN Flood, ACK Flood, UDP Flood</p>
+          </div>
+          <span class="osi-target">← TARGETED</span>
+        </div>
+        <div class="osi-layer">
+          <div class="osi-num" style="background:rgba(239,68,68,0.1); color:var(--danger);">L3</div>
+          <div class="osi-info">
+            <h6>Network Layer</h6>
+            <p>ICMP Flood, Smurf Attack, IP Fragmentation</p>
+          </div>
+          <span class="osi-target">← TARGETED</span>
+        </div>
+        <div class="osi-layer">
+          <div class="osi-num" style="background:rgba(100,100,100,0.1); color:var(--text-secondary);">L2</div>
+          <div class="osi-info">
+            <h6>Data Link Layer</h6>
+            <p>MAC flooding, ARP spoofing (local network)</p>
+          </div>
+        </div>
+        <div class="osi-layer">
+          <div class="osi-num" style="background:rgba(100,100,100,0.1); color:var(--text-secondary);">L1</div>
+          <div class="osi-info">
+            <h6>Physical Layer</h6>
+            <p>Physical destruction, cable cutting (not DDoS)</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DDoS Testing Tools -->
+<section class="content-section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>Testing &amp; Analysis <span>Tools</span></h2>
+      <p>Tools used for DDoS stress testing and traffic analysis (authorized testing only).</p>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up">
+        <div class="attack-card">
+          <h6><i class="bi bi-speedometer2"></i> hping3</h6>
+          <p>TCP/IP packet assembler. Used for SYN flood testing, firewall testing, and advanced port scanning on authorized networks.</p>
+          <span class="ddos-badge badge-protocol mb-2">Protocol Testing</span>
+          <div class="tool-cmd">
+            <code>hping3 -S --flood -V -p 80 target_ip</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="50">
+        <div class="attack-card">
+          <h6><i class="bi bi-water"></i> LOIC (Low Orbit Ion Cannon)</h6>
+          <p>Open-source network stress testing tool. Sends TCP, UDP, or HTTP requests to stress test a target (authorized use only).</p>
+          <span class="ddos-badge badge-volumetric mb-2">Stress Test</span>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="attack-card">
+          <h6><i class="bi bi-clock-history"></i> Slowloris</h6>
+          <p>Layer 7 denial of service tool that uses minimal bandwidth to keep connections open by sending partial HTTP headers.</p>
+          <span class="ddos-badge badge-application mb-2">App Layer</span>
+          <div class="tool-cmd">
+            <code>slowloris target_ip -p 80 -s 500</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="150">
+        <div class="attack-card">
+          <h6><i class="bi bi-bar-chart-fill"></i> Wireshark</h6>
+          <p>Network protocol analyzer. Essential for detecting DDoS traffic patterns, analyzing packet captures, and identifying attack signatures.</p>
+          <span class="ddos-badge badge-layer mb-2">Analysis</span>
+          <div class="tool-cmd">
+            <code>wireshark -i eth0 -f "tcp port 80"</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="attack-card">
+          <h6><i class="bi bi-terminal-fill"></i> tcpdump</h6>
+          <p>Command-line packet analyzer. Capture and analyze network traffic to detect DDoS patterns and anomalous traffic.</p>
+          <span class="ddos-badge badge-layer mb-2">Analysis</span>
+          <div class="tool-cmd">
+            <code>tcpdump -i eth0 -nn 'tcp[tcpflags] == tcp-syn'</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="250">
+        <div class="attack-card">
+          <h6><i class="bi bi-graph-up"></i> NetFlow/sFlow Analyzers</h6>
+          <p>Monitor network flow data to detect volumetric anomalies, traffic spikes, and unusual patterns indicative of DDoS attacks.</p>
+          <span class="ddos-badge badge-layer mb-2">Monitoring</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Detection -->
+<section class="content-section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>DDoS <span>Detection</span></h2>
+      <p>How to identify if you're under a DDoS attack.</p>
+    </div>
+
+    <table class="styled-table" data-aos="fade-up">
+      <thead>
+        <tr><th>Indicator</th><th>Description</th><th>Detection Method</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong style="color:var(--primary)">Traffic Spike</strong></td>
+          <td>Sudden unexplained surge in network traffic</td>
+          <td>NetFlow analysis, bandwidth monitoring</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--primary)">High CPU/Memory</strong></td>
+          <td>Server resources maxed out without legitimate cause</td>
+          <td>System monitoring tools (Nagios, Zabbix)</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--primary)">Connection Timeouts</strong></td>
+          <td>Legitimate users unable to connect or experiencing timeouts</td>
+          <td>Application logs, user reports</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--primary)">Single IP Flooding</strong></td>
+          <td>Unusually high number of requests from single source</td>
+          <td>Access logs, firewall logs</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--primary)">Geographic Anomaly</strong></td>
+          <td>Traffic from unexpected geographic regions</td>
+          <td>GeoIP analysis, CDN dashboards</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--primary)">Protocol Anomaly</strong></td>
+          <td>Unusual protocol distribution (e.g., all UDP traffic)</td>
+          <td>Packet capture analysis (Wireshark, tcpdump)</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--primary)">HTTP Error Surge</strong></td>
+          <td>Massive increase in 5xx server errors</td>
+          <td>Web server logs, monitoring dashboards</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Countermeasures -->
+<section class="content-section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>Defense &amp; <span>Countermeasures</span></h2>
+      <p>Multi-layered strategies for DDoS mitigation.</p>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up">
+        <div class="info-card">
+          <div class="info-card-icon"><i class="bi bi-cloud-fill"></i></div>
+          <h5>Cloud-Based Protection</h5>
+          <p>
+            • <strong>Cloudflare</strong> — Global CDN with DDoS protection<br>
+            • <strong>AWS Shield</strong> — Managed DDoS protection for AWS<br>
+            • <strong>Akamai Prolexic</strong> — Enterprise DDoS mitigation<br>
+            • <strong>Azure DDoS Protection</strong> — Microsoft cloud defense<br>
+            • <strong>Google Cloud Armor</strong> — WAF + DDoS protection<br>
+            • Anycast routing to distribute attack traffic globally
+          </p>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="info-card">
+          <div class="info-card-icon"><i class="bi bi-hdd-network-fill"></i></div>
+          <h5>Network-Level Defense</h5>
+          <p>
+            • <strong>Rate limiting</strong> — Limit requests per IP per second<br>
+            • <strong>Blackhole routing</strong> — Route attack traffic to null<br>
+            • <strong>ACL filtering</strong> — Block known malicious IPs<br>
+            • <strong>BGP Flowspec</strong> — Programmatic traffic filtering<br>
+            • <strong>Scrubbing centers</strong> — Clean traffic before delivery<br>
+            • Over-provisioning bandwidth capacity
+          </p>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="info-card">
+          <div class="info-card-icon"><i class="bi bi-shield-fill-check"></i></div>
+          <h5>Application-Level Defense</h5>
+          <p>
+            • <strong>WAF</strong> — Web Application Firewall rules<br>
+            • <strong>CAPTCHA challenges</strong> — Distinguish bots from humans<br>
+            • <strong>JavaScript challenges</strong> — Browser verification<br>
+            • <strong>Connection timeouts</strong> — Aggressive timeout settings<br>
+            • <strong>Load balancing</strong> — Distribute traffic across servers<br>
+            • IP reputation scoring and geo-blocking
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Iptables Examples -->
+    <div class="accordion-card" data-aos="fade-up">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-header-left">
+          <div class="accordion-icon"><i class="bi bi-terminal-fill"></i></div>
+          <div>
+            <div class="accordion-title">Linux iptables DDoS Mitigation Rules</div>
+            <div class="accordion-subtitle">Basic firewall rules for DDoS defense</div>
+          </div>
+        </div>
+        <i class="bi bi-chevron-down accordion-arrow"></i>
+      </div>
+      <div class="accordion-body">
+        <h6>Drop Invalid Packets</h6>
+        <div class="tool-cmd" style="margin-bottom:15px;">
+          <code>iptables -t mangle -A PREROUTING -m conntrack --ctstate INVALID -j DROP</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+
+        <h6>Block SYN Flood</h6>
+        <div class="tool-cmd" style="margin-bottom:15px;">
+          <code>iptables -A INPUT -p tcp --syn -m limit --limit 1/s --limit-burst 3 -j ACCEPT</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+
+        <h6>Limit ICMP (Ping Flood Protection)</h6>
+        <div class="tool-cmd" style="margin-bottom:15px;">
+          <code>iptables -A INPUT -p icmp --icmp-type echo-request -m limit --limit 1/s -j ACCEPT</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+
+        <h6>Rate Limit Connections per IP</h6>
+        <div class="tool-cmd" style="margin-bottom:15px;">
+          <code>iptables -A INPUT -p tcp --dport 80 -m connlimit --connlimit-above 50 -j REJECT</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+
+        <h6>Drop Fragmented Packets</h6>
+        <div class="tool-cmd" style="margin-bottom:15px;">
+          <code>iptables -A INPUT -f -j DROP</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+
+        <h6>Block XMAS Packets</h6>
+        <div class="tool-cmd" style="margin-bottom:15px;">
+          <code>iptables -A INPUT -p tcp --tcp-flags ALL ALL -j DROP</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+
+        <h6>Block NULL Packets</h6>
+        <div class="tool-cmd">
+          <code>iptables -A INPUT -p tcp --tcp-flags ALL NONE -j DROP</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Nginx Rate Limiting -->
+    <div class="accordion-card" data-aos="fade-up" data-aos-delay="50">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-header-left">
+          <div class="accordion-icon"><i class="bi bi-server"></i></div>
+          <div>
+            <div class="accordion-title">Nginx DDoS Mitigation Config</div>
+            <div class="accordion-subtitle">Rate limiting &amp; connection control</div>
+          </div>
+        </div>
+        <i class="bi bi-chevron-down accordion-arrow"></i>
+      </div>
+      <div class="accordion-body">
+        <h6>Rate Limiting Zone</h6>
+        <div class="tool-cmd" style="margin-bottom:15px;">
+          <code>limit_req_zone $binary_remote_addr zone=one:10m rate=10r/s;</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+
+        <h6>Apply Rate Limiting</h6>
+        <div class="tool-cmd" style="margin-bottom:15px;">
+          <code>limit_req zone=one burst=20 nodelay;</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+
+        <h6>Connection Limiting</h6>
+        <div class="tool-cmd" style="margin-bottom:15px;">
+          <code>limit_conn_zone $binary_remote_addr zone=addr:10m;</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+        <div class="tool-cmd" style="margin-bottom:15px;">
+          <code>limit_conn addr 10;</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+
+        <h6>Timeout Settings</h6>
+        <div class="tool-cmd" style="margin-bottom:8px;">
+          <code>client_body_timeout 10;</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+        <div class="tool-cmd" style="margin-bottom:8px;">
+          <code>client_header_timeout 10;</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+        <div class="tool-cmd">
+          <code>keepalive_timeout 5 5;</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Incident Response -->
+<section class="content-section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>Incident <span>Response</span> Plan</h2>
+      <p>What to do when you're under a DDoS attack.</p>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6 mb-4" data-aos="fade-up">
+        <div class="info-card">
+          <div class="info-card-icon"><i class="bi bi-lightning-charge-fill"></i></div>
+          <h5>Immediate Actions</h5>
+          <p>
+            <strong>1.</strong> Confirm it's a DDoS attack (not just a traffic spike)<br>
+            <strong>2.</strong> Activate DDoS mitigation service (Cloudflare, AWS Shield)<br>
+            <strong>3.</strong> Notify your ISP/hosting provider<br>
+            <strong>4.</strong> Enable rate limiting and geo-blocking<br>
+            <strong>5.</strong> Scale up infrastructure if possible<br>
+            <strong>6.</strong> Document the attack (logs, traffic captures)
+          </p>
+        </div>
+      </div>
+      <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="info-card">
+          <div class="info-card-icon"><i class="bi bi-clipboard-check-fill"></i></div>
+          <h5>Post-Attack Actions</h5>
+          <p>
+            <strong>1.</strong> Analyze attack vectors and traffic patterns<br>
+            <strong>2.</strong> Update firewall rules based on findings<br>
+            <strong>3.</strong> Review and improve DDoS response plan<br>
+            <strong>4.</strong> Consider upgrading DDoS protection services<br>
+            <strong>5.</strong> Report the attack to law enforcement (IC3, CERT)<br>
+            <strong>6.</strong> Conduct post-mortem with the team
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand"><i class="bi bi-shield-lock-fill"></i> HACKER'S WORLD</div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="Linux_cmd.html">Linux</a>
+        <a href="scanning.html">Scanning</a>
+        <a href="system-hacking.html">System Hacking</a>
+        <a href="mitm.html">MITM</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 Hacker's World. All Rights Reserved. Educational purposes only.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+<script>
+  AOS.init({ once: true, duration: 600 });
+
+  window.addEventListener('scroll', function () {
+    var nb = document.getElementById('mainNavbar');
+    var bt = document.getElementById('backToTop');
+    nb.classList.toggle('scrolled', window.scrollY > 50);
+    bt.style.display = window.scrollY > 300 ? 'flex' : 'none';
+  });
+
+  document.getElementById('backToTop').addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  function toggleAccordion(header) {
+    var body = header.nextElementSibling;
+    var arrow = header.querySelector('.accordion-arrow');
+    var isOpen = body.style.display === 'block';
+    body.style.display = isOpen ? 'none' : 'block';
+    arrow.classList.toggle('rotated', !isOpen);
+  }
+
+  function copyTool(btn) {
+    var code = btn.parentElement.querySelector('code');
+    var text = code.textContent.trim();
+    navigator.clipboard.writeText(text).then(function () {
+      btn.innerHTML = '<i class="bi bi-check-lg"></i>';
+      showToast('Command copied to clipboard!');
+      setTimeout(function () { btn.innerHTML = '<i class="bi bi-clipboard"></i>'; }, 2000);
+    });
+  }
+
+  function showToast(msg) {
+    var t = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    t.style.display = 'block';
+    setTimeout(function () { t.style.display = 'none'; }, 2500);
+  }
+</script>
+
+</body>
+</html>

@@ -1,199 +1,1936 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Hacking World</title>
-   <meta charset="utf-8">
-   <meta name="viewport" content="width=device-width, initial-scale=1">
-   
-   
-  <!-- Latest compiled and minified CSS -->
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <title>Hacker's World - Cybersecurity Learning Hub</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Learn ethical hacking, cybersecurity, and penetration testing">
 
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+  <!-- AOS Animation Library -->
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #00ff88;
+      --secondary: #0a192f;
+      --dark: #0d1117;
+      --darker: #010409;
+      --card-bg: #161b22;
+      --text-primary: #c9d1d9;
+      --text-secondary: #8b949e;
+      --accent: #58a6ff;
+      --danger: #ff4444;
+      --border: #30363d;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--dark);
+      color: var(--text-primary);
+      overflow-x: hidden;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--darker);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 4px;
+    }
+
+    /* Navbar */
+    .navbar {
+      background: rgba(13, 17, 23, 0.95) !important;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 15px 30px;
+      transition: all 0.3s ease;
+    }
+    .navbar.scrolled {
+      padding: 10px 30px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    }
+    .navbar-brand {
+      font-weight: 700;
+      font-size: 1.5rem;
+      color: var(--primary) !important;
+      letter-spacing: 2px;
+    }
+    .navbar-brand i {
+      margin-right: 8px;
+    }
+    .nav-link {
+      color: var(--text-primary) !important;
+      font-weight: 400;
+      margin: 0 8px;
+      position: relative;
+      transition: color 0.3s ease;
+    }
+    .nav-link:hover {
+      color: var(--primary) !important;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 2px;
+      background: var(--primary);
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after {
+      width: 80%;
+    }
+
+    /* ===== DROPDOWN FIX ===== */
+    .dropdown-menu {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px;
+      margin-top: 10px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      max-height: 70vh;
+      overflow-y: auto;
+    }
+    /* Force dropdown to open to the LEFT on the right-side nav item */
+    .navbar-nav .dropdown-menu {
+      right: 0;
+      left: auto;
+    }
+    /* Custom scrollbar inside dropdown */
+    .dropdown-menu::-webkit-scrollbar {
+      width: 5px;
+    }
+    .dropdown-menu::-webkit-scrollbar-track {
+      background: var(--card-bg);
+    }
+    .dropdown-menu::-webkit-scrollbar-thumb {
+      background: var(--primary);
+      border-radius: 4px;
+    }
+    /* ======================== */
+
+    .dropdown-item {
+      color: var(--text-primary);
+      padding: 10px 15px;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+      white-space: nowrap;
+    }
+    .dropdown-item:hover {
+      background: rgba(0, 255, 136, 0.1);
+      color: var(--primary);
+      transform: translateX(5px);
+    }
+    .dropdown-item i {
+      margin-right: 10px;
+      color: var(--primary);
+    }
+    .dropdown-divider {
+      border-top-color: var(--border);
+    }
+
+    /* Hero Section */
+    .hero-section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      padding: 100px 20px 60px;
+    }
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(ellipse at top, rgba(0, 255, 136, 0.08), transparent 60%),
+                  radial-gradient(ellipse at bottom right, rgba(88, 166, 255, 0.05), transparent 60%);
+      z-index: 0;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 900px;
+    }
+    .hero-badge {
+      display: inline-block;
+      padding: 6px 18px;
+      border: 1px solid var(--primary);
+      border-radius: 50px;
+      font-size: 0.85rem;
+      color: var(--primary);
+      margin-bottom: 20px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      animation: pulse-border 2s infinite;
+    }
+    @keyframes pulse-border {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(0, 255, 136, 0.3); }
+      50% { box-shadow: 0 0 0 8px rgba(0, 255, 136, 0); }
+    }
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      line-height: 1.2;
+    }
+    .hero-title span {
+      color: var(--primary);
+      text-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+    }
+    .hero-subtitle {
+      font-size: 1.15rem;
+      color: var(--text-secondary);
+      margin-bottom: 35px;
+      line-height: 1.8;
+    }
+    .hero-buttons .btn {
+      padding: 12px 35px;
+      border-radius: 50px;
+      font-weight: 500;
+      margin: 5px 10px;
+      transition: all 0.3s ease;
+    }
+    .btn-primary-custom {
+      background: var(--primary);
+      color: var(--dark);
+      border: none;
+    }
+    .btn-primary-custom:hover {
+      background: #00cc6e;
+      color: var(--dark);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 255, 136, 0.3);
+    }
+    .btn-outline-custom {
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      background: transparent;
+    }
+    .btn-outline-custom:hover {
+      background: rgba(0, 255, 136, 0.1);
+      color: var(--primary);
+      transform: translateY(-3px);
+    }
+
+    /* Terminal Typing Effect */
+    .terminal-container {
+      background: var(--darker);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-top: 40px;
+      text-align: left;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    }
+    .terminal-header {
+      background: var(--card-bg);
+      padding: 10px 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+    .terminal-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+    .terminal-dot.red { background: #ff5f56; }
+    .terminal-dot.yellow { background: #ffbd2e; }
+    .terminal-dot.green { background: #27c93f; }
+    .terminal-body {
+      padding: 20px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.9rem;
+      min-height: 120px;
+    }
+    .terminal-line {
+      margin-bottom: 5px;
+    }
+    .terminal-prompt {
+      color: var(--primary);
+    }
+    .terminal-cursor {
+      display: inline-block;
+      width: 8px;
+      height: 16px;
+      background: var(--primary);
+      animation: blink 1s infinite;
+      vertical-align: middle;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* Disclaimer */
+    .disclaimer-section {
+      padding: 60px 0;
+    }
+    .disclaimer-card {
+      background: linear-gradient(135deg, rgba(255, 68, 68, 0.08), rgba(255, 68, 68, 0.02));
+      border: 1px solid rgba(255, 68, 68, 0.2);
+      border-radius: 15px;
+      padding: 30px;
+      position: relative;
+      overflow: hidden;
+    }
+    .disclaimer-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--danger);
+    }
+    .disclaimer-card h5 {
+      color: var(--danger);
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+    .disclaimer-card h5 i {
+      margin-right: 8px;
+    }
+    .disclaimer-card p {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.8;
+      margin: 0;
+    }
+
+    /* Stats Section */
+    .stats-section {
+      padding: 60px 0;
+    }
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 30px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    .stat-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 25px rgba(0, 255, 136, 0.1);
+    }
+    .stat-icon {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 15px;
+    }
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    .stat-label {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    /* Topics Section */
+    .topics-section {
+      padding: 80px 0;
+    }
+    .section-header {
+      text-align: center;
+      margin-bottom: 50px;
+    }
+    .section-header h2 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+    .section-header h2 span {
+      color: var(--primary);
+    }
+    .section-header p {
+      color: var(--text-secondary);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .topic-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 30px;
+      height: 100%;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      text-decoration: none;
+      display: block;
+    }
+    .topic-card:hover {
+      transform: translateY(-8px);
+      border-color: var(--primary);
+      box-shadow: 0 15px 40px rgba(0, 255, 136, 0.1);
+      text-decoration: none;
+    }
+    .topic-card::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--accent));
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+    .topic-card:hover::after {
+      transform: scaleX(1);
+    }
+    .topic-icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(0, 255, 136, 0.1);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .topic-icon i {
+      font-size: 1.8rem;
+      color: var(--primary);
+    }
+    .topic-card h5 {
+      color: var(--text-primary);
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+    .topic-card p {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      margin: 0;
+    }
+    .topic-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 50px;
+      font-size: 0.7rem;
+      margin-top: 12px;
+      font-weight: 500;
+    }
+    .badge-beginner {
+      background: rgba(0, 255, 136, 0.1);
+      color: var(--primary);
+    }
+    .badge-intermediate {
+      background: rgba(255, 189, 46, 0.1);
+      color: #ffbd2e;
+    }
+    .badge-advanced {
+      background: rgba(255, 95, 86, 0.1);
+      color: #ff5f56;
+    }
+
+    /* Accordion / Content Section */
+    .content-section {
+      padding: 80px 0;
+    }
+    .accordion-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 15px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .accordion-card:hover {
+      border-color: rgba(0, 255, 136, 0.3);
+    }
+    .accordion-card .card-header {
+      background: transparent;
+      border-bottom: 1px solid var(--border);
+      padding: 18px 25px;
+      cursor: pointer;
+    }
+    .accordion-card .card-header a,
+    .accordion-card .card-header button {
+      color: var(--text-primary);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1.05rem;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+    .accordion-card .card-header a i,
+    .accordion-card .card-header button i {
+      margin-right: 12px;
+      color: var(--primary);
+      font-size: 1.2rem;
+    }
+    .accordion-card .card-header a .arrow,
+    .accordion-card .card-header button .arrow {
+      margin-left: auto;
+      transition: transform 0.3s ease;
+    }
+    .accordion-card .card-body {
+      padding: 25px;
+      color: var(--text-secondary);
+      line-height: 1.9;
+      font-size: 0.95rem;
+    }
+    .accordion-card .card-body ul {
+      padding-left: 20px;
+    }
+    .accordion-card .card-body li {
+      margin-bottom: 10px;
+    }
+
+    /* Books Section */
+    .book-item {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      border-radius: 8px;
+      transition: background 0.3s ease;
+    }
+    .book-item:hover {
+      background: rgba(0, 255, 136, 0.05);
+    }
+    .book-item i {
+      color: var(--primary);
+      margin-right: 12px;
+      font-size: 1.2rem;
+    }
+    .book-item a {
+      color: var(--accent);
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    .book-item a:hover {
+      color: var(--primary);
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--darker);
+      border-top: 1px solid var(--border);
+      padding: 60px 0 30px;
+    }
+    .footer-brand {
+      color: var(--primary);
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+    }
+    .footer-text {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.8;
+      margin-top: 15px;
+    }
+    .footer-links h6 {
+      color: var(--text-primary);
+      font-weight: 600;
+      margin-bottom: 20px;
+      font-size: 1rem;
+    }
+    .footer-links a {
+      display: block;
+      color: var(--text-secondary);
+      text-decoration: none;
+      margin-bottom: 10px;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+    .footer-links a:hover {
+      color: var(--primary);
+      transform: translateX(5px);
+    }
+    .footer-links a i {
+      margin-right: 8px;
+    }
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+      margin-top: 40px;
+      text-align: center;
+    }
+    .footer-bottom p {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+    .footer-social a {
+      color: var(--text-secondary);
+      font-size: 1.3rem;
+      margin: 0 10px;
+      transition: all 0.3s ease;
+    }
+    .footer-social a:hover {
+      color: var(--primary);
+      transform: translateY(-3px);
+    }
+
+    /* Back to Top Button */
+    .back-to-top {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      width: 45px;
+      height: 45px;
+      background: var(--primary);
+      color: var(--dark);
+      border: none;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      z-index: 999;
+      box-shadow: 0 4px 15px rgba(0, 255, 136, 0.3);
+    }
+    .back-to-top:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 25px rgba(0, 255, 136, 0.4);
+    }
+
+    /* Matrix Rain Background */
+    #matrix-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.03;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.2rem;
+      }
+      .hero-subtitle {
+        font-size: 1rem;
+      }
+      .stat-card {
+        margin-bottom: 15px;
+      }
+      /* Mobile dropdown full width */
+      .navbar-nav .dropdown-menu {
+        right: auto;
+        left: 0;
+        max-height: 50vh;
+      }
+    }
+
+    /* Loading Animation */
+    .loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--darker);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+    }
+    .loader.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .loader-text {
+      font-family: 'Fira Code', monospace;
+      color: var(--primary);
+      font-size: 1.5rem;
+      animation: loader-pulse 1s infinite;
+    }
+    @keyframes loader-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* ===== NEWS SECTION ===== */
+.news-section {
+  padding: 80px 0;
+}
+
+.news-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 25px;
+}
+
+.news-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.news-card:hover {
+  transform: translateY(-5px);
+  border-color: rgba(0, 255, 136, 0.3);
+  box-shadow: 0 10px 30px rgba(0, 255, 136, 0.08);
+}
+.news-card a {
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.news-img-container {
+  width: 100%;
+  height: 200px;
+  overflow: hidden;
+  position: relative;
+  background: var(--darker);
+}
+.news-img-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+.news-card:hover .news-img-container img {
+  transform: scale(1.08);
+}
+.news-img-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(0,255,136,0.05), rgba(88,166,255,0.05));
+}
+.news-img-placeholder i {
+  font-size: 3rem;
+  color: var(--border);
+}
+
+.news-category {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  z-index: 2;
+}
+.cat-hacking { background: rgba(0,255,136,0.15); color: var(--primary); border: 1px solid rgba(0,255,136,0.2); }
+.cat-crypto { background: rgba(245,158,11,0.15); color: #f59e0b; border: 1px solid rgba(245,158,11,0.2); }
+.cat-darknet { background: rgba(168,85,247,0.15); color: #a855f7; border: 1px solid rgba(168,85,247,0.2); }
+.cat-breach { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.2); }
+.cat-malware { background: rgba(236,72,153,0.15); color: #ec4899; border: 1px solid rgba(236,72,153,0.2); }
+.cat-privacy { background: rgba(88,166,255,0.15); color: var(--accent); border: 1px solid rgba(88,166,255,0.2); }
+.cat-general { background: rgba(6,182,212,0.15); color: #06b6d4; border: 1px solid rgba(6,182,212,0.2); }
+
+.news-body {
+  padding: 20px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.news-body h5 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 10px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.news-card:hover .news-body h5 {
+  color: var(--primary);
+}
+.news-body p {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  flex: 1;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 15px;
+}
+
+.news-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid var(--border);
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+.news-source {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+}
+.news-source i { color: var(--primary); }
+.news-date {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* News Tabs */
+.news-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 35px;
+}
+.news-tab {
+  padding: 8px 20px;
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 50px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.news-tab:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+.news-tab.active {
+  background: rgba(0,255,136,0.1);
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+/* News Loading */
+.news-loading {
+  text-align: center;
+  padding: 60px 20px;
+}
+.news-loading .spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--border);
+  border-top: 3px solid var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 15px;
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+.news-loading p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+/* News Error */
+.news-error {
+  text-align: center;
+  padding: 40px 20px;
+  display: none;
+}
+.news-error i {
+  font-size: 2.5rem;
+  color: var(--text-secondary);
+  margin-bottom: 12px;
+}
+.news-error h5 {
+  margin-bottom: 8px;
+}
+.news-error p {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+.news-error button {
+  margin-top: 15px;
+  padding: 8px 25px;
+  background: var(--primary);
+  color: var(--dark);
+  border: none;
+  border-radius: 50px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.news-error button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(0,255,136,0.3);
+}
+
+/* Live Indicator */
+.live-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 15px;
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.2);
+  border-radius: 50px;
+  font-size: 0.75rem;
+  color: #ef4444;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.live-dot {
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  animation: live-pulse 1.5s infinite;
+}
+@keyframes live-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(239,68,68,0.4); }
+  50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(239,68,68,0); }
+}
+
+/* News Ticker */
+.news-ticker {
+  background: var(--card-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 15px 20px;
+  margin-bottom: 30px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.ticker-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--primary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.ticker-content {
+  overflow: hidden;
+  flex: 1;
+}
+.ticker-scroll {
+  display: flex;
+  animation: ticker-scroll 60s linear infinite;
+  white-space: nowrap;
+}
+.ticker-scroll:hover {
+  animation-play-state: paused;
+}
+.ticker-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 40px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+.ticker-item a {
+  color: var(--text-primary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.ticker-item a:hover { color: var(--primary); }
+.ticker-item .ticker-dot {
+  width: 5px;
+  height: 5px;
+  background: var(--primary);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@media (max-width: 768px) {
+  .news-grid { grid-template-columns: 1fr; }
+  .news-tabs { gap: 6px; }
+  .news-tab { padding: 6px 14px; font-size: 0.8rem; }
+}
+  </style>
 </head>
 <body>
-<div>
-<!-- Navigation bar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark"  >
-  <a class="navbar-brand" href="#">HACKER'S WORLD</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+
+<!-- Loading Screen -->
+<div class="loader" id="loader">
+  <div class="loader-text">
+    <i class="bi bi-shield-lock-fill"></i> Initializing...
+  </div>
+</div>
+
+<!-- Matrix Background -->
+<canvas id="matrix-bg"></canvas>
+
+<!-- Back to Top Button -->
+<button class="back-to-top" id="backToTop">
+  <i class="bi bi-arrow-up"></i>
+</button>
+
+<!-- Navigation Bar -->
+<nav class="navbar navbar-expand-lg fixed-top" id="mainNavbar">
+  <a class="navbar-brand" href="#">
+    <i class="bi bi-shield-lock-fill"></i> HACKER'S WORLD
+  </a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent">
     <span class="navbar-toggler-icon"></span>
   </button>
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav ml-auto ">
+    <ul class="navbar-nav ml-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="#"><i class="bi bi-house-fill"></i> Home</a>
       </li>
-      
+      <li class="nav-item">
+        <a class="nav-link" href="#topics"><i class="bi bi-book-fill"></i> Topics</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#resources"><i class="bi bi-journal-code"></i> Resources</a>
+      </li>
+      <li class="nav-item">
+                <a class="nav-link" href="#news"><i class="bi bi-newspaper"></i> News</a>
+      </li>      
+
+      <!-- FIXED DROPDOWN — opens left-aligned, scrollable -->
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-         Content To Learn ?
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
+           aria-haspopup="true" aria-expanded="false">
+          <i class="bi bi-grid-fill"></i> Learn
         </a>
-        <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="Linux_cmd.html">Linux Basic Commmands</a>
-          <a class="dropdown-item" href="win-cmd.html">Windows Basic Commmands</a>
-          <a class="dropdown-item" href="#">Footprinting And Infromation Gathering</a>
-          <a class="dropdown-item" href="#">Scanning Network</a>
-          <a class="dropdown-item" href="#">System Hacking</a>
-          <a class="dropdown-item" href="#">Android Hacking</a>
-          <a class="dropdown-item" href="#">DDos Attack</a>
-          <a class="dropdown-item" href="#">Man In The Middle Attack</a>  
-          <a class="dropdown-item" href="#">Wifi Hacking</a>     
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+          <h6 class="dropdown-header" style="color:var(--primary);font-size:.75rem;letter-spacing:1px;">
+            FUNDAMENTALS
+          </h6>
+          <a class="dropdown-item" href="Linux_cmd.html">
+            <i class="bi bi-terminal-fill"></i> Linux Commands
+          </a>
+          <a class="dropdown-item" href="win-cmd.html">
+            <i class="bi bi-windows"></i> Windows Commands
+          </a>
+
           <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Hacking Through Android</a>
+
+          <h6 class="dropdown-header" style="color:var(--primary);font-size:.75rem;letter-spacing:1px;">
+            ATTACK &amp; DEFENSE
+          </h6>
+          <a class="dropdown-item" href="footprinting.html">
+            <i class="bi bi-search"></i> Footprinting &amp; Recon
+          </a>
+          <a class="dropdown-item" href="scanning.html">
+            <i class="bi bi-broadcast-pin"></i> Scanning Networks
+          </a>
+          <a class="dropdown-item" href="system-hacking.html">
+            <i class="bi bi-pc-display"></i> System Hacking
+          </a>
+          <a class="dropdown-item" href="android-hacking.html">
+            <i class="bi bi-phone-fill"></i> Android Hacking
+          </a>
+          <a class="dropdown-item" href="ddos.html">
+            <i class="bi bi-lightning-fill"></i> DDoS Attacks
+          </a>
+          <a class="dropdown-item" href="mitm.html">
+            <i class="bi bi-people-fill"></i> MITM Attacks
+          </a>
+          <a class="dropdown-item" href="wifi-hacking.html">
+            <i class="bi bi-wifi"></i> WiFi Hacking
+          </a>
         </div>
       </li>
     </ul>
-
   </div>
 </nav>
-  </div>
-  
-<header>
-  <div class="container-fluid text-center">
-  <div class="jumbotron ">
-    <h2 >Hacking Tutorial</h2>  
-      <div class="alert alert-danger alert-dismissible">
-    <button type="button" class="close" data-dismiss="alert">&times;</button>
-  
-    <p><h6 class="text-dark">All contents are for informational and educational purposes only, they do not contain any illegal activity. We do not promote, encourage, support or excite any illegal activity or hacking without written permission in general. We want to raise security awareness and inform our readers on how to prevent themselves from being a victim of hackers. If you plan to use the information for illegal purposes, please leave this website now. We cannot be held responsible for any misuse of the given information. We believe that ethical hacking, information security and cyber security should be familiar subjects to anyone using digital information and computers. We believe that it is impossible to defend yourself from hackers without knowing how hacking is done. </h6></p>
-</div>
-  </div>
-  </div>
 
-</header>
-
-
-
-
-
-
-<!-- collapse menu -->
-<section>
-  
-<div id="accordion">
-  <!-- Start -->
-
-  <div class="card">
-    <div class="card-header" id="headingOne">
-      <h5 class="mb-0">
-        <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-         What is kali Linux 
-        </button>
-      </h5>
+<!-- Hero Section -->
+<section class="hero-section" id="home">
+  <div class="hero-content" data-aos="fade-up" data-aos-duration="1000">
+    <div class="hero-badge">
+      <i class="bi bi-shield-check"></i> Ethical Hacking &amp; Cybersecurity
     </div>
-    <div id="collapseOne" class="collapse " aria-labelledby="headingOne" data-parent="#accordion">
-      <div class="card-body">   
-        <h4 class="card-title">Kali Linux</h4>
-           <p class="card-text bg-dark text-white">Kali Linux is a Debian-based Linux distribution aimed at advanced Penetration Testing and Security Auditing. Kali contains several hundred tools which are geared towards various information security tasks, such as Penetration Testing, Security research, Computer Forensics and Reverse Engineering. Kali Linux is developed, funded and maintained by Offensive Security, a leading information security training company. 
-            <ul>
-                <li>                
-                  More than 600 penetration testing tools included: After reviewing every tool that was included in BackTrack, we eliminated a great number of tools that either simply did not work or which duplicated other tools that provided the same or similar functionality. Details on what’s included are on the Kali Tools site.</li>
-                <li>
-                  Free and always will be: Kali Linux, like BackTrack, is completely free of charge and always will be. You will never, ever have to pay for Kali Linux.</li>
-                <li>
-                  Open source Git tree: We are committed to the open source development model and our development tree is available for all to see. All of the source code which goes into Kali Linux is available for anyone who wants to tweak or rebuild packages to suit their specific needs.</li>
-                <li>FHS compliant: Kali adheres to the Filesystem Hierarchy Standard, allowing Linux users to easily locate binaries, support files, libraries, etc.</li>
-                <li>Wide-ranging wireless device support: A regular sticking point with Linux distributions has been supported for wireless interfaces. We have built Kali Linux to support as many wireless devices as we possibly can, allowing it to run properly on a wide variety of hardware and making it compatible with numerous USB and other wireless devices.</li>
-                <li>Custom kernel, patched for injection: As penetration testers, the development team often needs to do wireless assessments, so our kernel has the latest injection patches included.</li>
-                <li>Developed in a secure environment: The Kali Linux team is made up of a small group of individuals who are the only ones trusted to commit packages and interact with the repositories, all of which is done using multiple secure protocols.
-                <li>GPG signed packages and repositories: Every package in Kali Linux is signed by each individual developer who built and committed it, and the repositories subsequently sign the packages as well.</li>
-                <li>Multi-language support: Although penetration tools tend to be written in English, we have ensured that Kali includes true multilingual support, allowing more users to operate in their native language and locate the tools they need for the jobs.
-                </li>
-            </ul></p>
-           
+    <h1 class="hero-title">
+      Learn <span>Ethical Hacking</span><br>The Right Way
+    </h1>
+    <p class="hero-subtitle">
+      Master cybersecurity skills with comprehensive tutorials, hands-on labs, and
+      real-world scenarios. From beginner to advanced — your journey starts here.
+    </p>
+    <div class="hero-buttons">
+      <a href="#topics" class="btn btn-primary-custom">
+        <i class="bi bi-rocket-takeoff-fill"></i> Start Learning
+      </a>
+      <a href="#resources" class="btn btn-outline-custom">
+        <i class="bi bi-book-half"></i> Resources
+      </a>
+    </div>
+
+    <!-- Terminal Animation -->
+    <div class="terminal-container" data-aos="fade-up" data-aos-delay="300">
+      <div class="terminal-header">
+        <div class="terminal-dot red"></div>
+        <div class="terminal-dot yellow"></div>
+        <div class="terminal-dot green"></div>
+        <span style="color: var(--text-secondary); font-size: 0.8rem; margin-left: 10px;">terminal</span>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line">
+          <span class="terminal-prompt">root@hackerworld:~$ </span>
+          <span id="typed-text"></span>
+          <span class="terminal-cursor"></span>
+        </div>
       </div>
     </div>
   </div>
-<!-- end -->
-
-  <div class="card">
-    <div class="card-header" id="headingTwo">
-      <h5 class="mb-0">
-        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-          Tools Reqiured For Penetration testing
-        </button>
-      </h5>
-    </div>
-    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
-      <div class="card-body">
-        <p>
-          <ul>
-            <li>
-              Virtual Machine (VMWare OR Oracle Virtualbox)
-            </li>
-             <li>
-              Latest Kali linux ISO image <a href="https://www.kali.org/downloads/" > { Click To Download Kali Linux } </a>
-            </li>
-            <li>Victime Machine </li>
-
-          </ul>
-
-
-        </p>
-      </div>
-    </div>
-  </div>
-
-<!-- end  of sencond collapse-->
-
-
-<div class="card">
-    <div class="card-header" id="headingThree">
-      <h5 class="mb-0">
-        <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-        Books Suggestion 
-        </button>
-      </h5>
-    </div>
-    <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
-      <div class="card-body">
-        <p>
-          <ul>
-            <li>
-                <a href="books/CEH v9 Certified Ethical Hacker Version 9.pdf">Certified Ethical Hacker Version 9</a> 
-            </li>
-             <li>
-             <a href="books/Kevin D. Mitnick, William L. Simon, Steve Wozniak - The art of deception_ controlling the human element of security-Wiley (2003).pdf">The art of deception controlling the human element of security-Wiley (2003)</a>
-            </li>
-             <li><a href="books/python.pdf">Beginning Python</a> </li>
-          </ul>
-
-
-        </p>
-      </div>
-    </div>
-  </div>
-
-
-</div>
-
 </section>
 
+<!-- Disclaimer Section -->
+<section class="disclaimer-section">
+  <div class="container" data-aos="fade-up">
+    <div class="disclaimer-card">
+      <h5><i class="bi bi-exclamation-triangle-fill"></i> Legal Disclaimer</h5>
+      <p>
+        All content provided on this platform is for <strong>informational and educational purposes only</strong>.
+        We do not promote, encourage, support, or incite any illegal activity or unauthorized hacking.
+        Our mission is to raise security awareness and educate readers on how to protect themselves from cyber threats.
+        Always obtain proper written authorization before performing any penetration testing.
+        If you intend to use this information for illegal purposes, please leave this website immediately.
+        We cannot be held responsible for any misuse of the information provided.
+        <strong>Ethical hacking and cybersecurity awareness should be familiar to anyone using digital technologies.</strong>
+      </p>
+    </div>
+  </div>
+</section>
 
+<!-- Stats Section -->
+<section class="stats-section">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-3 col-6 mb-3" data-aos="fade-up" data-aos-delay="0">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="bi bi-book-half"></i></div>
+          <div class="stat-number">9+</div>
+          <div class="stat-label">Topics Covered</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6 mb-3" data-aos="fade-up" data-aos-delay="100">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="bi bi-terminal-fill"></i></div>
+          <div class="stat-number">100+</div>
+          <div class="stat-label">Commands</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6 mb-3" data-aos="fade-up" data-aos-delay="200">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="bi bi-tools"></i></div>
+          <div class="stat-number">600+</div>
+          <div class="stat-label">Kali Tools</div>
+        </div>
+      </div>
+      <div class="col-md-3 col-6 mb-3" data-aos="fade-up" data-aos-delay="300">
+        <div class="stat-card">
+          <div class="stat-icon"><i class="bi bi-journal-richtext"></i></div>
+          <div class="stat-number">3+</div>
+          <div class="stat-label">Recommended Books</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 
+<!-- Topics Section -->
+<section class="topics-section" id="topics">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>Explore <span>Topics</span></h2>
+      <p>Choose a topic to begin your cybersecurity learning journey. Each module is designed to build your skills progressively.</p>
+    </div>
 
+    <div class="row">
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="0">
+        <a href="Linux_cmd.html" class="topic-card">
+          <div class="topic-icon"><i class="bi bi-terminal-fill"></i></div>
+          <h5>Linux Commands</h5>
+          <p>Master essential Linux commands for system administration, networking, and penetration testing.</p>
+          <span class="topic-badge badge-beginner">Beginner</span>
+        </a>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <a href="win-cmd.html" class="topic-card">
+          <div class="topic-icon"><i class="bi bi-windows"></i></div>
+          <h5>Windows Commands</h5>
+          <p>Learn Windows Command Prompt essentials for system management and troubleshooting.</p>
+          <span class="topic-badge badge-beginner">Beginner</span>
+        </a>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+        <a href="footprinting.html" class="topic-card">
+          <div class="topic-icon"><i class="bi bi-search"></i></div>
+          <h5>Footprinting &amp; Recon</h5>
+          <p>Discover techniques for gathering intelligence about targets through passive and active reconnaissance.</p>
+          <span class="topic-badge badge-intermediate">Intermediate</span>
+        </a>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+        <a href="scanning.html" class="topic-card">
+          <div class="topic-icon"><i class="bi bi-broadcast-pin"></i></div>
+          <h5>Scanning Networks</h5>
+          <p>Learn to identify live hosts, open ports, and running services on target networks.</p>
+          <span class="topic-badge badge-intermediate">Intermediate</span>
+        </a>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="400">
+        <a href="system-hacking.html" class="topic-card">
+          <div class="topic-icon"><i class="bi bi-pc-display"></i></div>
+          <h5>System Hacking</h5>
+          <p>Understand system exploitation techniques including password cracking and privilege escalation.</p>
+          <span class="topic-badge badge-advanced">Advanced</span>
+        </a>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="500">
+        <a href="android-hacking.html" class="topic-card">
+          <div class="topic-icon"><i class="bi bi-phone-fill"></i></div>
+          <h5>Android Hacking</h5>
+          <p>Explore mobile security vulnerabilities and learn to secure Android applications.</p>
+          <span class="topic-badge badge-advanced">Advanced</span>
+        </a>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="600">
+        <a href="ddos.html" class="topic-card">
+          <div class="topic-icon"><i class="bi bi-lightning-fill"></i></div>
+          <h5>DDoS Attacks</h5>
+          <p>Understand Distributed Denial of Service attacks and how to defend against them.</p>
+          <span class="topic-badge badge-intermediate">Intermediate</span>
+        </a>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="700">
+        <a href="mitm.html" class="topic-card">
+          <div class="topic-icon"><i class="bi bi-people-fill"></i></div>
+          <h5>Man In The Middle</h5>
+          <p>Learn about intercepting and manipulating communication between two parties.</p>
+          <span class="topic-badge badge-advanced">Advanced</span>
+        </a>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="800">
+        <a href="wifi-hacking.html" class="topic-card">
+          <div class="topic-icon"><i class="bi bi-wifi"></i></div>
+          <h5>WiFi Hacking</h5>
+          <p>Explore wireless network vulnerabilities and learn to secure wireless infrastructure.</p>
+          <span class="topic-badge badge-advanced">Advanced</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
 
+<!-- Resources Section -->
+<section class="content-section" id="resources">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>Learning <span>Resources</span></h2>
+      <p>Expand your knowledge with these carefully curated resources and information.</p>
+    </div>
 
+    <div id="accordion">
+      <!-- Kali Linux -->
+      <div class="accordion-card" data-aos="fade-up">
+        <div class="card-header" id="headingOne">
+          <a data-toggle="collapse" data-target="#collapseOne" aria-expanded="false">
+            <i class="bi bi-ubuntu"></i> What is Kali Linux?
+            <i class="bi bi-chevron-down arrow"></i>
+          </a>
+        </div>
+        <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordion">
+          <div class="card-body">
+            <h5 style="color: var(--primary); margin-bottom: 15px;">Kali Linux — The Penetration Tester's Platform</h5>
+            <p>Kali Linux is a Debian-based Linux distribution aimed at advanced Penetration Testing and Security Auditing. It contains several hundred tools geared towards various information security tasks, including Penetration Testing, Security Research, Computer Forensics, and Reverse Engineering.</p>
+            <p>Developed, funded, and maintained by <strong>Offensive Security</strong>, a leading information security training company.</p>
+            <ul>
+              <li><strong>600+ penetration testing tools</strong> — Only the best tools included. Details on the <a href="https://www.kali.org/tools/" target="_blank" style="color: var(--accent);">Kali Tools site</a>.</li>
+              <li><strong>Free and always will be</strong> — Completely free of charge.</li>
+              <li><strong>Open source Git tree</strong> — All source code is available for customization.</li>
+              <li><strong>FHS compliant</strong> — Adheres to the Filesystem Hierarchy Standard.</li>
+              <li><strong>Wide-ranging wireless device support</strong> — Compatible with numerous USB and wireless devices.</li>
+              <li><strong>Custom kernel with injection patches</strong> — Latest injection patches for wireless assessments.</li>
+              <li><strong>Developed in a secure environment</strong> — Committed using multiple secure protocols.</li>
+              <li><strong>GPG signed packages and repositories</strong> — Every package is cryptographically signed.</li>
+              <li><strong>Multi-language support</strong> — Operates in multiple languages.</li>
 
+            </ul>
+          </div>
+        </div>
+      </div>
 
+      <!-- Tools Required -->
+      <div class="accordion-card" data-aos="fade-up" data-aos-delay="100">
+        <div class="card-header" id="headingTwo">
+          <a data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false">
+            <i class="bi bi-tools"></i> Tools Required for Penetration Testing
+            <i class="bi bi-chevron-down arrow"></i>
+          </a>
+        </div>
+        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <h6 style="color: var(--primary); margin-bottom: 15px;">Essential Software</h6>
+                <ul>
+                  <li><strong>Virtualization:</strong> VMware Workstation / Oracle VirtualBox</li>
+                  <li><strong>Kali Linux ISO:</strong> <a href="https://www.kali.org/get-kali/" target="_blank" style="color: var(--accent);">Download Latest</a></li>
+                  <li><strong>Vulnerable Machines:</strong> Metasploitable, DVWA, OWASP WebGoat</li>
+                </ul>
+              </div>
+              <div class="col-md-6">
+                <h6 style="color: var(--primary); margin-bottom: 15px;">Recommended Hardware</h6>
+                <ul>
+                  <li>Minimum 8 GB RAM (16 GB recommended)</li>
+                  <li>At least 50 GB free disk space</li>
+                  <li>Wireless adapter supporting monitor mode</li>
+                  <li>Multi-core processor with virtualization support</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
+      <!-- Books -->
+      <div class="accordion-card" data-aos="fade-up" data-aos-delay="200">
+        <div class="card-header" id="headingThree">
+          <a data-toggle="collapse" data-target="#collapseThree" aria-expanded="false">
+            <i class="bi bi-journal-bookmark-fill"></i> Recommended Books
+            <i class="bi bi-chevron-down arrow"></i>
+          </a>
+        </div>
+        <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+          <div class="card-body">
+            <div class="book-item">
+              <i class="bi bi-book-fill"></i>
+              <a href="books/CEH v9 Certified Ethical Hacker Version 9.pdf">Certified Ethical Hacker (CEH v9) — Study Guide</a>
+            </div>
+            <div class="book-item">
+              <i class="bi bi-book-fill"></i>
+              <a href="books/Kevin D. Mitnick, William L. Simon, Steve Wozniak - The art of deception_ controlling the human element of security-Wiley (2003).pdf">The Art of Deception — Kevin Mitnick (2003)</a>
+            </div>
+            <div class="book-item">
+              <i class="bi bi-book-fill"></i>
+              <a href="books/python.pdf">Beginning Python — Programming Fundamentals</a>
+            </div>
+            <div class="book-item">
+              <i class="bi bi-book-fill"></i>
+              <a href="#">Hacking: The Art of Exploitation — Jon Erickson</a>
+            </div>
+            <div class="book-item">
+              <i class="bi bi-book-fill"></i>
+              <a href="#">The Web Application Hacker's Handbook — D. Stuttard</a>
+            </div>
+          </div>
+        </div>
+      </div>
 
+      <!-- Learning Path -->
+      <div class="accordion-card" data-aos="fade-up" data-aos-delay="300">
+        <div class="card-header" id="headingFour">
+          <a data-toggle="collapse" data-target="#collapseFour" aria-expanded="false">
+            <i class="bi bi-signpost-split-fill"></i> Recommended Learning Path
+            <i class="bi bi-chevron-down arrow"></i>
+          </a>
+        </div>
+        <div id="collapseFour" class="collapse" aria-labelledby="headingFour" data-parent="#accordion">
+          <div class="card-body">
+            <ol>
+              <li><strong>Networking Fundamentals</strong> — TCP/IP, OSI Model, common protocols.</li>
+              <li><strong>Linux &amp; Windows Commands</strong> — Get comfortable with both OS.</li>
+              <li><strong>Programming Basics</strong> — Python, Bash scripting, basic SQL.</li>
+              <li><strong>Footprinting &amp; Reconnaissance</strong> — Information gathering techniques.</li>
+              <li><strong>Scanning &amp; Enumeration</strong> — Identify targets and vulnerabilities.</li>
+              <li><strong>System Hacking</strong> — Exploitation, privilege escalation, maintaining access.</li>
+              <li><strong>Web Application Hacking</strong> — OWASP Top 10, SQLi, XSS, and more.</li>
+              <li><strong>Wireless &amp; Mobile Security</strong> — WiFi and Android/iOS security.</li>
+              <li><strong>Advanced Topics</strong> — DDoS, MITM, Cryptography, Social Engineering.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CYBERSECURITY NEWS SECTION ===== -->
+<section class="news-section" id="news">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <div style="margin-bottom:15px;">
+        <span class="live-indicator"><span class="live-dot"></span> Live Feed</span>
+      </div>
+      <h2>Cyber <span>News</span> Feed</h2>
+      <p>Stay updated with the latest cybersecurity news, hacking incidents, crypto updates, and dark web intelligence.</p>
+    </div>
+
+    <!-- News Ticker -->
+    <div class="news-ticker" data-aos="fade-up" id="newsTicker" style="display:none;">
+      <div class="ticker-label"><i class="bi bi-lightning-charge-fill"></i> BREAKING</div>
+      <div class="ticker-content">
+        <div class="ticker-scroll" id="tickerScroll"></div>
+      </div>
+    </div>
+
+    <!-- Category Tabs -->
+    <div class="news-tabs" data-aos="fade-up">
+      <div class="news-tab active" data-category="all" onclick="filterNews('all', this)">
+        <i class="bi bi-grid-fill"></i> All
+      </div>
+      <div class="news-tab" data-category="hacking" onclick="filterNews('hacking', this)">
+        <i class="bi bi-bug-fill"></i> Hacking
+      </div>
+      <div class="news-tab" data-category="crypto" onclick="filterNews('crypto', this)">
+        <i class="bi bi-currency-bitcoin"></i> Crypto
+      </div>
+      <div class="news-tab" data-category="darknet" onclick="filterNews('darknet', this)">
+        <i class="bi bi-incognito"></i> Dark Web
+      </div>
+      <div class="news-tab" data-category="breach" onclick="filterNews('breach', this)">
+        <i class="bi bi-shield-fill-x"></i> Breaches
+      </div>
+      <div class="news-tab" data-category="malware" onclick="filterNews('malware', this)">
+        <i class="bi bi-virus"></i> Malware
+      </div>
+      <div class="news-tab" data-category="privacy" onclick="filterNews('privacy', this)">
+        <i class="bi bi-eye-slash-fill"></i> Privacy
+      </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div class="news-loading" id="newsLoading">
+      <div class="spinner"></div>
+      <p>Fetching latest cybersecurity news...</p>
+    </div>
+
+    <!-- Error State -->
+    <div class="news-error" id="newsError">
+      <i class="bi bi-wifi-off"></i>
+      <h5>Unable to load news</h5>
+      <p>Could not fetch the latest news. Please check your connection and try again.</p>
+      <button onclick="fetchAllNews()"><i class="bi bi-arrow-clockwise"></i> Retry</button>
+    </div>
+
+    <!-- News Grid -->
+    <div class="news-grid" id="newsGrid" style="display:none;"></div>
+
+    <!-- Load More -->
+    <div style="text-align:center; margin-top:40px; display:none;" id="newsLoadMore">
+      <button onclick="loadMoreNews()" style="
+        padding: 12px 35px;
+        background: transparent;
+        border: 1px solid var(--primary);
+        color: var(--primary);
+        border-radius: 50px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: 'Poppins', sans-serif;
+      " onmouseover="this.style.background='rgba(0,255,136,0.1)'" onmouseout="this.style.background='transparent'">
+        <i class="bi bi-arrow-down-circle"></i> Load More News
+      </button>
+    </div>
+
+    <!-- Last Updated -->
+    <div style="text-align:center; margin-top:20px;" id="newsTimestamp"></div>
+  </div>
+</section>
 
 <!-- Footer -->
-<footer>
-  <h1 class="text-center text-capitalize text-muted w-100 pt-5 pb-5 mt-5">Thank You !</h1>
+<footer class="footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <div class="footer-brand">
+          <i class="bi bi-shield-lock-fill"></i> HACKER'S WORLD
+        </div>
+        <p class="footer-text">
+          Your gateway to ethical hacking and cybersecurity education.
+          Learn responsibly, hack ethically, and stay secure.
+        </p>
+        <div class="footer-social">
+          <a href="#"><i class="bi bi-github"></i></a>
+          <a href="#"><i class="bi bi-twitter"></i></a>
+          <a href="#"><i class="bi bi-linkedin"></i></a>
+          <a href="#"><i class="bi bi-youtube"></i></a>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="footer-links">
+          <h6>Quick Links</h6>
+          <a href="Linux_cmd.html"><i class="bi bi-chevron-right"></i> Linux Commands</a>
+          <a href="win-cmd.html"><i class="bi bi-chevron-right"></i> Windows Commands</a>
+          <a href="footprinting.html"><i class="bi bi-chevron-right"></i> Footprinting</a>
+          <a href="scanning.html"><i class="bi bi-chevron-right"></i> Network Scanning</a>
+          <a href="system-hacking.html"><i class="bi bi-chevron-right"></i> System Hacking</a>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4">
+        <div class="footer-links">
+          <h6>More Topics</h6>
+          <a href="android-hacking.html"><i class="bi bi-chevron-right"></i> Android Hacking</a>
+          <a href="ddos.html"><i class="bi bi-chevron-right"></i> DDoS Attacks</a>
+          <a href="mitm.html"><i class="bi bi-chevron-right"></i> MITM Attacks</a>
+          <a href="wifi-hacking.html"><i class="bi bi-chevron-right"></i> WiFi Hacking</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 Hacker's World. All Rights Reserved. Built for educational purposes only.</p>
+    </div>
+  </div>
 </footer>
 
-<!-- jQuery library -->
+<!-- jQuery -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
 <!-- Popper JS -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!-- AOS -->
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
-<!-- Latest compiled JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> 
+<script>
+  // AOS init
+  AOS.init({ once: true, duration: 800 });
+
+  // Loader
+  window.addEventListener('load', function () {
+    setTimeout(function () {
+      document.getElementById('loader').classList.add('hidden');
+    }, 1500);
+  });
+
+  // Navbar scroll & back-to-top
+  window.addEventListener('scroll', function () {
+    var nb = document.getElementById('mainNavbar');
+    var bt = document.getElementById('backToTop');
+    if (window.scrollY > 50)  nb.classList.add('scrolled');
+    else                       nb.classList.remove('scrolled');
+    bt.style.display = window.scrollY > 300 ? 'flex' : 'none';
+  });
+
+  document.getElementById('backToTop').addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  // Terminal typing
+  var cmds = [
+    'nmap -sV -O target.com',
+    'msfconsole -q',
+    'hydra -l admin -P wordlist.txt ssh://target',
+    'airmon-ng start wlan0',
+    'nikto -h https://target.com',
+    'sqlmap -u "http://target.com/?id=1" --dbs',
+    'john --wordlist=rockyou.txt hash.txt'
+  ];
+  var ci = 0, chi = 0, del = false;
+  var tt = document.getElementById('typed-text');
+
+  function typeCmd() {
+    var c = cmds[ci];
+    if (!del) {
+      tt.textContent = c.substring(0, chi + 1); chi++;
+      if (chi === c.length) { del = true; setTimeout(typeCmd, 2000); return; }
+    } else {
+      tt.textContent = c.substring(0, chi - 1); chi--;
+      if (chi === 0) { del = false; ci = (ci + 1) % cmds.length; }
+    }
+    setTimeout(typeCmd, del ? 30 : 80);
+  }
+  setTimeout(typeCmd, 2000);
+
+  // Matrix background
+  var cv = document.getElementById('matrix-bg');
+  var cx = cv.getContext('2d');
+  cv.width = innerWidth; cv.height = innerHeight;
+  var ch = '01アイウエオカキクケコサシスセソ';
+  var fs = 14, col = cv.width / fs, dr = [];
+  for (var i = 0; i < col; i++) dr[i] = 1;
+
+  function drawM() {
+    cx.fillStyle = 'rgba(13,17,23,0.05)';
+    cx.fillRect(0, 0, cv.width, cv.height);
+    cx.fillStyle = '#00ff88';
+    cx.font = fs + 'px monospace';
+    for (var i = 0; i < dr.length; i++) {
+      cx.fillText(ch[Math.floor(Math.random() * ch.length)], i * fs, dr[i] * fs);
+      if (dr[i] * fs > cv.height && Math.random() > 0.975) dr[i] = 0;
+      dr[i]++;
+    }
+  }
+  setInterval(drawM, 50);
+  addEventListener('resize', function () { cv.width = innerWidth; cv.height = innerHeight; });
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var t = document.querySelector(this.getAttribute('href'));
+      if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth' }); }
+    });
+  });
+
+ // ===== CYBERSECURITY NEWS ENGINE =====
+  var allNewsArticles = [];
+  var displayedCount = 0;
+  var ARTICLES_PER_PAGE = 9;
+  var currentCategory = 'all';
+
+  // RSS Feed Sources (via RSS-to-JSON API)
+  var NEWS_SOURCES = [
+    {
+      url: 'https://api.rss2json.com/v1/api.json?rss_url=https://thehackernews.com/feeds/posts/default',
+      source: 'The Hacker News',
+      defaultCategory: 'hacking'
+    },
+    {
+      url: 'https://api.rss2json.com/v1/api.json?rss_url=https://www.bleepingcomputer.com/feed/',
+      source: 'BleepingComputer',
+      defaultCategory: 'breach'
+    },
+    {
+      url: 'https://api.rss2json.com/v1/api.json?rss_url=https://krebsonsecurity.com/feed/',
+      source: 'KrebsOnSecurity',
+      defaultCategory: 'hacking'
+    },
+    {
+      url: 'https://api.rss2json.com/v1/api.json?rss_url=https://www.darkreading.com/rss.xml',
+      source: 'Dark Reading',
+      defaultCategory: 'darknet'
+    },
+    {
+      url: 'https://api.rss2json.com/v1/api.json?rss_url=https://feeds.feedburner.com/TheHackersNews',
+      source: 'THN Feed',
+      defaultCategory: 'malware'
+    }
+  ];
+
+  // Category detection keywords
+  var CATEGORY_KEYWORDS = {
+    crypto: ['crypto', 'bitcoin', 'ethereum', 'blockchain', 'nft', 'defi', 'cryptocurrency', 'wallet', 'exchange', 'token', 'mining'],
+    darknet: ['dark web', 'darknet', 'tor', 'deep web', 'underground', 'dark market', 'onion', 'silk road', 'hidden service'],
+    breach: ['breach', 'leak', 'data leak', 'exposed', 'stolen data', 'database', 'credentials', 'records leaked', 'hack attack', 'compromised'],
+    malware: ['malware', 'ransomware', 'trojan', 'virus', 'worm', 'spyware', 'botnet', 'payload', 'backdoor', 'rootkit', 'exploit kit'],
+    privacy: ['privacy', 'surveillance', 'tracking', 'spying', 'vpn', 'encryption', 'gdpr', 'data protection', 'anonymous', 'censorship'],
+    hacking: ['hack', 'vulnerability', 'exploit', 'zero-day', 'cve', 'rce', 'injection', 'pentest', 'apt', 'phishing', 'attack']
+  };
+
+  function detectCategory(title, description, defaultCat) {
+    var text = (title + ' ' + description).toLowerCase();
+    var scores = {};
+
+    for (var cat in CATEGORY_KEYWORDS) {
+      scores[cat] = 0;
+      CATEGORY_KEYWORDS[cat].forEach(function(keyword) {
+        if (text.indexOf(keyword) !== -1) {
+          scores[cat]++;
+        }
+      });
+    }
+
+    var maxCat = defaultCat;
+    var maxScore = 0;
+    for (var c in scores) {
+      if (scores[c] > maxScore) {
+        maxScore = scores[c];
+        maxCat = c;
+      }
+    }
+    return maxCat;
+  }
+
+  function getCategoryBadge(category) {
+    var badges = {
+      hacking: { class: 'cat-hacking', icon: 'bi-bug-fill', label: 'Hacking' },
+      crypto: { class: 'cat-crypto', icon: 'bi-currency-bitcoin', label: 'Crypto' },
+      darknet: { class: 'cat-darknet', icon: 'bi-incognito', label: 'Dark Web' },
+      breach: { class: 'cat-breach', icon: 'bi-shield-fill-x', label: 'Data Breach' },
+      malware: { class: 'cat-malware', icon: 'bi-virus', label: 'Malware' },
+      privacy: { class: 'cat-privacy', icon: 'bi-eye-slash-fill', label: 'Privacy' },
+      general: { class: 'cat-general', icon: 'bi-newspaper', label: 'Cyber News' }
+    };
+    return badges[category] || badges.general;
+  }
+
+  function formatDate(dateStr) {
+    try {
+      var d = new Date(dateStr);
+      var now = new Date();
+      var diff = Math.floor((now - d) / 1000);
+
+      if (diff < 60) return 'Just now';
+      if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+      if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+      if (diff < 604800) return Math.floor(diff / 86400) + 'd ago';
+
+      return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    } catch (e) {
+      return 'Recent';
+    }
+  }
+
+  function stripHTML(html) {
+    var tmp = document.createElement('div');
+    tmp.innerHTML = html;
+    return tmp.textContent || tmp.innerText || '';
+  }
+
+  function extractImage(item) {
+    // Try thumbnail
+    if (item.thumbnail && item.thumbnail.length > 10) return item.thumbnail;
+    // Try enclosure
+    if (item.enclosure && item.enclosure.link) return item.enclosure.link;
+    // Try finding image in content
+    if (item.content) {
+      var match = item.content.match(/<img[^>]+src=["']([^"']+)["']/i);
+      if (match && match[1]) return match[1];
+    }
+    if (item.description) {
+      var match2 = item.description.match(/<img[^>]+src=["']([^"']+)["']/i);
+      if (match2 && match2[1]) return match2[1];
+    }
+    return null;
+  }
+
+  function createNewsCard(article) {
+    var badge = getCategoryBadge(article.category);
+    var imgHTML = '';
+
+    if (article.image) {
+      imgHTML = '<div class="news-img-container">' +
+        '<span class="news-category ' + badge.class + '"><i class="bi ' + badge.icon + '"></i> ' + badge.label + '</span>' +
+        '<img src="' + article.image + '" alt="' + article.title.substring(0, 50) + '" loading="lazy" onerror="this.parentElement.innerHTML=\'<div class=news-img-placeholder><i class=bi bi-newspaper></i></div>\'">' +
+        '</div>';
+    } else {
+      imgHTML = '<div class="news-img-container">' +
+        '<span class="news-category ' + badge.class + '"><i class="bi ' + badge.icon + '"></i> ' + badge.label + '</span>' +
+        '<div class="news-img-placeholder"><i class="bi bi-newspaper"></i></div>' +
+        '</div>';
+    }
+
+    return '<div class="news-card" data-category="' + article.category + '">' +
+      '<a href="' + article.link + '" target="_blank" rel="noopener noreferrer">' +
+      imgHTML +
+      '<div class="news-body">' +
+      '<h5>' + article.title + '</h5>' +
+      '<p>' + article.description + '</p>' +
+      '<div class="news-meta">' +
+      '<span class="news-source"><i class="bi bi-broadcast-pin"></i> ' + article.source + '</span>' +
+      '<span class="news-date"><i class="bi bi-clock"></i> ' + article.date + '</span>' +
+      '</div>' +
+      '</div>' +
+      '</a>' +
+      '</div>';
+  }
+
+  function renderNews() {
+    var grid = document.getElementById('newsGrid');
+    var filtered = currentCategory === 'all'
+      ? allNewsArticles
+      : allNewsArticles.filter(function(a) { return a.category === currentCategory; });
+
+    var toShow = filtered.slice(0, displayedCount);
+    var html = '';
+    toShow.forEach(function(article) {
+      html += createNewsCard(article);
+    });
+
+    grid.innerHTML = html;
+    grid.style.display = html ? 'grid' : 'none';
+
+    // Load more button
+    var loadMore = document.getElementById('newsLoadMore');
+    loadMore.style.display = displayedCount < filtered.length ? 'block' : 'none';
+  }
+
+  function filterNews(category, tabEl) {
+    currentCategory = category;
+    displayedCount = ARTICLES_PER_PAGE;
+
+    document.querySelectorAll('.news-tab').forEach(function(t) { t.classList.remove('active'); });
+    tabEl.classList.add('active');
+
+    renderNews();
+  }
+
+  function loadMoreNews() {
+    displayedCount += ARTICLES_PER_PAGE;
+    renderNews();
+  }
+
+  function buildTicker() {
+    var ticker = document.getElementById('newsTicker');
+    var scroll = document.getElementById('tickerScroll');
+    var topNews = allNewsArticles.slice(0, 15);
+
+    if (topNews.length === 0) return;
+
+    var html = '';
+    // Duplicate for seamless loop
+    for (var r = 0; r < 2; r++) {
+      topNews.forEach(function(article) {
+        html += '<div class="ticker-item">' +
+          '<span class="ticker-dot"></span>' +
+          '<a href="' + article.link + '" target="_blank" rel="noopener noreferrer">' + article.title + '</a>' +
+          '</div>';
+      });
+    }
+
+    scroll.innerHTML = html;
+    ticker.style.display = 'flex';
+  }
+
+  function showTimestamp() {
+    var ts = document.getElementById('newsTimestamp');
+    var now = new Date();
+    ts.innerHTML = '<span style="font-size:0.75rem; color:var(--text-secondary);">' +
+      '<i class="bi bi-arrow-repeat" style="margin-right:5px;"></i> Last updated: ' +
+      now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' }) +
+      ' &bull; Auto-refreshes every 10 minutes</span>';
+  }
+
+  async function fetchFeed(source) {
+    try {
+      var resp = await fetch(source.url);
+      var data = await resp.json();
+
+      if (data.status !== 'ok' || !data.items) return [];
+
+      return data.items.map(function(item) {
+        var desc = stripHTML(item.description || item.content || '').substring(0, 200);
+        var category = detectCategory(item.title || '', desc, source.defaultCategory);
+
+        return {
+          title: item.title || 'Untitled',
+          description: desc || 'No description available.',
+          link: item.link || '#',
+          image: extractImage(item),
+          source: source.source,
+          date: formatDate(item.pubDate),
+          rawDate: new Date(item.pubDate),
+          category: category
+        };
+      });
+    } catch (e) {
+      console.warn('Failed to fetch from ' + source.source + ':', e);
+      return [];
+    }
+  }
+
+  async function fetchAllNews() {
+    var loading = document.getElementById('newsLoading');
+    var error = document.getElementById('newsError');
+    var grid = document.getElementById('newsGrid');
+
+    loading.style.display = 'block';
+    error.style.display = 'none';
+    grid.style.display = 'none';
+
+    try {
+      var promises = NEWS_SOURCES.map(function(src) { return fetchFeed(src); });
+      var results = await Promise.all(promises);
+
+      allNewsArticles = [];
+      results.forEach(function(articles) {
+        allNewsArticles = allNewsArticles.concat(articles);
+      });
+
+      // Sort by date (newest first)
+      allNewsArticles.sort(function(a, b) { return b.rawDate - a.rawDate; });
+
+      // Remove duplicates by title
+      var seen = {};
+      allNewsArticles = allNewsArticles.filter(function(article) {
+        var key = article.title.toLowerCase().substring(0, 50);
+        if (seen[key]) return false;
+        seen[key] = true;
+        return true;
+      });
+
+      loading.style.display = 'none';
+
+      if (allNewsArticles.length === 0) {
+        error.style.display = 'block';
+        return;
+      }
+
+      displayedCount = ARTICLES_PER_PAGE;
+      renderNews();
+      buildTicker();
+      showTimestamp();
+
+    } catch (e) {
+      console.error('News fetch error:', e);
+      loading.style.display = 'none';
+      error.style.display = 'block';
+    }
+  }
+
+  // Fetch on load
+  fetchAllNews();
+
+  // Auto-refresh every 10 minutes
+  setInterval(fetchAllNews, 600000);
+
+
+</script>
+
 </body>
-
-
 </html>

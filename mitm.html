@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Man In The Middle Attacks - Hacker's World</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Learn about Man In The Middle attacks, techniques, tools, and defense">
+
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.2/font/bootstrap-icons.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Fira+Code&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --primary: #ec4899;
+      --primary-glow: rgba(236, 72, 153, 0.3);
+      --primary-light: rgba(236, 72, 153, 0.1);
+      --dark: #0d1117;
+      --darker: #010409;
+      --card-bg: #161b22;
+      --text-primary: #c9d1d9;
+      --text-secondary: #8b949e;
+      --accent: #58a6ff;
+      --danger: #ff4444;
+      --success: #00ff88;
+      --warning: #f59e0b;
+      --purple: #a855f7;
+      --border: #30363d;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: var(--dark);
+      color: var(--text-primary);
+      overflow-x: hidden;
+    }
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--darker); }
+    ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+
+    /* Navbar */
+    .navbar {
+      background: rgba(13,17,23,0.95) !important; backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border); padding: 15px 30px; transition: all 0.3s ease;
+    }
+    .navbar.scrolled { padding: 10px 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.5); }
+    .navbar-brand { font-weight: 700; font-size: 1.4rem; color: #00ff88 !important; letter-spacing: 2px; }
+    .navbar-brand i { margin-right: 8px; }
+    .nav-link { color: var(--text-primary) !important; font-weight: 400; margin: 0 8px; transition: color 0.3s ease; }
+    .nav-link:hover { color: var(--primary) !important; }
+    .dropdown-menu {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px;
+      padding: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-height: 70vh; overflow-y: auto;
+    }
+    .navbar-nav .dropdown-menu { right: 0; left: auto; }
+    .dropdown-item { color: var(--text-primary); padding: 10px 15px; border-radius: 6px; transition: all 0.3s ease; font-size: 0.9rem; }
+    .dropdown-item:hover { background: var(--primary-light); color: var(--primary); transform: translateX(5px); }
+    .dropdown-item i { margin-right: 10px; color: var(--primary); }
+    .dropdown-divider { border-top-color: var(--border); }
+
+    /* Page Header */
+    .page-header {
+      padding: 120px 0 60px; text-align: center; position: relative; overflow: hidden;
+    }
+    .page-header::before {
+      content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: radial-gradient(ellipse at top, rgba(236,72,153,0.06), transparent 60%),
+                  radial-gradient(ellipse at bottom left, rgba(168,85,247,0.04), transparent 60%);
+      z-index: 0;
+    }
+    .page-header .container { position: relative; z-index: 1; }
+    .page-header h1 { font-size: 2.8rem; font-weight: 700; margin-bottom: 15px; }
+    .page-header h1 span { color: var(--primary); }
+    .page-header .lead {
+      color: var(--text-secondary); max-width: 750px; margin: 0 auto 20px; line-height: 1.8; font-size: 1.05rem;
+    }
+    .breadcrumb-custom {
+      display: flex; justify-content: center; gap: 8px; margin-bottom: 30px; flex-wrap: wrap;
+    }
+    .breadcrumb-custom a { color: var(--accent); text-decoration: none; font-size: 0.9rem; }
+    .breadcrumb-custom a:hover { color: var(--primary); }
+    .breadcrumb-custom span { color: var(--text-secondary); font-size: 0.9rem; }
+
+    /* Badges */
+    .mitm-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 15px; border-radius: 50px; font-size: 0.75rem;
+      font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+    }
+    .badge-passive { background: rgba(88,166,255,0.1); color: var(--accent); border: 1px solid rgba(88,166,255,0.2); }
+    .badge-active { background: rgba(236,72,153,0.1); color: var(--primary); border: 1px solid rgba(236,72,153,0.2); }
+    .badge-crypto { background: rgba(168,85,247,0.1); color: var(--purple); border: 1px solid rgba(168,85,247,0.2); }
+    .badge-network { background: rgba(0,255,136,0.1); color: var(--success); border: 1px solid rgba(0,255,136,0.2); }
+
+    /* Section */
+    .section-header { text-align: center; margin-bottom: 50px; }
+    .section-header h2 { font-size: 2rem; font-weight: 700; margin-bottom: 10px; }
+    .section-header h2 span { color: var(--primary); }
+    .section-header p { color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
+    .content-section { padding: 60px 0; }
+
+    /* Info Cards */
+    .info-card {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 15px;
+      padding: 30px; height: 100%; transition: all 0.3s ease;
+    }
+    .info-card:hover {
+      transform: translateY(-5px); border-color: rgba(236,72,153,0.3);
+      box-shadow: 0 10px 30px rgba(236,72,153,0.08);
+    }
+    .info-card-icon {
+      width: 55px; height: 55px; background: var(--primary-light);
+      border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 18px;
+    }
+    .info-card-icon i { font-size: 1.5rem; color: var(--primary); }
+    .info-card h5 { font-weight: 600; margin-bottom: 10px; font-size: 1.1rem; }
+    .info-card p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; margin: 0; }
+
+    /* Flow Diagram */
+    .mitm-flow {
+      display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 10px;
+      margin: 30px 0; padding: 30px; background: var(--card-bg); border: 1px solid var(--border);
+      border-radius: 15px;
+    }
+    .flow-entity {
+      text-align: center; min-width: 120px;
+    }
+    .flow-entity .entity-icon {
+      width: 70px; height: 70px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 10px; font-size: 1.8rem;
+    }
+    .flow-entity h6 { font-size: 0.85rem; font-weight: 600; margin-bottom: 3px; }
+    .flow-entity p { font-size: 0.72rem; color: var(--text-secondary); margin: 0; }
+    .flow-arrow-group {
+      display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--text-secondary);
+    }
+    .flow-arrow-group .arrow-line {
+      font-size: 1.2rem;
+    }
+    .flow-arrow-group .arrow-label {
+      font-size: 0.65rem; color: var(--primary); font-weight: 600; white-space: nowrap;
+    }
+    .entity-victim .entity-icon { background: rgba(88,166,255,0.1); color: var(--accent); }
+    .entity-attacker .entity-icon { background: rgba(236,72,153,0.1); color: var(--primary); }
+    .entity-server .entity-icon { background: rgba(0,255,136,0.1); color: var(--success); }
+
+    /* Attack Cards */
+    .attack-card {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 15px;
+      padding: 25px; height: 100%; transition: all 0.3s ease; position: relative; overflow: hidden;
+    }
+    .attack-card:hover {
+      border-color: rgba(236,72,153,0.4); transform: translateY(-5px);
+      box-shadow: 0 10px 25px rgba(236,72,153,0.1);
+    }
+    .attack-card::after {
+      content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--purple));
+      transform: scaleX(0); transition: transform 0.3s ease;
+    }
+    .attack-card:hover::after { transform: scaleX(1); }
+    .attack-card h6 { color: var(--primary); font-weight: 600; margin-bottom: 8px; font-size: 1rem; }
+    .attack-card p { color: var(--text-secondary); font-size: 0.85rem; line-height: 1.7; margin-bottom: 12px; }
+
+    /* Tool Command Block */
+    .tool-cmd {
+      background: var(--dark); border: 1px solid var(--border); border-radius: 8px;
+      padding: 12px 15px; display: flex; align-items: center;
+      justify-content: space-between; gap: 10px; margin-top: 10px;
+    }
+    .tool-cmd code {
+      font-family: 'Fira Code', monospace; color: var(--primary); font-size: 0.85rem; flex: 1;
+      word-break: break-all;
+    }
+    .tool-cmd .copy-btn {
+      background: none; border: 1px solid var(--border); border-radius: 5px;
+      color: var(--text-secondary); padding: 3px 8px; cursor: pointer;
+      font-size: 0.75rem; transition: all 0.3s ease;
+      display: flex; align-items: center; gap: 4px; flex-shrink: 0;
+    }
+    .tool-cmd .copy-btn:hover { border-color: var(--primary); color: var(--primary); }
+
+    /* Accordion */
+    .accordion-card {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 15px;
+      margin-bottom: 20px; overflow: hidden; transition: all 0.3s ease;
+    }
+    .accordion-card:hover { border-color: rgba(236,72,153,0.3); }
+    .accordion-header {
+      padding: 20px 25px; cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between;
+      background: none; border: none; width: 100%;
+      text-align: left; color: var(--text-primary); transition: background 0.3s ease;
+    }
+    .accordion-header:hover { background: rgba(236,72,153,0.03); }
+    .accordion-header-left { display: flex; align-items: center; gap: 15px; }
+    .accordion-icon {
+      width: 45px; height: 45px; background: var(--primary-light);
+      border-radius: 10px; display: flex; align-items: center; justify-content: center;
+    }
+    .accordion-icon i { font-size: 1.3rem; color: var(--primary); }
+    .accordion-title { font-weight: 600; font-size: 1.05rem; }
+    .accordion-subtitle { font-size: 0.8rem; color: var(--text-secondary); }
+    .accordion-arrow { color: var(--text-secondary); transition: transform 0.3s ease; }
+    .accordion-arrow.rotated { transform: rotate(180deg); }
+    .accordion-body {
+      border-top: 1px solid var(--border); padding: 25px; display: none;
+      color: var(--text-secondary); line-height: 1.9; font-size: 0.95rem;
+    }
+    .accordion-body h6 { color: var(--primary); font-weight: 600; margin: 20px 0 10px; }
+    .accordion-body h6:first-child { margin-top: 0; }
+    .accordion-body ul { padding-left: 20px; }
+    .accordion-body li { margin-bottom: 8px; }
+    .accordion-body strong { color: var(--text-primary); }
+
+    /* Process Steps */
+    .process-step { display: flex; gap: 20px; margin-bottom: 30px; align-items: flex-start; }
+    .step-number {
+      min-width: 50px; height: 50px; background: var(--primary-light);
+      border: 2px solid var(--primary); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 1.2rem; color: var(--primary); flex-shrink: 0;
+    }
+    .step-content h5 { font-weight: 600; margin-bottom: 5px; font-size: 1rem; }
+    .step-content p { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7; }
+
+    /* Styled Table */
+    .styled-table {
+      width: 100%; border-collapse: separate; border-spacing: 0;
+      border-radius: 12px; overflow: hidden; margin: 20px 0;
+    }
+    .styled-table thead th {
+      background: var(--primary-light); color: var(--primary);
+      padding: 14px 18px; font-weight: 600; font-size: 0.9rem;
+      border-bottom: 2px solid var(--border);
+    }
+    .styled-table tbody td {
+      padding: 12px 18px; border-bottom: 1px solid var(--border);
+      font-size: 0.9rem; color: var(--text-secondary);
+    }
+    .styled-table tbody tr:hover { background: rgba(236,72,153,0.03); }
+    .styled-table tbody tr:last-child td { border-bottom: none; }
+
+    /* Warning Box */
+    .warning-box {
+      background: linear-gradient(135deg, rgba(255,68,68,0.08), rgba(255,68,68,0.02));
+      border: 1px solid rgba(255,68,68,0.2); border-radius: 12px;
+      padding: 25px; margin: 30px 0; position: relative; overflow: hidden;
+    }
+    .warning-box::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 4px; height: 100%; background: var(--danger);
+    }
+    .warning-box h6 { color: var(--danger); font-weight: 600; margin-bottom: 8px; }
+    .warning-box h6 i { margin-right: 8px; }
+    .warning-box p { color: var(--text-secondary); font-size: 0.9rem; margin: 0; line-height: 1.7; }
+
+    /* Scenario Box */
+    .scenario-box {
+      background: linear-gradient(135deg, rgba(236,72,153,0.05), rgba(168,85,247,0.03));
+      border: 1px solid rgba(236,72,153,0.15); border-radius: 12px;
+      padding: 25px; margin: 20px 0; position: relative; overflow: hidden;
+    }
+    .scenario-box::before {
+      content: ''; position: absolute; top: 0; left: 0;
+      width: 4px; height: 100%; background: var(--primary);
+    }
+    .scenario-box h6 { color: var(--primary); font-weight: 600; margin-bottom: 8px; }
+    .scenario-box h6 i { margin-right: 8px; }
+    .scenario-box p { color: var(--text-secondary); font-size: 0.88rem; margin: 0; line-height: 1.7; }
+
+    /* Footer */
+    .footer {
+      background: var(--darker); border-top: 1px solid var(--border); padding: 40px 0 20px;
+    }
+    .footer-content {
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;
+    }
+    .footer-brand { color: #00ff88; font-weight: 700; font-size: 1.2rem; letter-spacing: 2px; }
+    .footer-brand i { margin-right: 6px; }
+    .footer-links a {
+      color: var(--text-secondary); text-decoration: none; margin-left: 20px;
+      font-size: 0.9rem; transition: color 0.3s ease;
+    }
+    .footer-links a:hover { color: var(--primary); }
+    .footer-bottom {
+      text-align: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border);
+    }
+    .footer-bottom p { color: var(--text-secondary); font-size: 0.8rem; }
+
+    .back-to-top {
+      position: fixed; bottom: 30px; right: 30px; width: 45px; height: 45px;
+      background: var(--primary); color: #fff; border: none; border-radius: 50%;
+      font-size: 1.2rem; cursor: pointer; display: none; align-items: center;
+      justify-content: center; z-index: 999;
+      box-shadow: 0 4px 15px var(--primary-glow); transition: all 0.3s ease;
+    }
+    .back-to-top:hover { transform: translateY(-3px); }
+
+    .toast-notification {
+      position: fixed; bottom: 80px; right: 30px;
+      background: var(--card-bg); border: 1px solid var(--primary);
+      color: var(--primary); padding: 12px 20px; border-radius: 10px;
+      font-size: 0.85rem; z-index: 1000; display: none;
+      box-shadow: 0 5px 20px var(--primary-glow); animation: slideIn 0.3s ease;
+    }
+    @keyframes slideIn {
+      from { transform: translateX(100px); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+      .page-header h1 { font-size: 2rem; }
+      .footer-content { flex-direction: column; text-align: center; }
+      .footer-links a { margin: 0 10px; }
+      .mitm-flow { flex-direction: column; }
+      .flow-arrow-group .arrow-line { transform: rotate(90deg); }
+      .process-step { flex-direction: column; align-items: center; text-align: center; }
+      .navbar-nav .dropdown-menu { right: auto; left: 0; max-height: 50vh; }
+    }
+  </style>
+</head>
+<body>
+
+<button class="back-to-top" id="backToTop"><i class="bi bi-arrow-up"></i></button>
+<div class="toast-notification" id="toast"><i class="bi bi-check-circle-fill"></i> <span id="toastMsg">Copied!</span></div>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg fixed-top" id="mainNavbar">
+  <a class="navbar-brand" href="index.html"><i class="bi bi-shield-lock-fill"></i> HACKER'S WORLD</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"><span class="navbar-toggler-icon"></span></button>
+  <div class="collapse navbar-collapse" id="navbarNav">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item"><a class="nav-link" href="index.html"><i class="bi bi-house-fill"></i> Home</a></li>
+      <li class="nav-item active"><a class="nav-link" href="#"><i class="bi bi-people-fill"></i> MITM</a></li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"><i class="bi bi-grid-fill"></i> More</a>
+        <div class="dropdown-menu dropdown-menu-right">
+          <a class="dropdown-item" href="Linux_cmd.html"><i class="bi bi-terminal-fill"></i> Linux Commands</a>
+          <a class="dropdown-item" href="win-cmd.html"><i class="bi bi-windows"></i> Windows Commands</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="footprinting.html"><i class="bi bi-search"></i> Footprinting</a>
+          <a class="dropdown-item" href="scanning.html"><i class="bi bi-broadcast-pin"></i> Scanning</a>
+          <a class="dropdown-item" href="system-hacking.html"><i class="bi bi-pc-display"></i> System Hacking</a>
+          <a class="dropdown-item" href="android-hacking.html"><i class="bi bi-phone-fill"></i> Android Hacking</a>
+          <a class="dropdown-item" href="ddos.html"><i class="bi bi-lightning-fill"></i> DDoS</a>
+          <a class="dropdown-item" href="wifi-hacking.html"><i class="bi bi-wifi"></i> WiFi Hacking</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<!-- Page Header -->
+<section class="page-header">
+  <div class="container">
+    <div class="breadcrumb-custom">
+      <a href="index.html"><i class="bi bi-house-fill"></i> Home</a><span>/</span><span>MITM Attacks</span>
+    </div>
+    <h1 data-aos="fade-up"><i class="bi bi-people-fill" style="color:var(--primary)"></i> Man In The <span>Middle</span></h1>
+    <p class="lead" data-aos="fade-up" data-aos-delay="100">
+      A Man-in-the-Middle (MITM) attack occurs when an attacker secretly intercepts and potentially alters
+      communication between two parties who believe they are communicating directly with each other.
+    </p>
+    <div data-aos="fade-up" data-aos-delay="200">
+      <span class="mitm-badge badge-active"><i class="bi bi-eye-fill"></i> Interception</span>
+      <span class="mitm-badge badge-crypto"><i class="bi bi-lock-fill"></i> SSL/TLS Attacks</span>
+      <span class="mitm-badge badge-network"><i class="bi bi-diagram-3-fill"></i> ARP Spoofing</span>
+    </div>
+  </div>
+</section>
+
+<!-- Warning -->
+<section class="content-section" style="padding-bottom:0;">
+  <div class="container">
+    <div class="warning-box" data-aos="fade-up">
+      <h6><i class="bi bi-exclamation-triangle-fill"></i> Legal Warning</h6>
+      <p>Intercepting network communications without authorization is a <strong>serious criminal offense</strong> under wiretapping and computer fraud laws worldwide.
+        MITM techniques must <strong>ONLY</strong> be used in authorized penetration testing engagements with proper written consent.
+        This content is strictly for educational and defensive purposes.</p>
+    </div>
+  </div>
+</section>
+
+<!-- How MITM Works -->
+<section class="content-section">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>How MITM <span>Works</span></h2>
+      <p>Understanding the interception and relay of communications.</p>
+    </div>
+
+    <!-- Flow Diagram -->
+    <div class="mitm-flow" data-aos="fade-up">
+      <div class="flow-entity entity-victim">
+        <div class="entity-icon"><i class="bi bi-person-fill"></i></div>
+        <h6>Victim (Alice)</h6>
+        <p>Thinks she's talking to Bob</p>
+      </div>
+      <div class="flow-arrow-group">
+        <span class="arrow-label">Intercepted</span>
+        <span class="arrow-line"><i class="bi bi-arrow-right"></i></span>
+        <span class="arrow-line"><i class="bi bi-arrow-left"></i></span>
+        <span class="arrow-label">Modified</span>
+      </div>
+      <div class="flow-entity entity-attacker">
+        <div class="entity-icon"><i class="bi bi-incognito"></i></div>
+        <h6 style="color:var(--primary);">Attacker (Eve)</h6>
+        <p>Intercepts &amp; relays</p>
+      </div>
+      <div class="flow-arrow-group">
+        <span class="arrow-label">Forwarded</span>
+        <span class="arrow-line"><i class="bi bi-arrow-right"></i></span>
+        <span class="arrow-line"><i class="bi bi-arrow-left"></i></span>
+        <span class="arrow-label">Captured</span>
+      </div>
+      <div class="flow-entity entity-server">
+        <div class="entity-icon"><i class="bi bi-hdd-rack-fill"></i></div>
+        <h6>Server (Bob)</h6>
+        <p>Thinks he's talking to Alice</p>
+      </div>
+    </div>
+
+    <!-- Normal vs MITM -->
+    <div class="row mt-4">
+      <div class="col-lg-6 mb-4" data-aos="fade-up">
+        <div class="info-card">
+          <div class="info-card-icon" style="background:rgba(0,255,136,0.1);"><i class="bi bi-check-circle-fill" style="color:var(--success);"></i></div>
+          <h5>Normal Communication</h5>
+          <p>
+            <strong>Alice → Bob</strong><br><br>
+            • Direct encrypted connection (TLS/SSL)<br>
+            • Certificate verified by trusted CA<br>
+            • Data integrity maintained end-to-end<br>
+            • No third party can read or modify data<br>
+            • Authentication verified on both ends
+          </p>
+        </div>
+      </div>
+      <div class="col-lg-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="info-card">
+          <div class="info-card-icon"><i class="bi bi-exclamation-triangle-fill"></i></div>
+          <h5>MITM Communication</h5>
+          <p>
+            <strong>Alice → Eve → Bob</strong><br><br>
+            • Attacker sits between both parties<br>
+            • Intercepts, reads, and modifies messages<br>
+            • Presents fake certificates to both sides<br>
+            • Both parties unaware of interception<br>
+            • Credentials and data stolen in real-time
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Attack Types -->
+<section class="content-section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>MITM Attack <span>Types</span></h2>
+      <p>Different techniques used to perform Man-in-the-Middle attacks.</p>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up">
+        <div class="attack-card">
+          <h6><i class="bi bi-diagram-3-fill"></i> ARP Spoofing/Poisoning</h6>
+          <p>Sends falsified ARP messages on a LAN to link attacker's MAC address with the IP of a legitimate host, redirecting traffic through the attacker.</p>
+          <span class="mitm-badge badge-network">LAN Attack</span>
+          <div class="tool-cmd">
+            <code>arpspoof -i eth0 -t victim_ip gateway_ip</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="50">
+        <div class="attack-card">
+          <h6><i class="bi bi-globe"></i> DNS Spoofing/Poisoning</h6>
+          <p>Corrupts the DNS cache to redirect domain name resolution to malicious IP addresses, sending users to fake websites.</p>
+          <span class="mitm-badge badge-active">Redirection</span>
+          <div class="tool-cmd">
+            <code>dnsspoof -i eth0 -f hosts.txt</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="attack-card">
+          <h6><i class="bi bi-unlock-fill"></i> SSL Stripping</h6>
+          <p>Downgrades HTTPS connections to HTTP by intercepting the initial redirect, allowing the attacker to see all traffic in plaintext.</p>
+          <span class="mitm-badge badge-crypto">Crypto Attack</span>
+          <div class="tool-cmd">
+            <code>sslstrip -l 8080</code>
+            <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="150">
+        <div class="attack-card">
+          <h6><i class="bi bi-router-fill"></i> DHCP Spoofing</h6>
+          <p>Sets up a rogue DHCP server to assign clients the attacker's IP as the default gateway, routing all traffic through the attacker.</p>
+          <span class="mitm-badge badge-network">LAN Attack</span>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="attack-card">
+          <h6><i class="bi bi-wifi"></i> Evil Twin / Rogue AP</h6>
+          <p>Creates a fake WiFi access point mimicking a legitimate one. Victims connect and all their traffic passes through the attacker.</p>
+          <span class="mitm-badge badge-active">WiFi Attack</span>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="250">
+        <div class="attack-card">
+          <h6><i class="bi bi-envelope-fill"></i> Email Hijacking</h6>
+          <p>Compromises email accounts or mail servers to intercept, read, modify, and forward email communications between parties.</p>
+          <span class="mitm-badge badge-passive">Passive</span>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="300">
+        <div class="attack-card">
+          <h6><i class="bi bi-file-earmark-lock-fill"></i> SSL/TLS Interception</h6>
+          <p>Uses forged or stolen certificates to intercept encrypted HTTPS traffic. Tools like mitmproxy present fake certs to the victim.</p>
+          <span class="mitm-badge badge-crypto">Crypto Attack</span>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="350">
+        <div class="attack-card">
+          <h6><i class="bi bi-broadcast-pin"></i> ICMP Redirect</h6>
+          <p>Sends forged ICMP redirect messages to alter the victim's routing table, forcing traffic through the attacker's machine.</p>
+          <span class="mitm-badge badge-network">Network</span>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="400">
+        <div class="attack-card">
+          <h6><i class="bi bi-cookie"></i> Session Hijacking</h6>
+          <p>Steals or predicts session tokens/cookies to take over an authenticated user's session without needing their credentials.</p>
+          <span class="mitm-badge badge-active">Session Attack</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MITM Tools -->
+<section class="content-section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>MITM <span>Tools</span></h2>
+      <p>Tools used for MITM testing in authorized engagements.</p>
+    </div>
+
+    <!-- Ettercap -->
+    <div class="accordion-card" data-aos="fade-up">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-header-left">
+          <div class="accordion-icon"><i class="bi bi-bug-fill"></i></div>
+          <div>
+            <div class="accordion-title">Ettercap</div>
+            <div class="accordion-subtitle">Comprehensive MITM attack suite</div>
+          </div>
+        </div>
+        <i class="bi bi-chevron-down accordion-arrow"></i>
+      </div>
+      <div class="accordion-body">
+        <p>Ettercap is a comprehensive suite for MITM attacks. It supports ARP poisoning, ICMP redirect, DHCP spoofing, port stealing, and more.</p>
+        <h6>Key Features:</h6>
+        <ul>
+          <li>Active and passive dissection of protocols (HTTP, FTP, SSH, HTTPS)</li>
+          <li>Content filtering and injection on the fly</li>
+          <li>Plugin architecture for extending functionality</li>
+          <li>GUI and command-line interfaces</li>
+        </ul>
+        <h6>Commands:</h6>
+        <div class="tool-cmd" style="margin-bottom:8px;">
+          <code>ettercap -G</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+        <div class="tool-cmd" style="margin-bottom:8px;">
+          <code>ettercap -T -q -i eth0 -M arp:remote /victim_ip// /gateway_ip//</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+        <div class="tool-cmd">
+          <code>ettercap -T -q -i eth0 -P dns_spoof -M arp /victim_ip// /gateway_ip//</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bettercap -->
+    <div class="accordion-card" data-aos="fade-up" data-aos-delay="50">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-header-left">
+          <div class="accordion-icon"><i class="bi bi-lightning-charge-fill"></i></div>
+          <div>
+            <div class="accordion-title">Bettercap</div>
+            <div class="accordion-subtitle">Modern MITM framework (Ettercap successor)</div>
+          </div>
+        </div>
+        <i class="bi bi-chevron-down accordion-arrow"></i>
+      </div>
+      <div class="accordion-body">
+        <p>Bettercap is the Swiss Army knife for network attacks and monitoring. It's the modern successor to Ettercap with a powerful interactive web UI.</p>
+        <h6>Capabilities:</h6>
+        <ul>
+          <li>ARP spoofing, DNS spoofing, DHCP spoofing</li>
+          <li>WiFi reconnaissance and deauthentication</li>
+          <li>BLE (Bluetooth Low Energy) device scanning</li>
+          <li>HTTP/HTTPS proxy with SSL stripping</li>
+          <li>Packet sniffing and credential harvesting</li>
+          <li>Caplet scripting for automation</li>
+        </ul>
+        <h6>Commands:</h6>
+        <div class="tool-cmd" style="margin-bottom:8px;">
+          <code>bettercap -iface eth0</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+        <div class="tool-cmd" style="margin-bottom:8px;">
+          <code>net.probe on</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+        <div class="tool-cmd" style="margin-bottom:8px;">
+          <code>set arp.spoof.targets victim_ip</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+        <div class="tool-cmd" style="margin-bottom:8px;">
+          <code>arp.spoof on</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+        <div class="tool-cmd">
+          <code>net.sniff on</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- mitmproxy -->
+    <div class="accordion-card" data-aos="fade-up" data-aos-delay="100">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-header-left">
+          <div class="accordion-icon"><i class="bi bi-arrow-left-right"></i></div>
+          <div>
+            <div class="accordion-title">mitmproxy</div>
+            <div class="accordion-subtitle">Interactive HTTPS proxy</div>
+          </div>
+        </div>
+        <i class="bi bi-chevron-down accordion-arrow"></i>
+      </div>
+      <div class="accordion-body">
+        <p>mitmproxy is an interactive TLS-capable intercepting HTTP proxy. Perfect for analyzing and modifying HTTPS traffic in real-time.</p>
+        <h6>Features:</h6>
+        <ul>
+          <li>Interactive console with request/response inspection</li>
+          <li>Web-based interface (mitmweb)</li>
+          <li>Python scripting API for automation</li>
+          <li>SSL/TLS interception with auto-generated certificates</li>
+          <li>Replay, modify, and inject HTTP traffic</li>
+        </ul>
+        <h6>Commands:</h6>
+        <div class="tool-cmd" style="margin-bottom:8px;">
+          <code>mitmproxy --mode transparent --showhost</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+        <div class="tool-cmd" style="margin-bottom:8px;">
+          <code>mitmweb -p 8080</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+        <div class="tool-cmd">
+          <code>mitmdump -w traffic.log</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wireshark -->
+    <div class="accordion-card" data-aos="fade-up" data-aos-delay="150">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-header-left">
+          <div class="accordion-icon"><i class="bi bi-bar-chart-fill"></i></div>
+          <div>
+            <div class="accordion-title">Wireshark &amp; Packet Analysis</div>
+            <div class="accordion-subtitle">Network protocol analyzer for captured traffic</div>
+          </div>
+        </div>
+        <i class="bi bi-chevron-down accordion-arrow"></i>
+      </div>
+      <div class="accordion-body">
+        <p>After intercepting traffic via MITM, Wireshark is used to analyze captured packets for credentials, session tokens, and sensitive data.</p>
+        <h6>Useful Wireshark Filters:</h6>
+        <div class="tool-cmd" style="margin-bottom:8px;">
+          <code>http.request.method == "POST"</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+        <div class="tool-cmd" style="margin-bottom:8px;">
+          <code>tcp.port == 80 || tcp.port == 443</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+        <div class="tool-cmd" style="margin-bottom:8px;">
+          <code>ftp.request.command == "PASS"</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+        <div class="tool-cmd" style="margin-bottom:8px;">
+          <code>http.cookie contains "session"</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+        <div class="tool-cmd">
+          <code>dns.qry.name contains "target.com"</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Real-World Scenarios -->
+<section class="content-section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>Real-World <span>Scenarios</span></h2>
+      <p>Common situations where MITM attacks occur.</p>
+    </div>
+
+    <div class="scenario-box" data-aos="fade-up">
+      <h6><i class="bi bi-wifi"></i> Public WiFi Coffee Shop Attack</h6>
+      <p>An attacker sets up an "Evil Twin" access point named "FreeWiFi_CoffeeShop" in a café. Unsuspecting users connect and all their HTTP traffic, login credentials, and session cookies are intercepted by the attacker. HTTPS connections may be downgraded via SSL stripping.</p>
+    </div>
+    <div class="scenario-box" data-aos="fade-up" data-aos-delay="50">
+      <h6><i class="bi bi-building"></i> Corporate Network ARP Poisoning</h6>
+      <p>An insider or compromised device on a corporate LAN performs ARP spoofing to position itself between employees and the default gateway. All internal HTTP traffic, email credentials, and intranet sessions are captured. Even VoIP calls can be intercepted.</p>
+    </div>
+    <div class="scenario-box" data-aos="fade-up" data-aos-delay="100">
+      <h6><i class="bi bi-bank"></i> Banking SSL Interception</h6>
+      <p>An attacker compromises a user's machine and installs a rogue CA certificate. All HTTPS traffic, including online banking sessions, is decrypted, modified (e.g., changing payment recipient details), and re-encrypted before forwarding to the legitimate bank server.</p>
+    </div>
+    <div class="scenario-box" data-aos="fade-up" data-aos-delay="150">
+      <h6><i class="bi bi-phone-fill"></i> Mobile App API Interception</h6>
+      <p>A tester configures mitmproxy as the device's proxy and installs the mitmproxy CA certificate. All API calls from mobile apps are intercepted, revealing API keys, authentication tokens, user data, and insecure endpoints.</p>
+    </div>
+  </div>
+</section>
+
+<!-- MITM Attack Methodology -->
+<section class="content-section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>Attack <span>Methodology</span></h2>
+      <p>Step-by-step process of a MITM attack (for authorized testing).</p>
+    </div>
+
+    <div class="process-step" data-aos="fade-up">
+      <div class="step-number">1</div>
+      <div class="step-content">
+        <h5>Position on the Network</h5>
+        <p>Connect to the same network as the target. For WiFi attacks, create a rogue AP. For LAN attacks, connect to the same subnet or VLAN.</p>
+      </div>
+    </div>
+    <div class="process-step" data-aos="fade-up" data-aos-delay="50">
+      <div class="step-number">2</div>
+      <div class="step-content">
+        <h5>Enable IP Forwarding</h5>
+        <p>Enable packet forwarding so intercepted traffic is relayed to the intended destination, maintaining connectivity for the victim.</p>
+      </div>
+    </div>
+    <div class="process-step" data-aos="fade-up" data-aos-delay="100">
+      <div class="step-number">3</div>
+      <div class="step-content">
+        <h5>Perform ARP Spoofing</h5>
+        <p>Send gratuitous ARP replies to poison the victim's and gateway's ARP cache, redirecting traffic through the attacker's machine.</p>
+      </div>
+    </div>
+    <div class="process-step" data-aos="fade-up" data-aos-delay="150">
+      <div class="step-number">4</div>
+      <div class="step-content">
+        <h5>Intercept &amp; Capture Traffic</h5>
+        <p>Use sniffing tools (Wireshark, tcpdump) to capture traffic. For HTTPS, deploy SSL stripping or proxy with forged certificates.</p>
+      </div>
+    </div>
+    <div class="process-step" data-aos="fade-up" data-aos-delay="200">
+      <div class="step-number">5</div>
+      <div class="step-content">
+        <h5>Extract &amp; Analyze Data</h5>
+        <p>Parse captured traffic for credentials, session tokens, cookies, API keys, and sensitive information. Analyze protocols for weaknesses.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quick Setup Commands -->
+  <div class="accordion-card" data-aos="fade-up">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <div class="accordion-header-left">
+        <div class="accordion-icon"><i class="bi bi-terminal-fill"></i></div>
+        <div>
+          <div class="accordion-title">Quick MITM Setup (Linux)</div>
+          <div class="accordion-subtitle">Essential commands for authorized MITM testing</div>
+        </div>
+      </div>
+      <i class="bi bi-chevron-down accordion-arrow"></i>
+    </div>
+    <div class="accordion-body">
+      <h6>Step 1: Enable IP Forwarding</h6>
+      <div class="tool-cmd" style="margin-bottom:15px;">
+        <code>echo 1 > /proc/sys/net/ipv4/ip_forward</code>
+        <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+      </div>
+      <h6>Step 2: ARP Spoofing (Terminal 1)</h6>
+      <div class="tool-cmd" style="margin-bottom:8px;">
+        <code>arpspoof -i eth0 -t victim_ip gateway_ip</code>
+        <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+      </div>
+      <h6>Step 2b: ARP Spoofing (Terminal 2)</h6>
+      <div class="tool-cmd" style="margin-bottom:15px;">
+        <code>arpspoof -i eth0 -t gateway_ip victim_ip</code>
+        <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+      </div>
+      <h6>Step 3: Capture Traffic</h6>
+      <div class="tool-cmd" style="margin-bottom:15px;">
+        <code>tcpdump -i eth0 -w capture.pcap host victim_ip</code>
+        <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+      </div>
+      <h6>Step 4: SSL Strip (Optional)</h6>
+      <div class="tool-cmd" style="margin-bottom:8px;">
+        <code>iptables -t nat -A PREROUTING -p tcp --dport 80 -j REDIRECT --to-port 8080</code>
+        <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+      </div>
+      <div class="tool-cmd" style="margin-bottom:15px;">
+        <code>sslstrip -l 8080</code>
+        <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+      </div>
+      <h6>Step 5: Credential Sniffing</h6>
+      <div class="tool-cmd">
+        <code>dsniff -i eth0</code>
+        <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Detection -->
+<section class="content-section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>Detecting <span>MITM</span> Attacks</h2>
+      <p>Signs that indicate a Man-in-the-Middle attack may be in progress.</p>
+    </div>
+
+    <table class="styled-table" data-aos="fade-up">
+      <thead>
+        <tr><th>Indicator</th><th>Description</th><th>Detection Method</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong style="color:var(--primary)">Certificate Warnings</strong></td>
+          <td>Browser shows SSL certificate errors or warnings about untrusted certificates</td>
+          <td>User awareness, HSTS enforcement</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--primary)">ARP Table Changes</strong></td>
+          <td>Multiple IP addresses mapping to the same MAC address</td>
+          <td><code style="color:var(--accent)">arp -a</code>, ARP monitoring tools</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--primary)">Increased Latency</strong></td>
+          <td>Noticeable delay in network communication due to traffic relay</td>
+          <td>Network monitoring, ping analysis</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--primary)">HTTP Downgrade</strong></td>
+          <td>Websites loading over HTTP instead of HTTPS</td>
+          <td>Browser indicators, HSTS preloading</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--primary)">Duplicate MAC</strong></td>
+          <td>Same MAC address appearing for different IPs on the network</td>
+          <td>Network switch port security, IDS</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--primary)">DNS Anomalies</strong></td>
+          <td>DNS responses pointing to unexpected IP addresses</td>
+          <td>DNS monitoring, DNSSEC validation</td>
+        </tr>
+        <tr>
+          <td><strong style="color:var(--primary)">Unexpected Disconnections</strong></td>
+          <td>Frequent WiFi disconnections and reconnections</td>
+          <td>WiFi monitoring, deauth detection</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Countermeasures -->
+<section class="content-section" style="padding-top:0;">
+  <div class="container">
+    <div class="section-header" data-aos="fade-up">
+      <h2>Counter<span>measures</span></h2>
+      <p>How to protect against Man-in-the-Middle attacks.</p>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up">
+        <div class="info-card">
+          <div class="info-card-icon"><i class="bi bi-lock-fill"></i></div>
+          <h5>Encryption</h5>
+          <p>
+            • Use <strong>HTTPS everywhere</strong> (HSTS preloading)<br>
+            • Implement <strong>TLS 1.3</strong> with strong cipher suites<br>
+            • Enable <strong>certificate pinning</strong> in mobile apps<br>
+            • Use <strong>VPN</strong> on untrusted networks<br>
+            • Deploy <strong>end-to-end encryption</strong> for messaging<br>
+            • Enable <strong>DNSSEC</strong> for DNS integrity
+          </p>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="100">
+        <div class="info-card">
+          <div class="info-card-icon"><i class="bi bi-hdd-network-fill"></i></div>
+          <h5>Network Security</h5>
+          <p>
+            • Enable <strong>Dynamic ARP Inspection (DAI)</strong><br>
+            • Configure <strong>DHCP snooping</strong> on switches<br>
+            • Use <strong>802.1X port authentication</strong><br>
+            • Implement <strong>network segmentation</strong><br>
+            • Deploy <strong>IDS/IPS</strong> for anomaly detection<br>
+            • Monitor for <strong>rogue access points</strong>
+          </p>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6 mb-4" data-aos="fade-up" data-aos-delay="200">
+        <div class="info-card">
+          <div class="info-card-icon"><i class="bi bi-person-fill-check"></i></div>
+          <h5>User Awareness</h5>
+          <p>
+            • Verify <strong>SSL certificate</strong> validity in browser<br>
+            • Avoid using <strong>public WiFi</strong> for sensitive tasks<br>
+            • Watch for <strong>certificate warnings</strong> — don't ignore them<br>
+            • Use <strong>password managers</strong> (detect phishing domains)<br>
+            • Enable <strong>Multi-Factor Authentication</strong><br>
+            • Train employees on <strong>MITM awareness</strong>
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detection Tools -->
+    <div class="accordion-card" data-aos="fade-up">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        <div class="accordion-header-left">
+          <div class="accordion-icon"><i class="bi bi-shield-fill-check"></i></div>
+          <div>
+            <div class="accordion-title">MITM Detection Tools &amp; Commands</div>
+            <div class="accordion-subtitle">Tools for identifying active MITM attacks</div>
+          </div>
+        </div>
+        <i class="bi bi-chevron-down accordion-arrow"></i>
+      </div>
+      <div class="accordion-body">
+        <h6>Check ARP Table for Anomalies</h6>
+        <div class="tool-cmd" style="margin-bottom:8px;">
+          <code>arp -a</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+        <div class="tool-cmd" style="margin-bottom:15px;">
+          <code>arp -a | awk '{print $4}' | sort | uniq -d</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+
+        <h6>Detect ARP Spoofing with arpwatch</h6>
+        <div class="tool-cmd" style="margin-bottom:15px;">
+          <code>arpwatch -i eth0</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+
+        <h6>Detect Suspicious Network Activity</h6>
+        <div class="tool-cmd" style="margin-bottom:8px;">
+          <code>tcpdump -i eth0 arp</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+        <div class="tool-cmd" style="margin-bottom:15px;">
+          <code>tcpdump -i eth0 'arp[6:2] == 2'</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+
+        <h6>Verify SSL Certificate</h6>
+        <div class="tool-cmd" style="margin-bottom:15px;">
+          <code>openssl s_client -connect target.com:443 -servername target.com</code>
+          <button class="copy-btn" onclick="copyTool(this)"><i class="bi bi-clipboard"></i></button>
+        </div>
+
+        <h6>MITM Detection Tools:</h6>
+        <ul>
+          <li><strong>XArp</strong> — Advanced ARP spoofing detection</li>
+          <li><strong>arpwatch</strong> — Monitor ARP activity on the network</li>
+          <li><strong>Snort/Suricata</strong> — IDS rules for ARP spoofing detection</li>
+          <li><strong>WiFi Pineapple Detector</strong> — Detect rogue access points</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-brand"><i class="bi bi-shield-lock-fill"></i> HACKER'S WORLD</div>
+      <div class="footer-links">
+        <a href="index.html">Home</a>
+        <a href="Linux_cmd.html">Linux</a>
+        <a href="scanning.html">Scanning</a>
+        <a href="ddos.html">DDoS</a>
+        <a href="wifi-hacking.html">WiFi Hacking</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2024 Hacker's World. All Rights Reserved. Educational purposes only.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+<script>
+  AOS.init({ once: true, duration: 600 });
+
+  window.addEventListener('scroll', function () {
+    var nb = document.getElementById('mainNavbar');
+    var bt = document.getElementById('backToTop');
+    nb.classList.toggle('scrolled', window.scrollY > 50);
+    bt.style.display = window.scrollY > 300 ? 'flex' : 'none';
+  });
+
+  document.getElementById('backToTop').addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  function toggleAccordion(header) {
+    var body = header.nextElementSibling;
+    var arrow = header.querySelector('.accordion-arrow');
+    var isOpen = body.style.display === 'block';
+    body.style.display = isOpen ? 'none' : 'block';
+    arrow.classList.toggle('rotated', !isOpen);
+  }
+
+  function copyTool(btn) {
+    var code = btn.parentElement.querySelector('code');
+    var text = code.textContent.trim();
+    navigator.clipboard.writeText(text).then(function () {
+      btn.innerHTML = '<i class="bi bi-check-lg"></i>';
+      showToast('Command copied to clipboard!');
+      setTimeout(function () { btn.innerHTML = '<i class="bi bi-clipboard"></i>'; }, 2000);
+    });
+  }
+
+  function showToast(msg) {
+    var t = document.getElementById('toast');
+    document.getElementById('toastMsg').textContent = msg;
+    t.style.display = 'block';
+    setTimeout(function () { t.style.display = 'none'; }, 2500);
+  }
+</script>
+
+</body>
+</html>
